@@ -1,4 +1,4 @@
-package Package1;
+﻿package Package1;
 
 import java.io.*;
 import java.util.*;
@@ -22,7 +22,7 @@ public class Nurse {
     /**
      * 
      */
-    public string fullName;
+    public String fullName;
 
     /**
      * 
@@ -32,24 +32,24 @@ public class Nurse {
     /**
      * 
      */
-    public string contactNumber;
+    public String contactNumber;
 
     /**
      * 
      */
-    public bool isAvailable;
+    public boolean isAvailable;
 
     /**
      * @param isAvailable
      */
-    public void setAvailability(void isAvailable) {
+    public void setAvailability(boolean isAvailable) {
         // TODO implement here
     }
 
     /**
      * @param newShift
      */
-    public void changeShift(void newShift) {
+    public void changeShift(ShiftType newShift) {
         // TODO implement here
     }
 

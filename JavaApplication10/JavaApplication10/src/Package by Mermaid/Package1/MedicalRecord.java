@@ -1,4 +1,4 @@
-package Package1;
+﻿package Package1;
 
 import java.io.*;
 import java.util.*;
@@ -22,17 +22,17 @@ public class MedicalRecord {
     /**
      * 
      */
-    public DateTime dateCreated;
+    public Date dateCreated;
 
     /**
      * 
      */
-    public string chiefComplaint;
+    public String chiefComplaint;
 
     /**
      * 
      */
-    public string clinicalDiagnosis;
+    public String clinicalDiagnosis;
 
     /**
      * 
@@ -54,14 +54,14 @@ public class MedicalRecord {
     /**
      * @param newDiagnosis
      */
-    public void updateDiagnosis(void newDiagnosis) {
+    public void updateDiagnosis(String newDiagnosis) {
         // TODO implement here
     }
 
     /**
      * @param text
      */
-    public void addComplaint(void text) {
+    public void addComplaint(String text) {
         // TODO implement here
     }
 

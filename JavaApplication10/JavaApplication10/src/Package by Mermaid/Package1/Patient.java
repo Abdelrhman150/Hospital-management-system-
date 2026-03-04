@@ -1,4 +1,6 @@
-package Package1;
+﻿package Package1;
+
+import java.sql.Time;
 
 import java.io.*;
 import java.util.*;
@@ -22,7 +24,7 @@ public class Patient {
     /**
      * 
      */
-    public string name;
+    public String name;
 
     /**
      * 
@@ -37,29 +39,29 @@ public class Patient {
     /**
      * 
      */
-    public string contactNumber;
+    public String contactNumber;
 
     /**
      * 
      */
-    public string emergencyContact;
+    public String emergencyContact;
 
     /**
      * 
      */
-    public string bloodType;
+    public String bloodType;
 
     /**
      * 
      */
-    public string insuranceProvider;
+    public String insuranceProvider;
 
 
 
     /**
      * @param onDate
      */
-    public void getAge(void onDate) {
+    public void getAge(Date onDate) {
         // TODO implement here
     }
 
@@ -67,7 +69,7 @@ public class Patient {
      * @param newContact 
      * @param newEmergency
      */
-    public void updateContact(void newContact, void newEmergency) {
+    public void updateContact(Object newContact, Object newEmergency) {
         // TODO implement here
     }
 
@@ -90,27 +92,27 @@ public class Patient {
         /**
          * 
          */
-        public string name;
+        public String name;
 
         /**
          * 
          */
-        public string specialization;
+        public String specialization;
 
         /**
          * 
          */
-        public string contactEmail;
+        public String contactEmail;
 
         /**
          * 
          */
-        public decimal consultationFee;
+        public double consultationFee;
 
         /**
          * 
          */
-        public string availabilitySchedule;
+        public String availabilitySchedule;
 
 
 
@@ -118,7 +120,7 @@ public class Patient {
          * @param date 
          * @param time
          */
-        public void isAvailable(void date, void time) {
+        public void isAvailable(Date date, Time time) {
             // TODO implement here
         }
 

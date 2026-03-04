@@ -1,4 +1,6 @@
-package Package1;
+﻿package Package1;
+
+import java.sql.Time;
 
 import java.io.*;
 import java.util.*;
@@ -32,7 +34,7 @@ public class Appointment {
     /**
      * 
      */
-    public string reasonForVisit;
+    public String reasonForVisit;
 
     /**
      * 
@@ -83,7 +85,7 @@ public class Appointment {
      * @param newDate 
      * @param newTime
      */
-    public void reschedule(void newDate, void newTime) {
+    public void reschedule(Date newDate, Time newTime) {
         // TODO implement here
     }
 

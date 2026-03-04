@@ -1,4 +1,4 @@
-package Package1;
+﻿package Package1;
 
 import java.io.*;
 import java.util.*;
@@ -22,7 +22,7 @@ public class Department {
     /**
      * 
      */
-    public string departmentName;
+    public String departmentName;
 
     /**
      * 
@@ -38,7 +38,7 @@ public class Department {
     /**
      * @param doctorId
      */
-    public void assignHead(void doctorId) {
+    public void assignHead(int doctorId) {
         // TODO implement here
     }
 

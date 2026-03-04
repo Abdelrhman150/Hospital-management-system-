@@ -1,4 +1,4 @@
-package Package1;
+﻿package Package1;
 
 import java.io.*;
 import java.util.*;
@@ -22,17 +22,17 @@ public class Secretary {
     /**
      * 
      */
-    public string fullName;
+    public String fullName;
 
     /**
      * 
      */
-    public string contactNumber;
+    public String contactNumber;
 
     /**
      * 
      */
-    public string email;
+    public String email;
 
     /**
      * 
@@ -44,7 +44,7 @@ public class Secretary {
      * @param newPhone 
      * @param newEmail
      */
-    public void updateContact(void newPhone, void newEmail) {
+    public void updateContact(String newPhone, String newEmail) {
         // TODO implement here
     }
 

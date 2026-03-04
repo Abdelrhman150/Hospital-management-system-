@@ -1,8 +1,6 @@
-﻿
-/**
- * 
- */
-public enum OccupancyStatus {
+﻿package Package1;
+
+public enum RoomStatus {
     Available,
     Occupied,
     UnderMaintenance

@@ -1,4 +1,4 @@
-package Package1;
+﻿package Package1;
 
 import java.io.*;
 import java.util.*;
@@ -27,12 +27,12 @@ public class Room {
     /**
      * 
      */
-    public OccupancyStatus occupancyStatus;
+    public RoomStatus occupancyStatus;
 
     /**
      * 
      */
-    public decimal dailyRate;
+    public double dailyRate;
 
     /**
      * 
@@ -58,7 +58,7 @@ public class Room {
     /**
      * @param days
      */
-    public void calculateCost(void days) {
+    public void calculateCost(int days) {
         // TODO implement here
     }
 

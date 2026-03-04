@@ -1,0 +1,184 @@
+@startuml
+
+' =========================
+' ENUMS
+' =========================
+
+enum Gender {
+  Male
+  Female
+}
+
+enum BloodType {
+  A_Pos
+  A_Neg
+  B_Pos
+  B_Neg
+  AB_Pos
+  AB_Neg
+  O_Pos
+  O_Neg
+}
+
+enum AppointmentStatus {
+  Scheduled
+  InProgress
+  Completed
+  Cancelled
+}
+
+enum AppointmentType {
+  WalkIn
+  FollowUp
+  Online
+}
+
+enum RoomType {
+  GeneralWard
+  PrivateRoom
+  ICU
+}
+
+enum RoomStatus {
+  Available
+  Occupied
+  UnderMaintenance
+}
+
+enum ShiftType {
+  Morning
+  Evening
+  Night
+}
+
+enum NurseStatus {
+  Available
+  Busy
+  OffDuty
+}
+
+' =========================
+' USER & ROLES
+' =========================
+class User {
+  + userId : int
+  + fullName : string
+  + email : string
+  + password : string
+}
+
+class Admin
+class Secretary
+
+User <|-- Admin
+User <|-- Secretary
+
+' =========================
+' PATIENT
+' =========================
+class Patient {
+  + patientId : int
+  + name : string
+  + dateOfBirth : Date
+  + gender : Gender
+  + contactNumber : string
+  + emergencyContact : string
+  + bloodType : BloodType
+  + insuranceProvider : string
+}
+
+' =========================
+' DOCTOR
+' =========================
+class Doctor {
+  + doctorId : int
+  + name : string
+  + specialization : string
+  + contactEmail : string
+  + consultationFee : double
+}
+
+class DoctorAvailability {
+  + availabilityId : int
+  + dayOfWeek : string
+  + startTime : Time
+  + endTime : Time
+}
+
+' =========================
+' DEPARTMENT
+' =========================
+class Department {
+  + departmentId : int
+  + departmentName : string
+  + floorNumber : int
+}
+
+' =========================
+' APPOINTMENT
+' =========================
+class Appointment {
+  + appointmentId : int
+  + appointmentDate : Date
+  + scheduledTime : Time
+  + reasonForVisit : string
+  + appointmentStatus : AppointmentStatus
+  + appointmentType : AppointmentType
+}
+
+' =========================
+' MEDICAL RECORD (ENCOUNTER)
+' =========================
+class MedicalRecord {
+  + recordId : int
+  + dateCreated : DateTime
+  + chiefComplaint : string
+  + clinicalDiagnosis : string
+}
+
+' =========================
+' ROOM & ADMISSION
+' =========================
+class Room {
+  + roomId : int
+  + roomType : RoomType
+  + occupancyStatus : RoomStatus
+  + dailyRate : double
+}
+
+class Admission {
+  + admissionId : int
+  + startDate : Date
+  + endDate : Date
+  + status : string
+}
+
+' =========================
+' NURSE
+' =========================
+class Nurse {
+  + nurseId : int
+  + fullName : string
+  + assignedShift : ShiftType
+  + contactNumber : string
+  + status : NurseStatus
+}
+
+' =========================
+' RELATIONSHIPS
+' =========================
+
+Patient "1" -- "0..*" Appointment
+Doctor "1" -- "0..*" Appointment
+
+Appointment "1" -- "0..1" MedicalRecord
+
+Doctor "*" -- "1" Department
+Department "1" --> "0..1" Doctor : Head
+
+Doctor "1" -- "0..*" DoctorAvailability
+
+Patient "1" -- "0..*" Admission
+Room "1" -- "0..*" Admission
+
+@enduml

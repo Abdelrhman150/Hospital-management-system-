@@ -1,4 +1,4 @@
-package dao;
+package Package3;
 
 import java.sql.*;
 
@@ -24,12 +24,12 @@ public class DatabaseConnection {
             try {
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                 connection = DriverManager.getConnection(DB_URL);
-                System.out.println("✓ Database connected successfully!");
+                System.out.println("Database connected successfully!");
             } catch (ClassNotFoundException e) {
-                System.err.println("✗ SQL Server JDBC Driver not found!");
+                System.err.println("SQL Server JDBC Driver not found!");
                 throw new SQLException("JDBC Driver not found", e);
             } catch (SQLException e) {
-                System.err.println("✗ Database connection failed!");
+                System.err.println("Database connection failed!");
                 throw e;
             }
         }
@@ -54,9 +54,9 @@ public class DatabaseConnection {
         try (Connection conn = getConnection();
                 Statement stmt = conn.createStatement()) {
             stmt.execute(createRoomTableSQL);
-            System.out.println("✓ Table 'rooms' initialized successfully!");
+            System.out.println("Table 'rooms' initialized successfully!");
         } catch (SQLException e) {
-            System.err.println("✗ Error initializing table: " + e.getMessage());
+            System.err.println("Error initializing table: " + e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class DatabaseConnection {
             try {
                 connection.close();
                 connection = null;
-                System.out.println("✓ Database connection closed.");
+                System.out.println("Database connection closed.");
             } catch (SQLException e) {
                 System.err.println("Error closing connection: " + e.getMessage());
             }

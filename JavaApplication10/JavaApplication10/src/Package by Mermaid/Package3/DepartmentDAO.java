@@ -1,19 +1,13 @@
-﻿package Package3;
-
-import java.io.*;
-import java.util.*;
+package Package3;
 
 /**
- * 
+ * Data Access Object for medical record operations.
  */
-public class DepartmentDAO {
+public class MedicalRecordDAO {
 
     /**
      * Default constructor
      */
-    public DepartmentDAO() {
+    public MedicalRecordDAO() {
     }
-
-
-
 }

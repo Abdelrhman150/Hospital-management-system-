@@ -1,10 +1,7 @@
-﻿package Package3;
-
-import java.io.*;
-import java.util.*;
+package Package3;
 
 /**
- * 
+ * Data Access Object for appointment operations.
  */
 public class AppointmentDAO {
 
@@ -13,9 +10,4 @@ public class AppointmentDAO {
      */
     public AppointmentDAO() {
     }
-
-
-
-
-
 }

@@ -1,8 +1,4 @@
-﻿package Package1;
-
-import java.io.*;
-import java.util.*;
-
+package Package1;
 
 public class ICUFactory extends RoomFactory {
     @Override
@@ -10,4 +6,3 @@ public class ICUFactory extends RoomFactory {
         return new ICU();
     }
 }
-

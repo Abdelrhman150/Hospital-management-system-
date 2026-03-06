@@ -1,10 +1,7 @@
-﻿package Package1;
-
-import java.io.*;
-import java.util.*;
+package Package1;
 
 /**
- * 
+ * Represents a secretary in the hospital system.
  */
 public class Secretary {
 
@@ -14,31 +11,11 @@ public class Secretary {
     public Secretary() {
     }
 
-    /**
-     * 
-     */
     public int secretaryId;
-
-    /**
-     * 
-     */
     public String fullName;
-
-    /**
-     * 
-     */
     public String contactNumber;
-
-    /**
-     * 
-     */
     public String email;
-
-    /**
-     * 
-     */
     public ShiftType assignedShift;
-
 
     /**
      * @param newPhone 
@@ -47,5 +24,4 @@ public class Secretary {
     public void updateContact(String newPhone, String newEmail) {
         // TODO implement here
     }
-
 }

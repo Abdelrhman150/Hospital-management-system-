@@ -1,18 +1,8 @@
-﻿
-import java.io.*;
-import java.util.*;
+package Package1;
 
 /**
- * 
+ * Database connection interface.
  */
 public interface IDbConnection {
-
-
-
-
-
-
-
-
 
 }

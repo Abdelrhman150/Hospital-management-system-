@@ -1,9 +1,11 @@
 package Package1;
 
-import java.io.*;
-import java.util.*;
-
 public class PrivateRoom implements Room {
+
+    public int roomId;
+    public RoomType roomType;
+    public RoomStatus occupancyStatus;
+    public double dailyRate;
 
     // Constructor
     public PrivateRoom() {
@@ -13,19 +15,12 @@ public class PrivateRoom implements Room {
         dailyRate = 300.0; 
     }
 
-   
-    public int roomId;
-    public RoomType roomType;
-    public RoomStatus occupancyStatus;
-    public double dailyRate;
-   
-   
     @Override
     public void markOccupied() {
         occupancyStatus = RoomStatus.Occupied;
     }
 
-        @Override
+    @Override
     public void markAvailable() {
         occupancyStatus = RoomStatus.Available; 
     }
@@ -35,11 +30,19 @@ public class PrivateRoom implements Room {
         occupancyStatus = RoomStatus.UnderMaintenance; 
     }
 
-    /**
-     * @param days
-     */@Override
+    @Override
     public double calculateCost(int days) {
         double totalCost = dailyRate * days;
         return totalCost;
+    }
+
+    @Override
+    public String toString() {
+        return "Room Details [" +
+                "ID: '" + roomId + '\'' +
+                ", Type: '" + roomType + '\'' +
+                ", Status: '" + occupancyStatus + '\'' +
+                ", Daily Rate: " + dailyRate +
+                ']';
     }
 }

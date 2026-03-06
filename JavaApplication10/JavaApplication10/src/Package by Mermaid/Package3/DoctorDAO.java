@@ -1,10 +1,7 @@
-﻿package Package3;
-
-import java.io.*;
-import java.util.*;
+package Package3;
 
 /**
- * 
+ * Data Access Object for doctor operations.
  */
 public class DoctorDAO {
 
@@ -13,10 +10,4 @@ public class DoctorDAO {
      */
     public DoctorDAO() {
     }
-
-
-
-
-
-
 }

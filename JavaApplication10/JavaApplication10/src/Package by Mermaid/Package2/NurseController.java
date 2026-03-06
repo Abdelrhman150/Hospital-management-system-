@@ -1,10 +1,7 @@
-﻿package Package2;
-
-import java.io.*;
-import java.util.*;
+package Package2;
 
 /**
- * 
+ * Controller for nurse operations.
  */
 public class NurseController {
 
@@ -13,8 +10,4 @@ public class NurseController {
      */
     public NurseController() {
     }
-
-
-
-
 }

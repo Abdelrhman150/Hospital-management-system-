@@ -1,10 +1,7 @@
-﻿package Package2;
-
-import java.io.*;
-import java.util.*;
+package Package2;
 
 /**
- * 
+ * Controller for secretary operations.
  */
 public class SecretaryController {
 
@@ -13,14 +10,4 @@ public class SecretaryController {
      */
     public SecretaryController() {
     }
-
-
-
-
-
-
-
-
-
-
 }

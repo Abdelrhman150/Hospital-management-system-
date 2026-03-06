@@ -1,11 +1,8 @@
-﻿
-import java.io.*;
-import java.util.*;
+package Package1;
 
 /**
- * 
+ * Repository interface for MedicalRecord operations.
  */
 public interface IMedicalRecordRepository {
-
 
 }

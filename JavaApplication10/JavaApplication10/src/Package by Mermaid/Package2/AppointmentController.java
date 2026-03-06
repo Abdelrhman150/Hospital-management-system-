@@ -1,10 +1,7 @@
-﻿package Package2;
-
-import java.io.*;
-import java.util.*;
+package Package2;
 
 /**
- * 
+ * Controller for appointment operations.
  */
 public class AppointmentController {
 
@@ -13,12 +10,4 @@ public class AppointmentController {
      */
     public AppointmentController() {
     }
-
-
-
-
-
-
-
-
 }

@@ -1,10 +1,9 @@
-﻿package Package1;
+package Package1;
 
-import java.io.*;
-import java.util.*;
+import java.util.Date;
 
 /**
- * 
+ * Represents a medical record.
  */
 public class MedicalRecord {
 
@@ -14,42 +13,13 @@ public class MedicalRecord {
     public MedicalRecord() {
     }
 
-    /**
-     * 
-     */
     public int recordId;
-
-    /**
-     * 
-     */
     public Date dateCreated;
-
-    /**
-     * 
-     */
     public String chiefComplaint;
-
-    /**
-     * 
-     */
     public String clinicalDiagnosis;
-
-    /**
-     * 
-     */
     public int patientId;
-
-    /**
-     * 
-     */
     public int doctorId;
-
-    /**
-     * 
-     */
     public int appointmentId;
-
-
 
     /**
      * @param newDiagnosis
@@ -64,5 +34,4 @@ public class MedicalRecord {
     public void addComplaint(String text) {
         // TODO implement here
     }
-
 }

@@ -1,10 +1,7 @@
-﻿package Package2;
-
-import java.io.*;
-import java.util.*;
+package Package2;
 
 /**
- * 
+ * Controller for department operations.
  */
 public class DepartmentController {
 
@@ -13,10 +10,4 @@ public class DepartmentController {
      */
     public DepartmentController() {
     }
-
-
-
-
-
-
 }

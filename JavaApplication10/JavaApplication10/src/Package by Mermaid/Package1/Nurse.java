@@ -1,10 +1,9 @@
-﻿package Package1;
+package Package1;
 
-import java.io.*;
-import java.util.*;
+import java.util.Date;
 
 /**
- * 
+ * Represents a nurse in the hospital system.
  */
 public class Nurse {
 
@@ -14,29 +13,10 @@ public class Nurse {
     public Nurse() {
     }
 
-    /**
-     * 
-     */
     public int nurseId;
-
-    /**
-     * 
-     */
     public String fullName;
-
-    /**
-     * 
-     */
     public ShiftType assignedShift;
-
-    /**
-     * 
-     */
     public String contactNumber;
-
-    /**
-     * 
-     */
     public boolean isAvailable;
 
     /**
@@ -52,5 +32,4 @@ public class Nurse {
     public void changeShift(ShiftType newShift) {
         // TODO implement here
     }
-
 }

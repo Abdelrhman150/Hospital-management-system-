@@ -1,10 +1,7 @@
-﻿package Package2;
-
-import java.io.*;
-import java.util.*;
+package Package2;
 
 /**
- * 
+ * Controller for medical record operations.
  */
 public class MedicalRecordController {
 
@@ -13,14 +10,4 @@ public class MedicalRecordController {
      */
     public MedicalRecordController() {
     }
-
-
-
-
-
-
-
-
-
-
 }

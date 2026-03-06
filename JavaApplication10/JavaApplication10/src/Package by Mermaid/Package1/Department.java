@@ -1,10 +1,9 @@
-﻿package Package1;
+package Package1;
 
-import java.io.*;
-import java.util.*;
+import java.util.Date;
 
 /**
- * 
+ * Represents a department in the hospital.
  */
 public class Department {
 
@@ -14,26 +13,10 @@ public class Department {
     public Department() {
     }
 
-    /**
-     * 
-     */
     public int departmentId;
-
-    /**
-     * 
-     */
     public String departmentName;
-
-    /**
-     * 
-     */
     public int floorNumber;
-
-    /**
-     * 
-     */
     public int departmentHeadId;
-
 
     /**
      * @param doctorId
@@ -41,5 +24,4 @@ public class Department {
     public void assignHead(int doctorId) {
         // TODO implement here
     }
-
 }

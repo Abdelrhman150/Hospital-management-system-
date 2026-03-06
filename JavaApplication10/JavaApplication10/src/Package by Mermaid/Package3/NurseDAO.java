@@ -1,10 +1,7 @@
-﻿package Package3;
-
-import java.io.*;
-import java.util.*;
+package Package3;
 
 /**
- * 
+ * Data Access Object for nurse operations.
  */
 public class NurseDAO {
 
@@ -13,7 +10,4 @@ public class NurseDAO {
      */
     public NurseDAO() {
     }
-
-
-
 }

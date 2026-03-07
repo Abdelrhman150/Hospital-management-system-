@@ -3,11 +3,11 @@ package Package3;
 /**
  * Data Access Object for medical record operations.
  */
-public class MedicalRecordDAO {
+public class DepartmentDAO {
 
     /**
      * Default constructor
      */
-    public MedicalRecordDAO() {
+    public DepartmentDAO() {
     }
 }

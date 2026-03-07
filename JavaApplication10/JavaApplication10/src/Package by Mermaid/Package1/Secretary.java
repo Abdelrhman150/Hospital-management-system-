@@ -1,27 +1,29 @@
 package Package1;
 
-/**
- * Represents a secretary in the hospital system.
- */
-public class Secretary {
+public class Secretary extends User {
+    private String shift;
 
-    /**
-     * Default constructor
-     */
-    public Secretary() {
+    public Secretary(int id, String name, String phone, String email, String shift) {
+        super(id, name, phone, email);
+        this.shift = shift;
     }
 
-    public int secretaryId;
-    public String fullName;
-    public String contactNumber;
-    public String email;
-    public ShiftType assignedShift;
+    @Override
+    public String getRole() {
+        return "Secretary";
+    }
 
-    /**
-     * @param newPhone 
-     * @param newEmail
-     */
-    public void updateContact(String newPhone, String newEmail) {
-        // TODO implement here
+    public String getShift() {
+        return shift;
+    }
+
+    public void bookAppointment() {
+        System.out.println(name + " booked an appointment.");
+    }
+
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Shift: " + shift);
     }
 }

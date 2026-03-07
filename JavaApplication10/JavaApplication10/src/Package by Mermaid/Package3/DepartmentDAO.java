@@ -63,4 +63,12 @@ public class DepartmentDAO {
         Connection conn = DatabaseConnection.getInstance().getConnection();
         return conn.createStatement().executeQuery(sql);
     }
+
+    public ResultSet getDepartmentById(int departmentId) throws Exception {
+        String sql = "SELECT * FROM Departments WHERE departmentId = ?";
+        Connection conn = DatabaseConnection.getInstance().getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, departmentId);
+        return ps.executeQuery();
+    }
 }

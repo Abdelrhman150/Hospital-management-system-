@@ -16,7 +16,8 @@ public class ICU implements Room {
     }
 
     @Override
-    public void markOccupied() {
+    public void markOccupied(int roomID) {
+    
         occupancyStatus = RoomStatus.Occupied;
     }
 

@@ -8,13 +8,17 @@ public class StayPatientServiceFactory implements HospitalServicFactory {
     }
 
     @Override
-    public Bill createBill() {
-        return new RoomBill(room);
+    public Bill createBill( int patientId , int daysOfStay) {
+         RoomBill Bill =  new RoomBill(room);
+         Bill.generateBill(patientId, daysOfStay);
+         return Bill;
+
     }
 
     @Override
-    public Appointment createAppointment() {
+    public Appointment createAppointment(int patientId, String doctorName, String appointmentDate, int roomID) {
         RoomAppointment appointment = new RoomAppointment(room);
+        appointment.scheduleAppointment(patientId, doctorName, appointmentDate, roomID);
         return appointment;
     }
 }

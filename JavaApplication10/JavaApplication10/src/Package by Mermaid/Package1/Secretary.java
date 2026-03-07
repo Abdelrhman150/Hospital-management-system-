@@ -1,5 +1,7 @@
 package Package1;
 
+import Package2.HospitalServiceController;
+
 public class Secretary extends User {
     private String shift;
 
@@ -17,8 +19,11 @@ public class Secretary extends User {
         return shift;
     }
 
-    public void bookAppointment() {
-        System.out.println(name + " booked an appointment.");
+    public void bookAppointment(int patientId, String doctorName, String appointmentDate, int roomID) {
+        HospitalServiceController hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory());
+        Appointment appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate, roomID);
+        System.out.println("Appointment booked successfully!");
+
     }
 
     @Override
@@ -26,4 +31,6 @@ public class Secretary extends User {
         super.displayInfo();
         System.out.println("Shift: " + shift);
     }
+
+
 }

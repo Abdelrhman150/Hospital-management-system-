@@ -14,5 +14,4 @@ public class DepartmentUI {
     public DepartmentUI() {
     }
 
-
 }

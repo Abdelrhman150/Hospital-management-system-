@@ -17,20 +17,6 @@ public class NurseDAO {
         return instance;
     }
 
-    // ==================== ID Generator ====================
-
-    public int generateNurseId() {
-        try {
-            Connection conn = DatabaseConnection.getInstance().getConnection();
-            ResultSet rs = conn.createStatement().executeQuery("SELECT ISNULL(MAX(nurseId), 0) + 1 FROM Nurses");
-            if (rs.next())
-                return rs.getInt(1);
-        } catch (Exception e) {
-            System.err.println("Error generating nurse ID: " + e.getMessage());
-        }
-        return 1;
-    }
-
     // ==================== Operations ====================
 
     public void addNurse(int nurseId, String name, String phone,

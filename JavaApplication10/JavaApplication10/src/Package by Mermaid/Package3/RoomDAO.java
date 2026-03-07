@@ -57,28 +57,6 @@ public class RoomDAO {
         }
     }
 
-    // ==================== ID Generator ====================
-
-    public String generateRoomId() {
-        String query = "SELECT MAX(roomId) AS maxId FROM rooms WHERE roomId LIKE 'ROOM%'";
-        String newId = "ROOM001";
-        try {
-            Connection conn = DatabaseConnection.getInstance().getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
-            if (rs.next()) {
-                String maxId = rs.getString("maxId");
-                if (maxId != null && maxId.startsWith("ROOM")) {
-                    int num = Integer.parseInt(maxId.substring(4));
-                    newId = String.format("ROOM%03d", num + 1);
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Error generating room ID: " + e.getMessage());
-        }
-        return newId;
-    }
-
     // ==================== CRUD Operations ====================
 
     public void addRoom(RoomRecord room) throws Exception {

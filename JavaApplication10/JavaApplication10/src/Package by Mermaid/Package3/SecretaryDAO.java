@@ -17,21 +17,6 @@ public class SecretaryDAO {
         return instance;
     }
 
-    // ==================== ID Generator ====================
-
-    public int generateSecretaryId() {
-        try {
-            Connection conn = DatabaseConnection.getInstance().getConnection();
-            ResultSet rs = conn.createStatement()
-                    .executeQuery("SELECT ISNULL(MAX(secretaryId), 0) + 1 FROM Secretaries");
-            if (rs.next())
-                return rs.getInt(1);
-        } catch (Exception e) {
-            System.err.println("Error generating secretary ID: " + e.getMessage());
-        }
-        return 1;
-    }
-
     // ==================== Operations ====================
 
     public void addSecretary(int secretaryId, String name, String phone,

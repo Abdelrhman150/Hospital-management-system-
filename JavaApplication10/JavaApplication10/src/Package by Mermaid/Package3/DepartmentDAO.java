@@ -17,21 +17,6 @@ public class DepartmentDAO {
         return instance;
     }
 
-    // ==================== ID Generator ====================
-
-    public int generateDepartmentId() {
-        try {
-            Connection conn = DatabaseConnection.getInstance().getConnection();
-            ResultSet rs = conn.createStatement()
-                    .executeQuery("SELECT ISNULL(MAX(departmentId), 0) + 1 FROM Departments");
-            if (rs.next())
-                return rs.getInt(1);
-        } catch (Exception e) {
-            System.err.println("Error generating department ID: " + e.getMessage());
-        }
-        return 1;
-    }
-
     // ==================== Operations ====================
 
     public void addDepartment(int departmentId, String name) throws Exception {

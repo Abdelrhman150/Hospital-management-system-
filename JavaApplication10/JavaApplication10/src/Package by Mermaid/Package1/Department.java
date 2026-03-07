@@ -5,23 +5,44 @@ import java.util.Date;
 /**
  * Represents a department in the hospital.
  */
-public class Department {
 
-    /**
-     * Default constructor
-     */
-    public Department() {
+public abstract class Department {
+    protected int departmentId;
+    protected String departmentName;
+    protected int floorNumber;
+    protected int departmentHeadId;
+
+    public Department(int departmentId, String departmentName, int floorNumber, int departmentHeadId) {
+        this.departmentId = departmentId;
+        this.departmentName = departmentName;
+        this.floorNumber = floorNumber;
+        this.departmentHeadId = departmentHeadId;
     }
 
-    public int departmentId;
-    public String departmentName;
-    public int floorNumber;
-    public int departmentHeadId;
-
-    /**
-     * @param doctorId
-     */
-    public void assignHead(int doctorId) {
-        // TODO implement here
+    public int getDepartmentId() {
+        return departmentId;
     }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public int getFloorNumber() {
+        return floorNumber;
+    }
+
+    public int getDepartmentHeadId() {
+        return departmentHeadId;
+    }
+
+    public abstract String getDepartmentType();
+
+    public void displayDepartment() {
+        System.out.println("Department ID: " + departmentId);
+        System.out.println("Department Name: " + departmentName);
+        System.out.println("Department Type: " + getDepartmentType());
+        System.out.println("Floor Number: " + floorNumber);
+        System.out.println("Department Head ID: " + departmentHeadId);
+    }
+
 }

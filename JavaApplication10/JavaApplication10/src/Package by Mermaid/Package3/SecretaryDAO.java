@@ -34,13 +34,19 @@ public class SecretaryDAO {
 
     // ==================== Operations ====================
 
-    public void addSecretary(int secretaryId, String name, String phone) throws Exception {
-        String sql = "INSERT INTO Secretaries(secretaryId, name, phone) VALUES(?,?,?)";
+    public void addSecretary(int secretaryId, String name, String phone,
+            String email, String shift, int departmentId) throws Exception {
+        String sql = "INSERT INTO Secretaries(secretaryId, name, phone, email, shift, departmentId) VALUES(?,?,?,?,?,?)";
         Connection conn = DatabaseConnection.getInstance().getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, secretaryId);
             ps.setString(2, name);
             ps.setString(3, phone);
+            ps.setString(4, email);
+            ps.setString(5, shift);
+            ps.setInt(6, departmentId);
+
             ps.executeUpdate();
         }
     }

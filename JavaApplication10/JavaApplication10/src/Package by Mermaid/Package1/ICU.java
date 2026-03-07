@@ -45,4 +45,5 @@ public class ICU implements Room {
                 ", Daily Rate: " + dailyRate +
                 ']';
     }
+
 }

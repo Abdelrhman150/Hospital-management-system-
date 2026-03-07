@@ -4,8 +4,8 @@ import Package2.RoomController;
 
 public class Main {
     public static void main(String[] args){
-        RoomController controller = new RoomController(new GeneralRoomFactory());
-        System.out.println(controller.reserveRoom().calculateCost(10));
+        RoomController PatientRoom = new RoomController(new GeneralRoomFactory());
+        System.out.println(PatientRoom.reserveRoom().calculateCost(10));
 
         
     }

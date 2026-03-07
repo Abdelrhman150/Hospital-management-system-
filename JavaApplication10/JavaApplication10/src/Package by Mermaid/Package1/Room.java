@@ -5,4 +5,6 @@ public interface Room {
     public void markAvailable();
     public void markUnderMaintenance();
     public double calculateCost(int days);
+    //creation of room 
+    // 
 }

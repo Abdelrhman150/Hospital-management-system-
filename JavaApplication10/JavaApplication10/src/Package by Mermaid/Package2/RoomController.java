@@ -12,9 +12,6 @@ public class RoomController {
     /**
      * Default constructor
      */
-    public RoomController() {
-    }
-
     public RoomController(RoomFactory factory) {
         this.factory = factory;
     }

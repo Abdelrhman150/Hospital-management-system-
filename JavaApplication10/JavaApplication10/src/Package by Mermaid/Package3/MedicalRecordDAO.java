@@ -17,21 +17,6 @@ public class MedicalRecordDAO {
         return instance;
     }
 
-    // ==================== ID Generator ====================
-
-    public int generateRecordId() {
-        try {
-            Connection conn = DatabaseConnection.getInstance().getConnection();
-            ResultSet rs = conn.createStatement()
-                    .executeQuery("SELECT ISNULL(MAX(recordId), 0) + 1 FROM MedicalRecords");
-            if (rs.next())
-                return rs.getInt(1);
-        } catch (Exception e) {
-            System.err.println("Error generating record ID: " + e.getMessage());
-        }
-        return 1;
-    }
-
     // ==================== Operations ====================
 
     public void createMedicalRecord(int recordId, int patientId, int doctorId,

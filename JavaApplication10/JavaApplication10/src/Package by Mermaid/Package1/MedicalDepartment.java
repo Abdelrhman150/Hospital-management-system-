@@ -11,10 +11,6 @@ public class MedicalDepartment extends Department {
         return "Medical";
     }
 
-    public String getDepartmentName() {
-        return departmentName;
-    }
-
     @Override
     public void displayDepartment() {
         super.displayDepartment();

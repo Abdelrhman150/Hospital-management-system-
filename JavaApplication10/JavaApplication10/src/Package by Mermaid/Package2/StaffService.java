@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 public class StaffService {
 
     public void createAndSaveDoctor(String name, String phone, String email,
-            String specialization, int departmentId) {
+            String specialization, boolean availability, int departmentId) {
         try {
             // prepare el database
             DoctorDAO doctorDAO = DoctorDAO.getInstance();
@@ -34,24 +34,24 @@ public class StaffService {
                     phone,
                     email,
                     specialization,
+                    availability,
                     department);
             // create user
             User user = factory.createUser();
             // check if user is doctor
-            if (user instanceof Doctor) {
-                Doctor doctor = (Doctor) user;
 
-                doctorDAO.addDoctor(
-                        doctor.getId(),
-                        doctor.getName(),
-                        doctor.getSpecialization(),
-                        doctor.getPhone(),
-                        department.getDepartmentId());
+            Doctor doctor = (Doctor) user;
 
-                System.out.println("Doctor added successfully.");
-                doctor.displayInfo();
-                department.displayDepartment();
-            }
+            doctorDAO.addDoctor(
+                    doctor.getId(),
+                    doctor.getName(),
+                    doctor.getSpecialization(),
+                    doctor.getPhone(),
+                    department.getDepartmentId());
+
+            System.out.println("Doctor added successfully.");
+            doctor.displayInfo();
+            department.displayDepartment();
 
         } catch (Exception e) {
             System.out.println("Error while saving doctor: " + e.getMessage());
@@ -90,21 +90,19 @@ public class StaffService {
 
             User user = factory.createUser();
 
-            if (user instanceof Secretary) {
-                Secretary secretary = (Secretary) user;
+            Secretary secretary = (Secretary) user;
 
-                secretaryDAO.addSecretary(
-                        secretary.getId(),
-                        secretary.getName(),
-                        secretary.getPhone(),
-                        secretary.getEmail(),
-                        secretary.getShift(),
-                        department.getDepartmentId());
+            secretaryDAO.addSecretary(
+                    secretary.getId(),
+                    secretary.getName(),
+                    secretary.getPhone(),
+                    secretary.getEmail(),
+                    secretary.getShift(),
+                    department.getDepartmentId());
 
-                System.out.println("Secretary added successfully.");
-                secretary.displayInfo();
-                department.displayDepartment();
-            }
+            System.out.println("Secretary added successfully.");
+            secretary.displayInfo();
+            department.displayDepartment();
 
         } catch (Exception e) {
             System.out.println("Error while saving secretary: " + e.getMessage());

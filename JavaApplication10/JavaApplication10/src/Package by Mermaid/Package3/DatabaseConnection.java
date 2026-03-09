@@ -1,62 +1,92 @@
+
+
 package Package3;
 
 import java.sql.*;
 
 /**
- * Database Connection Manager for MS SQL Server - Singleton Pattern
+ * Database Connection Manager for MS SQL Server
+ * Manages database connections using Singleton pattern
  */
 public class DatabaseConnection {
+    
+    private static final String SERVER_NAME = "LAPTOP-OUGK83B0\\SQLEXPRESS";
+    private static final String DB_NAME = "hospital_mangament_system";
 
-    private static final String SERVER_NAME = "DESKTOP-P61KLBK\\SQLEXPRESS";
-    private static final String DB_NAME = "Hospital_Management_System";
+     // جملة الاتصال الخاصة بـ SQL Server (بدون رقم البورت، ليعتمد على خدمة Browser)
+    private static final String DB_URL = "jdbc:sqlserver://" + SERVER_NAME +
+                                         ";databaseName=" + DB_NAME + 
+                                         ";integratedSecurity=true;trustServerCertificate=true;";
 
-    // غيرنا سلسلة الاتصال لـ SQL Server Authentication
-    private static final String DB_URL = "jdbc:sqlserver://" + SERVER_NAME
-            + ";databaseName=" + DB_NAME
-            + ";user=sa;password=123456"
-            + ";trustServerCertificate=true;";
+    private static Connection connection = null;
 
-    // ==================== Singleton ====================
+    /**
+     * Get database connection (Singleton pattern)
+     */
+    public static Connection getConnection() throws SQLException {
+        if (connection == null || connection.isClosed()) {
+            try {
+                // تحميل تعريف SQL Server
+                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-    private static DatabaseConnection instance;
-    private Connection connection;
+                // إنشاء الاتصال
+                connection = DriverManager.getConnection(DB_URL);
+                System.out.println("✓ Database connected successfully!");
 
-    private DatabaseConnection() throws SQLException {
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            connection = DriverManager.getConnection(DB_URL);
-            connection.setAutoCommit(true);
-            System.out.println("✓ Database connected successfully!");
-        } catch (ClassNotFoundException e) {
-            System.err.println("✗ SQL Server JDBC Driver not found!");
-            throw new SQLException("JDBC Driver not found", e);
-        } catch (SQLException e) {
-            System.err.println("✗ Database connection failed: " + e.getMessage());
-            throw e;
+            } catch (ClassNotFoundException e) {
+                System.err.println("✗ SQL Server JDBC Driver not found!");
+                System.err.println("  Please make sure the 'mssql-jdbc' JAR file is added to the project's Libraries.");
+                throw new SQLException("JDBC Driver not found", e);
+            } catch (SQLException e) {
+                System.err.println("✗ Database connection failed!");
+                System.err.println("  Error: " + e.getMessage());
+                if (e.getMessage().contains("integrated security")) {
+                    System.err.println("  Hint: Did you copy the 'mssql-jdbc_auth' DLL file to your project's main folder?");
+                }
+                if (e.getMessage().contains("SQL Server Browser")) {
+                    System.err.println("  Hint: Is the 'SQL Server Browser' service running? Check SQL Server Configuration Manager.");
+                }
+                throw e;
+            }
         }
-    }
-
-    public static synchronized DatabaseConnection getInstance() throws SQLException {
-        if (instance == null || instance.connection == null || instance.connection.isClosed()) {
-            instance = new DatabaseConnection();
-        }
-        return instance;
-    }
-
-    // ==================== Operations ====================
-
-    public Connection getConnection() {
         return connection;
     }
 
+    /**
+     * Close database connection
+     */
     public static void closeConnection() {
-        if (instance != null && instance.connection != null) {
+        if (connection != null) {
             try {
-                instance.connection.close();
-                instance = null;
+                connection.close();
+                connection = null;
                 System.out.println("✓ Database connection closed.");
             } catch (SQLException e) {
                 System.err.println("Error closing connection: " + e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Main method for testing
+     */
+    public static void main(String[] args) {
+        System.out.println("Testing Database Connection to SQL Server...");
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            DatabaseMetaData meta = conn.getMetaData();
+            System.out.println("--- Connection Info ---");
+            System.out.println("  Database: " + meta.getDatabaseProductName() + " " + meta.getDatabaseProductVersion());
+            System.out.println("  URL: " + meta.getURL());
+            System.out.println("-----------------------");
+
+        } catch (SQLException e) {
+            System.out.println("\n❌ Connection Test Failed.");
+        
+        } finally {
+            if (conn != null) {
+                closeConnection();
             }
         }
     }

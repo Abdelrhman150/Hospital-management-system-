@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run DatabaseConnection",
+            "request": "launch",
+            "mainClass": "Package3.DatabaseConnection",
+            "vmArgs": [
+                "-Djava.library.path=${workspaceFolder}/JavaApplication10/JavaApplication10",
+                "--enable-native-access=ALL-UNNAMED"
+            ],
+            "classPaths": [
+                "${workspaceFolder}/JavaApplication10/JavaApplication10/build/classes",
+                "${workspaceFolder}/JavaApplication10/JavaApplication10/lib/mssql-jdbc-13.2.1.jre11.jar"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "Run DoctorController",
+            "request": "launch",
+            "mainClass": "Package2.DoctorController",
+            "vmArgs": [
+                "-Djava.library.path=${workspaceFolder}/JavaApplication10/JavaApplication10",
+                "--enable-native-access=ALL-UNNAMED"
+            ],
+            "classPaths": [
+                "${workspaceFolder}/JavaApplication10/JavaApplication10/build/classes",
+                "${workspaceFolder}/JavaApplication10/JavaApplication10/lib/mssql-jdbc-13.2.1.jre11.jar"
+            ]
+        }
+    ]
+}

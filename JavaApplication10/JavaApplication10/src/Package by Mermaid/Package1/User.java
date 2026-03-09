@@ -1,4 +1,4 @@
-﻿package Package1;
+package Package1;
 
 public abstract class User {
     protected int id;

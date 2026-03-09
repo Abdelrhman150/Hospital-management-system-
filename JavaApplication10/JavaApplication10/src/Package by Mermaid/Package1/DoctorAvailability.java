@@ -1,4 +1,4 @@
-﻿package Package1;
+package Package1;
 
 import java.sql.Time;
 

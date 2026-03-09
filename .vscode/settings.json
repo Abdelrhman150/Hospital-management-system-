@@ -1,0 +1,5 @@
+{
+    "java.project.referencedLibraries": [
+        "JavaApplication10/JavaApplication10/lib/**/*.jar"
+    ]
+}

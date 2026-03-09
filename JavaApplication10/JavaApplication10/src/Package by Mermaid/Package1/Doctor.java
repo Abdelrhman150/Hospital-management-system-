@@ -1,4 +1,4 @@
-﻿package Package1;
+package Package1;
 
 public class Doctor extends User {
     private String specialization;

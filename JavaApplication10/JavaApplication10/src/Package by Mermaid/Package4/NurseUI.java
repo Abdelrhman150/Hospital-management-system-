@@ -1,4 +1,4 @@
-﻿package Package4;
+package Package4;
 
 import java.io.*;
 import java.util.*;

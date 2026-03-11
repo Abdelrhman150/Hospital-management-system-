@@ -1,11 +1,13 @@
 package Package1;
+import Package2.*;
 
 public class Doctor extends User {
     private String specialization;
     private boolean availability;
 
-    public Doctor(int id, String name, String phone, String email, String specialization, boolean availability) {
-        super(id, name, phone, email);
+    public Doctor( String name, String phone, String email, String specialization, boolean availability) {
+        super( name, phone, email);
+        this.id = IdGenerator.getInstance().nextDoctorId();
         this.specialization = specialization;
         this.availability = availability;
     }

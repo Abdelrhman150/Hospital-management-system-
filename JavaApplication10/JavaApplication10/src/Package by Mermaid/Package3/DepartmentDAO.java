@@ -21,7 +21,7 @@ public class DepartmentDAO {
 
     public void addDepartment(int departmentId, String name) throws Exception {
         String sql = "INSERT INTO Departments(departmentId, name) VALUES(?,?)";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, departmentId);
             ps.setString(2, name);
@@ -31,7 +31,7 @@ public class DepartmentDAO {
 
     public void updateDepartment(int departmentId, String name) throws Exception {
         String sql = "UPDATE Departments SET name=? WHERE departmentId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
             ps.setInt(2, departmentId);
@@ -41,7 +41,7 @@ public class DepartmentDAO {
 
     public void deleteDepartment(int departmentId) throws Exception {
         String sql = "DELETE FROM Departments WHERE departmentId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, departmentId);
             ps.executeUpdate();
@@ -50,7 +50,7 @@ public class DepartmentDAO {
 
     public void setDepartmentHead(int departmentId, int doctorId) throws Exception {
         String sql = "UPDATE Departments SET headDoctorId=? WHERE departmentId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, doctorId);
             ps.setInt(2, departmentId);
@@ -60,13 +60,13 @@ public class DepartmentDAO {
 
     public ResultSet getAllDepartments() throws Exception {
         String sql = "SELECT * FROM Departments";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         return conn.createStatement().executeQuery(sql);
     }
 
     public ResultSet getDepartmentById(int departmentId) throws Exception {
         String sql = "SELECT * FROM Departments WHERE departmentId = ?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, departmentId);
         return ps.executeQuery();

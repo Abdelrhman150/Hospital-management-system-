@@ -1,5 +1,7 @@
 package Package1;
 
+import Package2.IdGenerator;
+
 public class VisitingBill implements Bill {
     public int billId;
     public int patientId;
@@ -10,7 +12,7 @@ public class VisitingBill implements Bill {
     @Override
     public void generateBill(int patientId, int daysOfStay) {
         this.patientId = patientId;
-        billId = IDGenerator.generateBillID(); ///////////////
+        billId = IdGenerator.getInstance().nextRecordId(); ///////////////
         billingDate = java.time.LocalDate.now().toString(); // Get current date as billing date
     }
 

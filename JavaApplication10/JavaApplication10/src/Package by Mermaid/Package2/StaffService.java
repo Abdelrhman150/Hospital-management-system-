@@ -14,7 +14,7 @@ public class StaffService {
             DoctorDAO doctorDAO = DoctorDAO.getInstance();
             DepartmentDAO departmentDAO = DepartmentDAO.getInstance();
             // genetate ID gdeed
-            int newDoctorId = doctorDAO.generateDoctorId();
+            int newDoctorId = IdGenerator.getInstance().nextDoctorId();
             // make sure en el department mawgood
             ResultSet rs = departmentDAO.getDepartmentById(departmentId);
             // lw msh mawgood yegib error
@@ -29,7 +29,6 @@ public class StaffService {
             Department department = new MedicalDepartment(departmentId, departmentName, floorNumber, headDoctorId);
             // create factory
             StaffFactory factory = new MedicalStaff(
-                    newDoctorId,
                     name,
                     phone,
                     email,
@@ -64,7 +63,7 @@ public class StaffService {
             SecretaryDAO secretaryDAO = SecretaryDAO.getInstance();
             DepartmentDAO departmentDAO = DepartmentDAO.getInstance();
 
-            int newSecretaryId = secretaryDAO.generateSecretaryId();
+            int newSecretaryId = IdGenerator.getInstance().nextSecretaryId();
 
             ResultSet rs = departmentDAO.getDepartmentById(departmentId);
 

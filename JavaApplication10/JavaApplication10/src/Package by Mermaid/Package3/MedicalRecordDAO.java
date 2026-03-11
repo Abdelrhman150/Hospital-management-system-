@@ -22,7 +22,7 @@ public class MedicalRecordDAO {
     public void createMedicalRecord(int recordId, int patientId, int doctorId,
             String diagnosis, String complaint, Date recordDate) throws Exception {
         String sql = "INSERT INTO MedicalRecords(recordId, patientId, doctorId, diagnosis, complaint, recordDate) VALUES(?,?,?,?,?,?)";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, recordId);
             ps.setInt(2, patientId);
@@ -36,7 +36,7 @@ public class MedicalRecordDAO {
 
     public void updateMedicalRecord(int recordId, String diagnosis, String complaint) throws Exception {
         String sql = "UPDATE MedicalRecords SET diagnosis=?, complaint=? WHERE recordId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, diagnosis);
             ps.setString(2, complaint);
@@ -47,7 +47,7 @@ public class MedicalRecordDAO {
 
     public ResultSet getPatientHistory(int patientId) throws Exception {
         String sql = "SELECT * FROM MedicalRecords WHERE patientId=? ORDER BY recordDate DESC";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, patientId);
         return ps.executeQuery();

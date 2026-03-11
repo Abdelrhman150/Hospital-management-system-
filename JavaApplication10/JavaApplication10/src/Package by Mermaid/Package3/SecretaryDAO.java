@@ -22,7 +22,7 @@ public class SecretaryDAO {
     public void addSecretary(int secretaryId, String name, String phone,
             String email, String shift, int departmentId) throws Exception {
         String sql = "INSERT INTO Secretaries(secretaryId, name, phone, email, shift, departmentId) VALUES(?,?,?,?,?,?)";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, secretaryId);
@@ -38,7 +38,7 @@ public class SecretaryDAO {
 
     public void updateSecretary(int secretaryId, String name, String phone) throws Exception {
         String sql = "UPDATE Secretaries SET name=?, phone=? WHERE secretaryId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
             ps.setString(2, phone);
@@ -49,7 +49,7 @@ public class SecretaryDAO {
 
     public void deleteSecretary(int secretaryId) throws Exception {
         String sql = "DELETE FROM Secretaries WHERE secretaryId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, secretaryId);
             ps.executeUpdate();
@@ -58,7 +58,7 @@ public class SecretaryDAO {
 
     public ResultSet getAllSecretaries() throws Exception {
         String sql = "SELECT * FROM Secretaries";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         return conn.createStatement().executeQuery(sql);
     }
 }

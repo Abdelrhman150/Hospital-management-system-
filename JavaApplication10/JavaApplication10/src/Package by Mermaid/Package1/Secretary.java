@@ -1,12 +1,13 @@
 package Package1;
 
-import Package2.HospitalServiceController;
+import Package2.*;
 
 public class Secretary extends User {
     private String shift;
 
     public Secretary(int id, String name, String phone, String email, String shift) {
-        super(id, name, phone, email);
+        super( name, phone, email);
+        this.id = IdGenerator.getInstance().nextSecretaryId();
         this.shift = shift;
     }
 

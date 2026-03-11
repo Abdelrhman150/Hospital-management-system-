@@ -6,11 +6,14 @@ public abstract class User {
     protected String phone;
     protected String email;
 
-    public User(int id, String name, String phone, String email) {
-        this.id = id;
+    public User( String name, String phone, String email) {
         this.name = name;
         this.phone = phone;
         this.email = email;
+    }
+
+    public User() {
+        //TODO Auto-generated constructor stub
     }
 
     public int getId() {

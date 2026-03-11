@@ -1,4 +1,5 @@
 package Package1;
+import Package2.*;
 
 public class VistingAppointment implements Appointment {
     public int appointmentId;
@@ -22,7 +23,7 @@ public class VistingAppointment implements Appointment {
         this.patientId = patientId;
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
-        this.appointmentId = IDGenerator.generateAppointmentID(); ///////////////
+        this.appointmentId = IdGenerator.getInstance().nextAppointmentId(); ///////////////
     }
 
     @Override

@@ -22,7 +22,7 @@ public class NurseDAO {
     public void addNurse(int nurseId, String name, String phone,
             String shift, String availability) throws Exception {
         String sql = "INSERT INTO Nurses(nurseId, name, phone, shift, availability) VALUES(?,?,?,?,?)";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, nurseId);
             ps.setString(2, name);
@@ -35,7 +35,7 @@ public class NurseDAO {
 
     public void updateNurse(int nurseId, String name, String phone, String shift) throws Exception {
         String sql = "UPDATE Nurses SET name=?, phone=?, shift=? WHERE nurseId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
             ps.setString(2, phone);
@@ -47,7 +47,7 @@ public class NurseDAO {
 
     public void deleteNurse(int nurseId) throws Exception {
         String sql = "DELETE FROM Nurses WHERE nurseId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, nurseId);
             ps.executeUpdate();
@@ -56,7 +56,7 @@ public class NurseDAO {
 
     public void setAvailability(int nurseId, String availability) throws Exception {
         String sql = "UPDATE Nurses SET availability=? WHERE nurseId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, availability);
             ps.setInt(2, nurseId);
@@ -66,7 +66,7 @@ public class NurseDAO {
 
     public ResultSet getAssignedShift(int nurseId) throws Exception {
         String sql = "SELECT shift FROM Nurses WHERE nurseId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, nurseId);
         return ps.executeQuery();
@@ -74,7 +74,7 @@ public class NurseDAO {
 
     public ResultSet getAvailableNurses() throws Exception {
         String sql = "SELECT * FROM Nurses WHERE availability='Available'";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         return conn.createStatement().executeQuery(sql);
     }
 }

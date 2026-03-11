@@ -22,7 +22,7 @@ public class DoctorDAO {
     public void addDoctor(int doctorId, String name, String specialization,
             String contactEmail, double consultationFee) throws Exception {
         String sql = "INSERT INTO Doctors(doctorId, name, specialization, contactEmail, consultationFee) VALUES(?,?,?,?,?)";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, doctorId);
             ps.setString(2, name);
@@ -36,7 +36,7 @@ public class DoctorDAO {
     public void updateDoctor(int doctorId, String name, String specialization,
             String contactEmail, double consultationFee) throws Exception {
         String sql = "UPDATE Doctors SET name=?, specialization=?, contactEmail=?, consultationFee=? WHERE doctorId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
             ps.setString(2, specialization);
@@ -49,7 +49,7 @@ public class DoctorDAO {
 
     public void deleteDoctor(int doctorId) throws Exception {
         String sql = "DELETE FROM Doctors WHERE doctorId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, doctorId);
             ps.executeUpdate();
@@ -58,13 +58,13 @@ public class DoctorDAO {
 
     public ResultSet getAllDoctors() throws Exception {
         String sql = "SELECT * FROM Doctors";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         return conn.createStatement().executeQuery(sql);
     }
 
     public ResultSet getDoctorById(int doctorId) throws Exception {
         String sql = "SELECT * FROM Doctors WHERE doctorId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, doctorId);
         return ps.executeQuery();

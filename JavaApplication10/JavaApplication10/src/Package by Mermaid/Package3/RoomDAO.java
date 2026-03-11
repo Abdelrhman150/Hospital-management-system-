@@ -61,7 +61,7 @@ public class RoomDAO {
 
     public void addRoom(RoomRecord room) throws Exception {
         String sql = "INSERT INTO rooms(roomId, roomType, capacity, availabilityStatus, dailyRate) VALUES(?,?,?,?,?)";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, room.getRoomId());
             ps.setString(2, room.getRoomType());
@@ -75,7 +75,7 @@ public class RoomDAO {
     public List<RoomRecord> getAllRooms() throws Exception {
         List<RoomRecord> rooms = new ArrayList<>();
         String sql = "SELECT * FROM rooms";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
@@ -92,7 +92,7 @@ public class RoomDAO {
 
     public void updateRoom(RoomRecord room) throws Exception {
         String sql = "UPDATE rooms SET roomType=?, capacity=?, availabilityStatus=?, dailyRate=? WHERE roomId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, room.getRoomType());
             ps.setInt(2, room.getCapacity());
@@ -106,7 +106,7 @@ public class RoomDAO {
 
     public void deleteRoom(String roomId) throws Exception {
         String sql = "DELETE FROM rooms WHERE roomId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, roomId);
             if (ps.executeUpdate() == 0)
@@ -116,7 +116,7 @@ public class RoomDAO {
 
     public void markRoomOccupied(String roomId) throws Exception {
         String sql = "UPDATE rooms SET availabilityStatus='Occupied' WHERE roomId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, roomId);
             if (ps.executeUpdate() == 0)
@@ -126,7 +126,7 @@ public class RoomDAO {
 
     public void markRoomAvailable(String roomId) throws Exception {
         String sql = "UPDATE rooms SET availabilityStatus='Available' WHERE roomId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, roomId);
             if (ps.executeUpdate() == 0)

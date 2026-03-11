@@ -22,7 +22,7 @@ public class PatientDAO {
     public void addPatient(int patientId, String name, String gender, String bloodType,
             String phone, String address, Date dateOfBirth) throws Exception {
         String sql = "INSERT INTO Patients(patientId, name, gender, bloodType, phone, address, dateOfBirth) VALUES(?,?,?,?,?,?,?)";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, patientId);
             ps.setString(2, name);
@@ -37,7 +37,7 @@ public class PatientDAO {
 
     public void updatePatient(int patientId, String name, String phone, String address) throws Exception {
         String sql = "UPDATE Patients SET name=?, phone=?, address=? WHERE patientId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
             ps.setString(2, phone);
@@ -49,7 +49,7 @@ public class PatientDAO {
 
     public void deletePatient(int patientId) throws Exception {
         String sql = "DELETE FROM Patients WHERE patientId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, patientId);
             ps.executeUpdate();
@@ -58,7 +58,7 @@ public class PatientDAO {
 
     public ResultSet searchPatient(String name) throws Exception {
         String sql = "SELECT * FROM Patients WHERE name LIKE ?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, "%" + name + "%");
         return ps.executeQuery();
@@ -66,7 +66,7 @@ public class PatientDAO {
 
     public ResultSet getPatientById(int patientId) throws Exception {
         String sql = "SELECT * FROM Patients WHERE patientId=?";
-        Connection conn = DatabaseConnection.getInstance().getConnection();
+        Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, patientId);
         return ps.executeQuery();

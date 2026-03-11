@@ -1,4 +1,5 @@
 package Package1;
+import Package2.*;
 
 public class RoomBill implements Bill {
     public int billId;
@@ -19,7 +20,7 @@ public class RoomBill implements Bill {
 
         this.patientId = patientId;
         this.DaysOfStay = daysOfStay;
-        billId = IDGenerator.generateBillID(); ///////////////
+        billId = IdGenerator.getInstance().nextRecordId(); ///////////////
         amount = room.calculateCost(daysOfStay);
         billingDate = java.time.LocalDate.now().toString(); // Get current date as billing date
     }

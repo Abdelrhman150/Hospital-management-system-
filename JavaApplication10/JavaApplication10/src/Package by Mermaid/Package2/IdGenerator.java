@@ -22,7 +22,7 @@ public class IdGenerator {
 
     private int nextId(String table, String column) {
         try {
-            Connection conn = DatabaseConnection.getInstance().getConnection();
+            Connection conn = DatabaseConnection.getConnection();
             ResultSet rs = conn.createStatement()
                     .executeQuery("SELECT ISNULL(MAX(" + column + "), 0) + 1 FROM " + table);
             if (rs.next())
@@ -68,7 +68,7 @@ public class IdGenerator {
     public String nextRoomId() {
         String newId = "ROOM001";
         try {
-            Connection conn = DatabaseConnection.getInstance().getConnection();
+            Connection conn = DatabaseConnection.getConnection();
             ResultSet rs = conn.createStatement()
                     .executeQuery("SELECT MAX(roomId) AS maxId FROM rooms WHERE roomId LIKE 'ROOM%'");
             if (rs.next()) {

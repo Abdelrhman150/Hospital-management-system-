@@ -6,8 +6,7 @@ public class Secretary extends User {
     private String shift;
 
     public Secretary(int id, String name, String phone, String email, String shift) {
-        super( name, phone, email);
-        this.id = IdGenerator.getInstance().nextSecretaryId();
+        super(id, name, phone, email);
         this.shift = shift;
     }
 
@@ -20,11 +19,17 @@ public class Secretary extends User {
         return shift;
     }
 
-    public void bookAppointment(int patientId, String doctorName, String appointmentDate, int roomID) {
+    public void bookVisitingAppointment(int patientId, String doctorName, String appointmentDate) {
         HospitalServiceController hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory());
-        Appointment appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate, roomID);
+        Appointment appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate, null);
         System.out.println("Appointment booked successfully!");
 
+    }
+
+    public void bookStayAppointment(int patientId, String doctorName, String appointmentDate, int roomID) throws Exception {
+        HospitalServiceController hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory( roomID));
+        Appointment appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate, roomID);
+        System.out.println("Appointment booked successfully!");
     }
 
     @Override

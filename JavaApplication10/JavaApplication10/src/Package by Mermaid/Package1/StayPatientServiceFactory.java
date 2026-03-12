@@ -1,10 +1,14 @@
 package Package1;
 
+import Package3.RoomDAO;
+
 public class StayPatientServiceFactory implements HospitalServicFactory {
     private Room room;
 
-    public StayPatientServiceFactory(Room room) {
-        this.room = room;
+    public StayPatientServiceFactory(int roomID) throws Exception {
+        
+        RoomDAO roomDAO = RoomDAO.getInstance();
+        this.room = roomDAO.getRoomById(roomID);
     }
 
     @Override

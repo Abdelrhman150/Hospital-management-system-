@@ -6,7 +6,8 @@ public abstract class User {
     protected String phone;
     protected String email;
 
-    public User( String name, String phone, String email) {
+    public User( int ID ,String name, String phone, String email) {
+        this.id = ID;
         this.name = name;
         this.phone = phone;
         this.email = email;

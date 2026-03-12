@@ -5,12 +5,12 @@ public class Doctor extends User {
     private String specialization;
     private boolean availability;
 
-    public Doctor( String name, String phone, String email, String specialization, boolean availability) {
-        super( name, phone, email);
-        this.id = IdGenerator.getInstance().nextDoctorId();
+    public Doctor( int ID ,String name, String phone, String email, String specialization, boolean availability) {
+        super( ID, name, phone, email);
         this.specialization = specialization;
         this.availability = availability;
     }
+
 
     @Override
     public String getRole() {

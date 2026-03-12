@@ -25,11 +25,12 @@ public class RoomAppointment implements Appointment {
     }
 
     @Override
-    public void scheduleAppointment(int patientId, String doctorName, String appointmentDate, int roomID) {
+    public void scheduleAppointment(int patientId, String doctorName, String appointmentDate, Integer roomID) {
         this.patientId = patientId;
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
         this.appointmentId = IdGenerator.getInstance().nextAppointmentId(); ///////////////
+        room.markOccupied(roomID);
     }
 
     @Override

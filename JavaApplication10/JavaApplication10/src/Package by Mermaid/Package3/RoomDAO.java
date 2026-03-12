@@ -1,4 +1,5 @@
 package Package3;
+import Package1.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -114,23 +115,55 @@ public class RoomDAO {
         }
     }
 
-    public void markRoomOccupied(String roomId) throws Exception {
+    public void markRoomOccupied(int roomId) throws Exception {
         String sql = "UPDATE rooms SET availabilityStatus='Occupied' WHERE roomId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, roomId);
+            ps.setInt(1, roomId);
             if (ps.executeUpdate() == 0)
                 throw new SQLException("No room found with ID: " + roomId);
         }
     }
 
-    public void markRoomAvailable(String roomId) throws Exception {
+    public void markRoomAvailable(int roomId) throws Exception {
         String sql = "UPDATE rooms SET availabilityStatus='Available' WHERE roomId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, roomId);
+            ps.setInt(1, roomId);
             if (ps.executeUpdate() == 0)
                 throw new SQLException("No room found with ID: " + roomId);
+        }
+    }
+
+
+    public Room getRoomById(int roomId) throws Exception {
+        String sql = "SELECT * FROM rooms WHERE roomId=?";
+        Connection conn = DatabaseConnection.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, roomId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    RoomType roomType = RoomType.valueOf(rs.getString("roomType").toUpperCase());
+                    int capacity = rs.getInt("capacity");
+                    RoomStatus availabilityStatus = RoomStatus.valueOf(rs.getString("availabilityStatus").toUpperCase());
+                    double dailyRate = rs.getDouble("dailyRate");
+                    
+                    // Return appropriate Room implementation based on roomType
+                    switch (roomType) {
+                        case GeneralWard : 
+                            return new GeneralRoom(roomId, capacity, roomType, availabilityStatus, dailyRate);
+                        case PrivateRoom :
+                            return new PrivateRoom(roomId, capacity, roomType, availabilityStatus, dailyRate);
+                        case ICU:
+                            return new ICU(roomId, capacity, roomType, availabilityStatus, dailyRate);
+                        default:
+                            throw new SQLException("Unknown room type: " + roomType);
+                    }
+
+                } else {
+                    throw new SQLException("No room found with ID: " + roomId);
+                }
+            }
         }
     }
 }

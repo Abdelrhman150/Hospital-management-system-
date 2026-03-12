@@ -1,9 +1,12 @@
 package Package1;
 
+import Package3.RoomDAO;
+
 public class PrivateRoom implements Room {
 
     public int roomId;
     public RoomType roomType;
+    public int Capacity;
     public RoomStatus occupancyStatus;
     public double dailyRate;
 
@@ -15,14 +18,34 @@ public class PrivateRoom implements Room {
         dailyRate = 300.0; 
     }
 
-    @Override
+    public PrivateRoom(int roomId, int capacity, RoomType roomType, RoomStatus occupancyStatus, double dailyRate) {
+        this.roomId = roomId;
+        this.Capacity = capacity;
+        this.roomType = roomType;
+        this.occupancyStatus = occupancyStatus;
+        this.dailyRate = dailyRate;
+    }
+
+        @Override
     public void markOccupied(int roomID) {
         occupancyStatus = RoomStatus.Occupied;
+            RoomDAO roomdao = RoomDAO.getInstance() ;
+        try {
+            roomdao.markRoomOccupied(roomID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void markAvailable() {
-        occupancyStatus = RoomStatus.Available; 
+        occupancyStatus = RoomStatus.Available;
+            RoomDAO roomdao = RoomDAO.getInstance() ;
+        try {           
+             roomdao.markRoomAvailable(roomId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

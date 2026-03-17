@@ -14,8 +14,19 @@ public class EmailNotificationAdapter implements NotificationService {
     }
 
     @Override
-    public void sendNotification(Notification notification) {
-        // تحويل الطلب من الواجهة الموحدة إلى الخدمة الأصلية
-        emailService.sendEmail(notification.getMessage(), notification.getRecipient());
+    public boolean sendNotification(Notification notification) {
+        try {
+           
+            emailService.sendEmail(notification.getMessage(), notification.getRecipient());
+            return true; // Success
+        } catch (Exception e) {
+            System.err.println("✗ Failed to send Email: " + e.getMessage());
+            return false; // Failure
+        }
+    }
+
+    @Override
+    public String getChannelName() {
+        return "EMAIL";
     }
 }

@@ -14,8 +14,18 @@ public class MobileAppNotificationAdapter implements NotificationService {
     }
 
     @Override
-    public void sendNotification(Notification notification) {
-        // تحويل الطلب من الواجهة الموحدة إلى الخدمة الأصلية
-        mobileAppService.sendPushNotification(notification.getMessage(), notification.getRecipient());
+    public boolean sendNotification(Notification notification) {
+        try {
+            mobileAppService.sendPushNotification(notification.getMessage(), notification.getRecipient());
+            return true; // Success
+        } catch (Exception e) {
+            System.err.println("✗ Failed to send Mobile Push: " + e.getMessage());
+            return false; // Failure
+        }
+    }
+
+    @Override
+    public String getChannelName() {
+        return "MOBILE";
     }
 }

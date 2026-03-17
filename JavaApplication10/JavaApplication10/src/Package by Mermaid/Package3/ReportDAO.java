@@ -19,12 +19,7 @@ public class ReportDAO {
         return instance;
     }
 
-    /**
-     * شرح الحل:
-     * استخدام if(rs.next()) كان يقرأ فقط أول سجل طبي للمريض، وهذا خطأ منطقي لأن المريض 
-     * قد يكون له تاريخ طويل من الزيارات.
-     * باستخدام while(rs.next())، نقوم بالمرور على جميع السجلات وتجميعها في StringBuilder.
-     */
+  
     public String getPatientHistoryData(int patientId) throws Exception {
         String sql = "SELECT p.name, mr.diagnosis, mr.treatment, mr.visitDate " +
                      "FROM Patients p " +
@@ -39,7 +34,7 @@ public class ReportDAO {
                 StringBuilder data = new StringBuilder();
                 boolean found = false;
                 
-                // استخدام while بدلاً من if لقراءة جميع الزيارات
+                
                 while (rs.next()) {
                     if (!found) {
                         data.append("Patient History for: ").append(rs.getString("name")).append("\n");
@@ -61,19 +56,17 @@ public class ReportDAO {
         }
     }
 
-    /**
-     * جلب اسم المريض وأحدث تشخيص له.
-     */
+  
     public String[] getLatestPatientInfo(int patientId) throws Exception {
-        // SQL Optimization: استخدام TOP 1 مع ORDER BY لضمان أحدث تشخيص
+        
         String sql = "SELECT TOP 1 p.name, mr.diagnosis " +
                      "FROM Patients p " +
                      "LEFT JOIN MedicalRecords mr ON p.patientId = mr.patientId " +
                      "WHERE p.patientId = ? " +
                      "ORDER BY mr.visitDate DESC";
         
-        // Resource Management: PreparedStatement و ResultSet يتم إغلاقهما تلقائياً
-        // ملاحظة: DatabaseConnection يدير الاتصال الفعلي (Singleton)
+       
+       
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, patientId);
@@ -85,10 +78,8 @@ public class ReportDAO {
             }
         }
     }
+//(bills)بتجيب الفواتير من الداتا سيت
 
-    /**
-     * جلب البيانات المالية الفعلية.
-     */
     public double[] getFinancialSummaryDataMetrics() throws Exception {
         String sql = "SELECT SUM(amount) as total_revenue FROM Bills";
         
@@ -97,7 +88,7 @@ public class ReportDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     double revenue = rs.getDouble("total_revenue");
-                    double expenses = revenue * 0.6; // افتراض المصاريف 60%
+                    double expenses = revenue * 0.6; 
                     return new double[]{revenue, expenses};
                 }
                 return new double[]{0.0, 0.0};

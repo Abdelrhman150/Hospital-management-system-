@@ -1,121 +1,203 @@
 /*
-    Hospital Management System - Database Setup Script
+    Hospital Management System - Safe Full Setup Script
     Target: Microsoft SQL Server Management Studio (SSMS)
-    Description: This script creates the database, all necessary tables, 
-                 and populates them with realistic sample data for testing.
 */
 
--- 1. Create the Database
-IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'Hospital_Management_System')
+-- 1. Create Database if not exists
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'hospital_mangament_system')
 BEGIN
-    CREATE DATABASE Hospital_Management_System;
+    CREATE DATABASE hospital_mangament_system;
 END
 GO
 
-USE Hospital_Management_System;
+USE hospital_mangament_system;
 GO
 
--- 2. Drop Tables if they exist (to allow re-running the script)
--- Note: Order matters due to foreign key constraints
-IF OBJECT_ID('MedicalRecords', 'U') IS NOT NULL DROP TABLE MedicalRecords;
-IF OBJECT_ID('Appointments', 'U') IS NOT NULL DROP TABLE Appointments;
-IF OBJECT_ID('rooms', 'U') IS NOT NULL DROP TABLE rooms;
-IF OBJECT_ID('Secretaries', 'U') IS NOT NULL DROP TABLE Secretaries;
-IF OBJECT_ID('Nurses', 'U') IS NOT NULL DROP TABLE Nurses;
-IF OBJECT_ID('Doctors', 'U') IS NOT NULL 
-BEGIN
-    -- Remove circular dependency if exists
-    IF EXISTS (SELECT 1 FROM sys.foreign_keys WHERE name = 'FK_Departments_HeadDoctor')
-        ALTER TABLE Departments DROP CONSTRAINT FK_Departments_HeadDoctor;
-    DROP TABLE Doctors;
-END
-IF OBJECT_ID('Patients', 'U') IS NOT NULL DROP TABLE Patients;
-IF OBJECT_ID('Departments', 'U') IS NOT NULL DROP TABLE Departments;
+-- 2. Drop foreign keys first to avoid errors
+-- Drop FKs dynamically
+DECLARE @sql NVARCHAR(MAX) = N'';
+
+SELECT @sql += 'ALTER TABLE ' + QUOTENAME(OBJECT_NAME(parent_object_id)) +
+               ' DROP CONSTRAINT ' + QUOTENAME(name) + ';' + CHAR(13)
+FROM sys.foreign_keys;
+
+EXEC sp_executesql @sql;
 GO
 
--- 3. Create Tables
+-- 3. Drop tables if exist
+DECLARE @tables NVARCHAR(MAX) = N'';
 
--- Departments Table
+SELECT @tables += 'DROP TABLE IF EXISTS ' + QUOTENAME(name) + ';' + CHAR(13)
+FROM sys.tables;
+
+EXEC sp_executesql @tables;
+GO
+
+-- 4. Create Tables
+
+-- Departments
 CREATE TABLE Departments (
     departmentId INT PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
-    headDoctorId INT -- Will be updated later to avoid circular reference
+    headDoctorId INT NULL
 );
 
--- Doctors Table
+-- Doctors
 CREATE TABLE Doctors (
     doctorId INT PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
     specialization NVARCHAR(100),
     phone NVARCHAR(20),
-    departmentId INT FOREIGN KEY REFERENCES Departments(departmentId)
+    email NVARCHAR(100),
+    departmentId INT NOT NULL,
+    CONSTRAINT FK_Doctors_Departments FOREIGN KEY (departmentId) REFERENCES Departments(departmentId)
 );
 
--- Add Foreign Key to Departments (Head Doctor)
-ALTER TABLE Departments 
-ADD CONSTRAINT FK_Departments_HeadDoctor 
-FOREIGN KEY (headDoctorId) REFERENCES Doctors(doctorId);
-
--- Patients Table
+-- Patients
 CREATE TABLE Patients (
     patientId INT PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
     gender NVARCHAR(20),
     bloodType NVARCHAR(20),
     phone NVARCHAR(20),
+    email NVARCHAR(100),
     address NVARCHAR(255),
     dateOfBirth DATE
 );
 
--- Nurses Table
+-- Nurses
 CREATE TABLE Nurses (
     nurseId INT PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
     phone NVARCHAR(20),
+    email NVARCHAR(100),
     shift NVARCHAR(50),
     availability NVARCHAR(50)
 );
 
--- Secretaries Table
+-- Secretaries
 CREATE TABLE Secretaries (
     secretaryId INT PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
-    phone NVARCHAR(20)
+    phone NVARCHAR(20),
+    email NVARCHAR(100)
 );
 
--- Rooms Table (Note: lowercase 'rooms' as per RoomDAO)
+-- Admins
+CREATE TABLE Admins (
+    adminId INT PRIMARY KEY,
+    name NVARCHAR(100) NOT NULL,
+    phone NVARCHAR(20),
+    email NVARCHAR(100)
+);
+
+-- Security
+CREATE TABLE Security (
+    securityId INT PRIMARY KEY,
+    name NVARCHAR(100) NOT NULL,
+    phone NVARCHAR(20),
+    email NVARCHAR(100)
+);
+
+-- Rooms
 CREATE TABLE rooms (
     roomId NVARCHAR(20) PRIMARY KEY,
     roomType NVARCHAR(50),
     capacity INT,
     availabilityStatus NVARCHAR(50),
-    dailyRate DECIMAL(10, 2)
+    dailyRate DECIMAL(10,2)
 );
 
--- Appointments Table
+-- Appointments
 CREATE TABLE Appointments (
     appointmentId INT PRIMARY KEY,
-    patientId INT FOREIGN KEY REFERENCES Patients(patientId),
-    doctorId INT FOREIGN KEY REFERENCES Doctors(doctorId),
+    patientId INT NOT NULL,
+    doctorId INT NOT NULL,
     appointmentTime DATETIME NOT NULL,
     type NVARCHAR(50),
-    status NVARCHAR(50) DEFAULT 'Scheduled'
+    status NVARCHAR(50) DEFAULT 'Scheduled',
+    CONSTRAINT FK_Appointments_Patients FOREIGN KEY (patientId) REFERENCES Patients(patientId),
+    CONSTRAINT FK_Appointments_Doctors FOREIGN KEY (doctorId) REFERENCES Doctors(doctorId)
 );
 
--- MedicalRecords Table
+-- MedicalRecords
 CREATE TABLE MedicalRecords (
     recordId INT PRIMARY KEY,
-    patientId INT FOREIGN KEY REFERENCES Patients(patientId),
-    doctorId INT FOREIGN KEY REFERENCES Doctors(doctorId),
+    patientId INT NOT NULL,
+    doctorId INT NOT NULL,
     diagnosis NVARCHAR(MAX),
     complaint NVARCHAR(MAX),
-    recordDate DATE
+    recordDate DATE,
+    treatment NVARCHAR(MAX) NULL,
+    visitDate DATE NULL,
+    CONSTRAINT FK_MedicalRecords_Patients FOREIGN KEY (patientId) REFERENCES Patients(patientId),
+    CONSTRAINT FK_MedicalRecords_Doctors FOREIGN KEY (doctorId) REFERENCES Doctors(doctorId)
 );
+
+-- Roles
+CREATE TABLE Roles(
+    roleId INT IDENTITY(1,1) PRIMARY KEY,
+    roleName NVARCHAR(50) UNIQUE NOT NULL
+);
+
+-- Users
+CREATE TABLE Users(
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    personId INT NULL, -- Optional link to doctorId, nurseId, etc.
+    full_name NVARCHAR(100) NOT NULL,
+    username NVARCHAR(50) UNIQUE NOT NULL, -- This will store generated IDs (D001, A001, etc.)
+    password NVARCHAR(255) NOT NULL,
+    email NVARCHAR(100) UNIQUE NOT NULL,
+    role NVARCHAR(20) NOT NULL CHECK (role IN ('Doctor', 'Nurse', 'Secretary', 'Admin', 'Patient')),
+    createdAt DATETIME DEFAULT GETDATE(),
+    lastLogin DATETIME NULL,
+    accountStatus NVARCHAR(20) DEFAULT 'Active'
+);
+
+-- Bills
+CREATE TABLE Bills(
+    billId INT IDENTITY(1,1) PRIMARY KEY,
+    patientId INT NULL,
+    amount DECIMAL(10,2),
+    billDate DATETIME DEFAULT GETDATE(),
+    status NVARCHAR(50),
+    CONSTRAINT FK_Bills_Patients FOREIGN KEY (patientId) REFERENCES Patients(patientId)
+);
+
+-- Reports
+CREATE TABLE Reports(
+    reportId INT IDENTITY(1,1) PRIMARY KEY,
+    patientId INT NULL,
+    doctorId INT NULL,
+    reportType NVARCHAR(50),
+    formatType NVARCHAR(50),
+    reportContent NVARCHAR(MAX),
+    visitDate DATE NULL,
+    treatment NVARCHAR(MAX) NULL,
+    createdAt DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_Reports_Patients FOREIGN KEY (patientId) REFERENCES Patients(patientId),
+    CONSTRAINT FK_Reports_Doctors FOREIGN KEY (doctorId) REFERENCES Doctors(doctorId)
+);
+
+-- Notifications
+CREATE TABLE Notifications (
+    id INT PRIMARY KEY IDENTITY(1,1),
+    message NVARCHAR(MAX) NOT NULL,
+    recipient NVARCHAR(100) NOT NULL,
+    channel NVARCHAR(20) NOT NULL, -- EMAIL, SMS, MOBILE
+    status NVARCHAR(20) NOT NULL,  -- SENT, FAILED
+    sentAt DATETIME DEFAULT GETDATE()
+);
+
+-- Add FK for Department head after Doctors table exists
+ALTER TABLE Departments
+ADD CONSTRAINT FK_Departments_HeadDoctor FOREIGN KEY (headDoctorId) REFERENCES Doctors(doctorId);
 GO
 
--- 4. Insert Sample Data
+-- 5. Insert Sample Data (Safe Insert)
 
--- 4.1 Departments
+-- Departments
+IF NOT EXISTS (SELECT 1 FROM Departments WHERE departmentId = 1)
 INSERT INTO Departments (departmentId, name) VALUES 
 (1, 'Cardiology'),
 (2, 'Neurology'),
@@ -123,18 +205,19 @@ INSERT INTO Departments (departmentId, name) VALUES
 (4, 'Orthopedics'),
 (5, 'Dermatology');
 
--- 4.2 Doctors
-INSERT INTO Doctors (doctorId, name, specialization, phone, departmentId) VALUES 
-(1, 'Dr. Ahmed Mansour', 'Cardiologist', '01012345678', 1),
-(2, 'Dr. Sarah Hassan', 'Neurologist', '01123456789', 2),
-(3, 'Dr. Mohamed Ibrahim', 'Pediatrician', '01234567890', 3),
-(4, 'Dr. Mona Zaki', 'Orthopedic Surgeon', '01545678901', 4),
-(5, 'Dr. Omar Farouk', 'Dermatologist', '01098765432', 5),
-(6, 'Dr. Laila Nour', 'Cardiologist', '01187654321', 1),
-(7, 'Dr. Khaled Said', 'Neurologist', '01276543210', 2),
-(8, 'Dr. Fatma Ali', 'Pediatrician', '01565432109', 3),
-(9, 'Dr. Youssef Kamal', 'Orthopedic Surgeon', '01054321098', 4),
-(10, 'Dr. Mariam El-Sayed', 'Dermatologist', '01143210987', 5);
+-- Doctors
+IF NOT EXISTS (SELECT 1 FROM Doctors WHERE doctorId = 1)
+INSERT INTO Doctors (doctorId, name, specialization, phone, email, departmentId) VALUES 
+(1, 'Dr. Ahmed Mansour', 'Cardiologist', '01012345678', 'ahmed@hospital.com', 1),
+(2, 'Dr. Sarah Hassan', 'Neurologist', '01123456789', 'sara@hospital.com', 2),
+(3, 'Dr. Mohamed Ibrahim', 'Pediatrician', '01234567890', 'mohamed@hospital.com', 3),
+(4, 'Dr. Mona Zaki', 'Orthopedic Surgeon', '01545678901', 'mona@hospital.com', 4),
+(5, 'Dr. Omar Farouk', 'Dermatologist', '01098765432', 'omar@hospital.com', 5),
+(6, 'Dr. Laila Nour', 'Cardiologist', '01187654321', 'laila@hospital.com', 1),
+(7, 'Dr. Khaled Said', 'Neurologist', '01276543210', 'khaled@hospital.com', 2),
+(8, 'Dr. Fatma Ali', 'Pediatrician', '01565432109', 'fatma@hospital.com', 3),
+(9, 'Dr. Youssef Kamal', 'Orthopedic Surgeon', '01054321098', 'youssef@hospital.com', 4),
+(10, 'Dr. Mariam El-Sayed', 'Dermatologist', '01143210987', 'mariam@hospital.com', 5);
 
 -- Update Department Heads
 UPDATE Departments SET headDoctorId = 1 WHERE departmentId = 1;
@@ -143,34 +226,48 @@ UPDATE Departments SET headDoctorId = 3 WHERE departmentId = 3;
 UPDATE Departments SET headDoctorId = 4 WHERE departmentId = 4;
 UPDATE Departments SET headDoctorId = 5 WHERE departmentId = 5;
 
--- 4.3 Patients
-INSERT INTO Patients (patientId, name, gender, bloodType, phone, address, dateOfBirth) VALUES 
-(1, 'Mahmoud Abbas', 'Male', 'A_Pos', '01011122233', 'Cairo, Nasr City', '1985-05-15'),
-(2, 'Zainab Soliman', 'Female', 'B_Pos', '01122233344', 'Giza, Dokki', '1990-10-20'),
-(3, 'Mostafa Ragab', 'Male', 'O_Neg', '01233344455', 'Alexandria, Smouha', '1975-03-12'),
-(4, 'Amira Fawzy', 'Female', 'AB_Pos', '01544455566', 'Cairo, Maadi', '2000-08-05'),
-(5, 'Hany Shaker', 'Male', 'A_Neg', '01055566677', 'Giza, Haram', '1982-12-30'),
-(6, 'Salma Ahmed', 'Female', 'O_Pos', '01166677788', 'Cairo, Heliopolis', '1995-07-14'),
-(7, 'Karim Walid', 'Male', 'B_Neg', '01277788899', 'Suez, Port Tawfik', '1988-02-28'),
-(8, 'Nour El-Din', 'Male', 'AB_Neg', '01588899900', 'Mansoura, Talkha', '1992-11-11'),
-(9, 'Yasmin Gamal', 'Female', 'A_Pos', '01099900011', 'Tanta, Sea St.', '1998-04-09'),
-(10, 'Sherif Mounir', 'Male', 'O_Pos', '01100011122', 'Cairo, Zamalek', '1970-01-01');
+-- Patients
+IF NOT EXISTS (SELECT 1 FROM Patients WHERE patientId = 1)
+INSERT INTO Patients (patientId, name, gender, bloodType, phone, email, address, dateOfBirth) VALUES 
+(1, 'Mahmoud Abbas', 'Male', 'A_Pos', '01011122233', 'mahmoud@hospital.com', 'Cairo, Nasr City', '1985-05-15'),
+(2, 'Zainab Soliman', 'Female', 'B_Pos', '01122233344', 'zainab@hospital.com', 'Giza, Dokki', '1990-10-20'),
+(3, 'Mostafa Ragab', 'Male', 'O_Neg', '01233344455', 'mostafa@hospital.com', 'Alexandria, Smouha', '1975-03-12'),
+(4, 'Amira Fawzy', 'Female', 'AB_Pos', '01544455566', 'amira@hospital.com', 'Cairo, Maadi', '2000-08-05'),
+(5, 'Hany Shaker', 'Male', 'A_Neg', '01055566677', 'hany@hospital.com', 'Giza, Haram', '1982-12-30'),
+(6, 'Salma Ahmed', 'Female', 'O_Pos', '01166677788', 'salma@hospital.com', 'Cairo, Heliopolis', '1995-07-14'),
+(7, 'Karim Walid', 'Male', 'B_Neg', '01277788899', 'karim_p@hospital.com', 'Suez, Port Tawfik', '1988-02-28'),
+(8, 'Nour El-Din', 'Male', 'AB_Neg', '01588899900', 'nour@hospital.com', 'Mansoura, Talkha', '1992-11-11'),
+(9, 'Yasmin Gamal', 'Female', 'A_Pos', '01099900011', 'yasmin@hospital.com', 'Tanta, Sea St.', '1998-04-09'),
+(10, 'Sherif Mounir', 'Male', 'O_Pos', '01100011122', 'sherif@hospital.com', 'Cairo, Zamalek', '1970-01-01');
 
--- 4.4 Nurses
-INSERT INTO Nurses (nurseId, name, phone, shift, availability) VALUES 
-(1, 'Noura Ali', '01012312312', 'Morning', 'Available'),
-(2, 'Heba Mahmoud', '01123423423', 'Evening', 'Available'),
-(3, 'Mona Ahmed', '01234534534', 'Night', 'Busy'),
-(4, 'Eman Said', '01545645645', 'Morning', 'Available'),
-(5, 'Rania Youssef', '01056756756', 'Evening', 'OffDuty');
+-- Nurses
+IF NOT EXISTS (SELECT 1 FROM Nurses WHERE nurseId = 1)
+INSERT INTO Nurses (nurseId, name, phone, email, shift, availability) VALUES 
+(1, 'Noura Ali', '01012312312', 'noura@hospital.com', 'Morning', 'Available'),
+(2, 'Heba Mahmoud', '01123423423', 'heba@hospital.com', 'Evening', 'Available'),
+(3, 'Mona Ahmed', '01234534534', 'mona_n@hospital.com', 'Night', 'Busy'),
+(4, 'Eman Said', '01545645645', 'eman@hospital.com', 'Morning', 'Available'),
+(5, 'Rania Youssef', '01056756756', 'rania@hospital.com', 'Evening', 'OffDuty');
 
--- 4.5 Secretaries
-INSERT INTO Secretaries (secretaryId, name, phone) VALUES 
-(1, 'Sahar Fouad', '01011122233'),
-(2, 'Dina Hamdy', '01122233344'),
-(3, 'Mai Khaled', '01233344455');
+-- Secretaries
+IF NOT EXISTS (SELECT 1 FROM Secretaries WHERE secretaryId = 1)
+INSERT INTO Secretaries (secretaryId, name, phone, email) VALUES 
+(1, 'Sahar Fouad', '01011122233', 'sahar@hospital.com'),
+(2, 'Dina Hamdy', '01122233344', 'dina@hospital.com'),
+(3, 'Mai Khaled', '01233344455', 'mai@hospital.com');
 
--- 4.6 Rooms
+-- Admins
+IF NOT EXISTS (SELECT 1 FROM Admins WHERE adminId = 1)
+INSERT INTO Admins (adminId, name, phone, email) VALUES 
+(1, 'Admin Karim', '01000000000', 'karim@hospital.com');
+
+-- Security
+IF NOT EXISTS (SELECT 1 FROM Security WHERE securityId = 1)
+INSERT INTO Security (securityId, name, phone, email) VALUES 
+(1, 'Sec Guard Ali', '01011111111', 'ali_sec@hospital.com');
+
+-- Rooms
+IF NOT EXISTS (SELECT 1 FROM rooms WHERE roomId = 'ROOM001')
 INSERT INTO rooms (roomId, roomType, capacity, availabilityStatus, dailyRate) VALUES 
 ('ROOM001', 'GeneralWard', 4, 'Available', 200.0),
 ('ROOM002', 'GeneralWard', 4, 'Occupied', 200.0),
@@ -183,7 +280,7 @@ INSERT INTO rooms (roomId, roomType, capacity, availabilityStatus, dailyRate) VA
 ('ROOM009', 'ICU', 1, 'Available', 5000.0),
 ('ROOM010', 'GeneralWard', 4, 'Available', 200.0);
 
--- 4.7 Appointments
+-- Appointments
 INSERT INTO Appointments (appointmentId, patientId, doctorId, appointmentTime, type, status) VALUES 
 (1, 1, 1, '2026-03-08 10:00:00', 'WalkIn', 'Scheduled'),
 (2, 2, 2, '2026-03-08 11:30:00', 'FollowUp', 'Scheduled'),
@@ -196,7 +293,7 @@ INSERT INTO Appointments (appointmentId, patientId, doctorId, appointmentTime, t
 (9, 9, 9, '2026-03-11 15:30:00', 'Online', 'Scheduled'),
 (10, 10, 10, '2026-03-12 11:00:00', 'WalkIn', 'Scheduled');
 
--- 4.8 Medical Records
+-- MedicalRecords
 INSERT INTO MedicalRecords (recordId, patientId, doctorId, diagnosis, complaint, recordDate) VALUES 
 (1, 1, 1, 'Hypertension', 'Headache and dizziness', '2026-02-01'),
 (2, 2, 2, 'Migraine', 'Severe headache', '2026-02-05'),
@@ -208,6 +305,42 @@ INSERT INTO MedicalRecords (recordId, patientId, doctorId, diagnosis, complaint,
 (8, 8, 8, 'Asthma', 'Shortness of breath', '2026-03-03'),
 (9, 9, 9, 'Knee Osteoarthritis', 'Chronic knee pain', '2026-03-05'),
 (10, 10, 10, 'Psoriasis', 'Scaly skin patches', '2026-03-06');
+
+-- Roles
+INSERT INTO Roles (roleName) VALUES
+('Admin'), ('Doctor'), ('Nurse'), ('Secretary');
+
+-- Users
+INSERT INTO Users (personId, full_name, username, password, email, role) VALUES
+(1, 'Admin Karim', 'A001', 'admin123', 'karim@hospital.com', 'Admin'),
+(1, 'Dr. Ahmed Mansour', 'D001', 'doctor456', 'ahmed.mansour.d001@hospital.com', 'Doctor'),
+(2, 'Dr. Sarah Hassan', 'D002', 'doctor789', 'sarah.hassan.d002@hospital.com', 'Doctor'),
+(1, 'Noura Ali', 'N001', 'nurse123', 'noura.ali.n001@hospital.com', 'Nurse'),
+(2, 'Heba Mahmoud', 'N002', 'nurse456', 'heba.mahmoud.n002@hospital.com', 'Nurse'),
+(1, 'Sahar Fouad', 'SCT001', 'sec123', 'sahar.fouad.sct001@hospital.com', 'Secretary');
+
+-- Bills
+INSERT INTO Bills (patientId,amount,status) VALUES
+(1,500,'Paid'),
+(2,1200,'Unpaid'),
+(3,350,'Paid'),
+(4,800,'Unpaid'),
+(5,200,'Paid');
+
+-- Reports
+INSERT INTO Reports (patientId,doctorId,reportType,formatType,reportContent) VALUES
+(1,1,'MedicalReport','PDF','Patient diagnosed with hypertension. Requires monthly follow-up.'),
+(2,2,'MedicalReport','PDF','Migraine treatment plan and medication prescribed.'),
+(3,3,'MedicalReport','Excel','Cold symptoms treated with rest and medication.'),
+(4,4,'RadiologyReport','PDF','X-ray confirms ankle fracture. Cast applied.'),
+(5,5,'DermatologyReport','PDF','Skin rash identified as eczema. Topical cream prescribed.');
 GO
 
-PRINT 'Database setup and data population completed successfully.';
+-- Notifications
+INSERT INTO Notifications (message, recipient, channel, status) VALUES
+('Your appointment is confirmed for tomorrow.', 'Mahmoud Abbas', 'SMS', 'SENT'),
+('Please check your latest medical report.', 'Zainab Soliman', 'EMAIL', 'SENT'),
+('A new message from Dr. Ahmed.', 'Mahmoud Abbas', 'MOBILE', 'SENT');
+GO
+
+PRINT 'Full Database setup completed successfully.';

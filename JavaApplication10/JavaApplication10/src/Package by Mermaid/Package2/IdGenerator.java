@@ -63,6 +63,61 @@ public class IdGenerator {
         return nextId("MedicalRecords", "recordId");
     }
 
+    /**
+     * Generates a unique role-based ID (e.g., D001, N015, SCT001)
+     */
+    public String generateUserIdByRole(String role) {
+        String prefix = "";
+        switch (role.toLowerCase()) {
+            case "doctor": prefix = "D"; break;
+            case "nurse": prefix = "N"; break;
+            case "admin": prefix = "A"; break;
+            case "patient": prefix = "P"; break;
+            case "secretary": prefix = "SCT"; break;
+            default: prefix = "U";
+        }
+
+        String newId = prefix + "001";
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            // Order by length and name to find the true highest numeric ID
+            String query = "SELECT username FROM Users WHERE username LIKE '" + prefix + "%' ORDER BY LEN(username) DESC, username DESC";
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(query)) {
+                
+                while (rs.next()) {
+                    String maxId = rs.getString("username");
+                    if (maxId != null && maxId.startsWith(prefix)) {
+                        String numericPart = maxId.substring(prefix.length());
+                        if (numericPart.matches("\\d+")) { // Ensure it's numeric
+                            int num = Integer.parseInt(numericPart);
+                            newId = String.format(prefix + "%03d", num + 1);
+                            break; // Found the latest numeric ID
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error generating role ID: " + e.getMessage());
+        }
+        return newId;
+    }
+
+    /**
+     * Generates an official email based on Full Name and ID
+     */
+    public String generateEmail(String fullName, String generatedId) {
+        // 1) convert to lowercase
+        String processedName = fullName.toLowerCase();
+        // 2) replace spaces with dots
+        processedName = processedName.replace(" ", ".");
+        // 3) remove special characters (keep dots)
+        processedName = processedName.replaceAll("[^a-z0-9.]", "");
+        
+        // 4) append ID and @hospital.com
+        return processedName + "." + generatedId.toLowerCase() + "@hospital.com";
+    }
+
     // ==================== Room (String ID) ====================
 
     public String nextRoomId() {

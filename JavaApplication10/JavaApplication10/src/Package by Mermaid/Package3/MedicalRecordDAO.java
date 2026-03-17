@@ -19,12 +19,20 @@ public class MedicalRecordDAO {
 
     // ==================== Operations ====================
 
-    public void createMedicalRecord(int recordId, int patientId, int doctorId,
+    public void createMedicalRecord(int patientId, int doctorId,
             String diagnosis, String complaint, Date recordDate) throws Exception {
         String sql = "INSERT INTO MedicalRecords(recordId, patientId, doctorId, diagnosis, complaint, recordDate) VALUES(?,?,?,?,?,?)";
+        
+        // Get next recordId automatically
+        int nextRecordId = 1;
         Connection conn = DatabaseConnection.getConnection();
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT ISNULL(MAX(recordId), 0) + 1 FROM MedicalRecords")) {
+            if (rs.next()) nextRecordId = rs.getInt(1);
+        }
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, recordId);
+            ps.setInt(1, nextRecordId);
             ps.setInt(2, patientId);
             ps.setInt(3, doctorId);
             ps.setString(4, diagnosis);

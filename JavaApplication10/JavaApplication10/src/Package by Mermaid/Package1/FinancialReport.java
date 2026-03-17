@@ -11,7 +11,7 @@ public class FinancialReport extends Report {
     private double expenses;
 
     public FinancialReport(double revenue, double expenses, ReportFormatter formatter) {
-        super(formatter);
+        this.formatter = formatter;
         this.revenue = revenue;
         this.expenses = expenses;
     }

@@ -9,24 +9,28 @@ import Package2.ReportFormatter;
 public abstract class Report {
     protected ReportFormatter formatter;
 
+    protected Report() {
+    }
+
     protected Report(ReportFormatter formatter) {
         this.formatter = formatter;
     }
 
-    /**
-     * المسؤولية: ملء محتوى التقرير (Header, Body, Footer) عبر المنسق.
-     */
+ 
+   
     protected abstract void generate();
 
-    /**
-     * شرح الحل: Entity لا يجب أن تطبع مباشرة.
-     * بدلاً من ذلك، تعيد النص المنسق، والـ UI هو المسؤول عن عرضه.
-     */
+
     public String getFullContent() {
-        // نضمن توليد المحتوى أولاً
+ 
         this.generate();
         
-        // نعيد النص المنسق بدلاً من الطباعة
+ 
         return formatter.getFormattedReport();
+    }
+
+    public void exportToFile(String fileName) {
+        this.generate();
+        formatter.saveToFile(fileName);
     }
 }

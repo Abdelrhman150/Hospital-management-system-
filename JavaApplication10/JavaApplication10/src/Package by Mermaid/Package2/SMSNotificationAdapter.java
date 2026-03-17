@@ -14,8 +14,18 @@ public class SMSNotificationAdapter implements NotificationService {
     }
 
     @Override
-    public void sendNotification(Notification notification) {
-        // تحويل الطلب من الواجهة الموحدة إلى الخدمة الأصلية
-        smsService.sendSMS(notification.getMessage(), notification.getRecipient());
+    public boolean sendNotification(Notification notification) {
+        try {
+            smsService.sendSMS(notification.getMessage(), notification.getRecipient());
+            return true; // Success
+        } catch (Exception e) {
+            System.err.println("✗ Failed to send SMS: " + e.getMessage());
+            return false; // Failure
+        }
+    }
+
+    @Override
+    public String getChannelName() {
+        return "SMS";
     }
 }

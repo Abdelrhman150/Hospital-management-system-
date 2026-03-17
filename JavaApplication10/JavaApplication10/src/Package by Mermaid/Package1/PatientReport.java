@@ -10,8 +10,8 @@ public class PatientReport extends Report {
     private String patientName;
     private String diagnosis;
 
-    public PatientReport(String patientName, String diagnosis, ReportFormatter formatter) {
-        super(formatter);
+    public PatientReport(final String patientName, final String diagnosis, final ReportFormatter formatter) {
+        this.formatter = formatter;
         this.patientName = patientName;
         this.diagnosis = diagnosis;
     }

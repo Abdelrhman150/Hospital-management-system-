@@ -1,0 +1,9 @@
+[EXCEL SHEET]: Patient Medical History Export
+==================================================
+COLUMN_A,COLUMN_B
+--------------------------------------------------
+Patient Name,Hany Shaker
+Diagnosis,Eczema
+--------------------------------------------------
+[EXCEL FOOTER],Medical Confidentiality Apply | System Generated History.
+==================================================

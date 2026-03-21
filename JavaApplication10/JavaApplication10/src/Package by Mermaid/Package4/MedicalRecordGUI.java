@@ -24,7 +24,7 @@ public class MedicalRecordGUI extends JFrame {
     public MedicalRecordGUI(User user) {
         this.currentUser = user;
         this.medicalRecordDAO = MedicalRecordDAO.getInstance();
-        
+
         setTitle("Medical Records Management - Dr. " + user.getName());
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -58,7 +58,7 @@ public class MedicalRecordGUI extends JFrame {
 
         JLabel lblSearch = new JLabel("Patient ID:");
         lblSearch.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        
+
         txtPatientId = new JTextField(10);
         JButton btnViewHistory = new JButton("View History 📋");
         btnViewHistory.setBackground(new Color(46, 117, 180));
@@ -77,7 +77,7 @@ public class MedicalRecordGUI extends JFrame {
         // Tab 1: View History
         JPanel viewPanel = new JPanel(new BorderLayout());
         viewPanel.setBackground(Color.WHITE);
-        tableModel = new DefaultTableModel(new String[]{"Record ID", "Date", "Diagnosis", "Complaint"}, 0);
+        tableModel = new DefaultTableModel(new String[] { "Record ID", "Date", "Diagnosis", "Complaint" }, 0);
         historyTable = new JTable(tableModel);
         historyTable.setRowHeight(25);
         viewPanel.add(new JScrollPane(historyTable), BorderLayout.CENTER);
@@ -90,14 +90,16 @@ public class MedicalRecordGUI extends JFrame {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        gbc.gridx = 0; gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
         addPanel.add(new JLabel("Diagnosis:"), gbc);
         txtDiagnosis = new JTextArea(3, 30);
         txtDiagnosis.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         gbc.gridx = 1;
         addPanel.add(new JScrollPane(txtDiagnosis), gbc);
 
-        gbc.gridx = 0; gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1;
         addPanel.add(new JLabel("Complaint:"), gbc);
         txtComplaint = new JTextArea(3, 30);
         txtComplaint.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
@@ -109,7 +111,8 @@ public class MedicalRecordGUI extends JFrame {
         btnSave.setForeground(Color.WHITE);
         btnSave.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnSave.addActionListener(e -> saveNewRecord());
-        gbc.gridx = 1; gbc.gridy = 2;
+        gbc.gridx = 1;
+        gbc.gridy = 2;
         addPanel.add(btnSave, gbc);
 
         tabbedPane.addTab("Add New Record", addPanel);
@@ -130,7 +133,7 @@ public class MedicalRecordGUI extends JFrame {
         try {
             int patientId = Integer.parseInt(idStr);
             tableModel.setRowCount(0); // Clear old data
-            
+
             ResultSet rs = medicalRecordDAO.getPatientHistory(patientId);
             boolean found = false;
             while (rs.next()) {
@@ -142,14 +145,16 @@ public class MedicalRecordGUI extends JFrame {
                 row.add(rs.getString("complaint"));
                 tableModel.addRow(row);
             }
-            
+
             if (!found) {
-                JOptionPane.showMessageDialog(this, "No records found for this patient.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "No records found for this patient.", "Info",
+                        JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Patient ID must be numeric.", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error loading history: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error loading history: " + ex.getMessage(), "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -159,27 +164,31 @@ public class MedicalRecordGUI extends JFrame {
         String complaint = txtComplaint.getText().trim();
 
         if (idStr.isEmpty() || diagnosis.isEmpty() || complaint.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please fill in Patient ID, Diagnosis, and Complaint.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please fill in Patient ID, Diagnosis, and Complaint.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
             int patientId = Integer.parseInt(idStr);
             int doctorId = currentUser.getPersonId(); // Assumes doctor's personId is stored in User object
-            
-            medicalRecordDAO.createMedicalRecord(patientId, doctorId, diagnosis, complaint, new java.sql.Date(System.currentTimeMillis()));
-            
-            JOptionPane.showMessageDialog(this, "Medical Record saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            
+
+            medicalRecordDAO.createMedicalRecord(patientId, doctorId, diagnosis, complaint,
+                    new java.sql.Date(System.currentTimeMillis()));
+
+            JOptionPane.showMessageDialog(this, "Medical Record saved successfully!", "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+
             // Clear fields and refresh history
             txtDiagnosis.setText("");
             txtComplaint.setText("");
             loadPatientHistory();
-            
+
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Patient ID must be numeric.", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Error saving record: " + ex.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error saving record: " + ex.getMessage(), "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 

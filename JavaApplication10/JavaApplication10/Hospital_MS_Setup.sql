@@ -130,6 +130,9 @@ CREATE TABLE MedicalRecords (
     recordDate DATE,
     treatment NVARCHAR(MAX) NULL,
     visitDate DATE NULL,
+    labResults    NVARCHAR(500) NULL,
+    xrayScan      NVARCHAR(500) NULL,
+    allergyWarning NVARCHAR(500) NULL,
     CONSTRAINT FK_MedicalRecords_Patients FOREIGN KEY (patientId) REFERENCES Patients(patientId),
     CONSTRAINT FK_MedicalRecords_Doctors FOREIGN KEY (doctorId) REFERENCES Doctors(doctorId)
 );

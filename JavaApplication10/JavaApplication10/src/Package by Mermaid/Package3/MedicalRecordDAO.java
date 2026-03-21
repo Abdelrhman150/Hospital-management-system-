@@ -60,4 +60,44 @@ public class MedicalRecordDAO {
         ps.setInt(1, patientId);
         return ps.executeQuery();
     }
+
+    // ==================== Decorator Methods ====================
+
+    public void addLabResult(int recordId, String labResult) throws Exception {
+        String sql = "UPDATE MedicalRecords SET labResults=? WHERE recordId=?";
+        Connection conn = DatabaseConnection.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, labResult);
+            ps.setInt(2, recordId);
+            ps.executeUpdate();
+        }
+    }
+
+    public void addXRayScan(int recordId, String scanDetails) throws Exception {
+        String sql = "UPDATE MedicalRecords SET xrayScan=? WHERE recordId=?";
+        Connection conn = DatabaseConnection.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, scanDetails);
+            ps.setInt(2, recordId);
+            ps.executeUpdate();
+        }
+    }
+
+    public void addAllergyWarning(int recordId, String allergyWarning) throws Exception {
+        String sql = "UPDATE MedicalRecords SET allergyWarning=? WHERE recordId=?";
+        Connection conn = DatabaseConnection.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, allergyWarning);
+            ps.setInt(2, recordId);
+            ps.executeUpdate();
+        }
+    }
+
+    public ResultSet getFullRecord(int recordId) throws Exception {
+        String sql = "SELECT * FROM MedicalRecords WHERE recordId=?";
+        Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setInt(1, recordId);
+        return ps.executeQuery();
+    }
 }

@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MedicalRecordTest",
+            "request": "launch",
+            "mainClass": "Package1.MedicalRecordTest",
+            "projectName": "Hospital-management-system-_c020c3af"
+        },
+        {
+            "type": "java",
             "name": "Run DatabaseConnection",
             "request": "launch",
             "mainClass": "Package3.DatabaseConnection",

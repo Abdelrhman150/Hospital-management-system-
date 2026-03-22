@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "Hospital-management-system-_99a3fe1e"
+        },
+        {
+            "type": "java",
             "name": "MedicalRecordTest",
             "request": "launch",
             "mainClass": "Package1.MedicalRecordTest",

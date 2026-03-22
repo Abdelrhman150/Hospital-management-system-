@@ -1,35 +1,28 @@
-package Package1;
+package Package1.roomsystemfactoryflyweight;
 
 import Package3.RoomDAO;
 
 public class PrivateRoom implements Room {
 
     public int roomId;
-    public RoomType roomType;
-    public int Capacity;
     public RoomStatus occupancyStatus;
-    public double dailyRate;
+    private RoomSharedData sharedData;
 
-    // Constructor
     public PrivateRoom() {
-        // waits for the roomID to be assigned by ID generator
-        roomType = RoomType.PrivateRoom;
-        occupancyStatus = RoomStatus.Available;
-        dailyRate = 300.0; 
+        this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.PrivateRoom);
+        this.occupancyStatus = RoomStatus.Available;
     }
 
-    public PrivateRoom(int roomId, int capacity, RoomType roomType, RoomStatus occupancyStatus, double dailyRate) {
+    public PrivateRoom(int roomId, RoomStatus occupancyStatus) {
         this.roomId = roomId;
-        this.Capacity = capacity;
-        this.roomType = roomType;
         this.occupancyStatus = occupancyStatus;
-        this.dailyRate = dailyRate;
+        this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.PrivateRoom);
     }
 
-        @Override
+    @Override
     public void markOccupied(int roomID) {
         occupancyStatus = RoomStatus.Occupied;
-            RoomDAO roomdao = RoomDAO.getInstance() ;
+        RoomDAO roomdao = RoomDAO.getInstance();
         try {
             roomdao.markRoomOccupied(roomID);
         } catch (Exception e) {
@@ -40,9 +33,9 @@ public class PrivateRoom implements Room {
     @Override
     public void markAvailable() {
         occupancyStatus = RoomStatus.Available;
-            RoomDAO roomdao = RoomDAO.getInstance() ;
-        try {           
-             roomdao.markRoomAvailable(roomId);
+        RoomDAO roomdao = RoomDAO.getInstance();
+        try {
+            roomdao.markRoomAvailable(roomId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,22 +43,22 @@ public class PrivateRoom implements Room {
 
     @Override
     public void markUnderMaintenance() {
-        occupancyStatus = RoomStatus.UnderMaintenance; 
+        occupancyStatus = RoomStatus.UnderMaintenance;
     }
 
     @Override
     public double calculateCost(int days) {
-        double totalCost = dailyRate * days;
-        return totalCost;
+        return sharedData.getDailyRate() * days;
     }
 
     @Override
     public String toString() {
         return "Room Details [" +
                 "ID: '" + roomId + '\'' +
-                ", Type: '" + roomType + '\'' +
+                ", Type: '" + sharedData.getRoomType() + '\'' +
+                ", Capacity: '" + sharedData.getCapacity() + '\'' +
                 ", Status: '" + occupancyStatus + '\'' +
-                ", Daily Rate: " + dailyRate +
+                ", Daily Rate: " + sharedData.getDailyRate() +
                 ']';
     }
 }

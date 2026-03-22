@@ -1,4 +1,4 @@
-package Package1;
+package Package1.roomsystemfactoryflyweight;
 
 public class PrivateRoomFactory extends RoomFactory {
     @Override

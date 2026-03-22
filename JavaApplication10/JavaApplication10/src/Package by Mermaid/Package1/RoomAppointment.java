@@ -1,5 +1,6 @@
 package Package1;
 
+import Package1.roomsystemfactoryflyweight.Room;
 import Package2.IdGenerator;
 
 public class RoomAppointment implements Appointment {

@@ -1,34 +1,28 @@
-package Package1;
+package Package1.roomsystemfactoryflyweight;
+
 import Package3.*;
 
 public class ICU implements Room {
 
     public int roomId;
-    public int Capacity;
-    public RoomType roomType;
     public RoomStatus occupancyStatus;
-    public double dailyRate;
+    private RoomSharedData sharedData;
 
-    // Constructor
     public ICU() {
-        // waits for the roomID to be assigned by ID generator
-        roomType = RoomType.ICU;
-        occupancyStatus = RoomStatus.Available;
-        dailyRate = 500.0; 
+        this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.ICU);
+        this.occupancyStatus = RoomStatus.Available;
     }
 
-    public ICU(int roomId, int capacity, RoomType roomType, RoomStatus occupancyStatus, double dailyRate) {
+    public ICU(int roomId, RoomStatus occupancyStatus) {
         this.roomId = roomId;
-        this.Capacity = capacity;
-        this.roomType = roomType;
         this.occupancyStatus = occupancyStatus;
-        this.dailyRate = dailyRate;
+        this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.ICU);
     }
 
     @Override
     public void markOccupied(int roomID) {
         occupancyStatus = RoomStatus.Occupied;
-            RoomDAO roomdao = RoomDAO.getInstance() ;
+        RoomDAO roomdao = RoomDAO.getInstance();
         try {
             roomdao.markRoomOccupied(roomID);
         } catch (Exception e) {
@@ -39,32 +33,32 @@ public class ICU implements Room {
     @Override
     public void markAvailable() {
         occupancyStatus = RoomStatus.Available;
-            RoomDAO roomdao = RoomDAO.getInstance() ;
-        try {           
-             roomdao.markRoomAvailable(roomId);
+        RoomDAO roomdao = RoomDAO.getInstance();
+        try {
+            roomdao.markRoomAvailable(roomId);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @Override
     public void markUnderMaintenance() {
-        occupancyStatus = RoomStatus.UnderMaintenance; 
+        occupancyStatus = RoomStatus.UnderMaintenance;
     }
 
     @Override
     public double calculateCost(int days) {
-        double totalCost = dailyRate * days;
-        return totalCost;
+        return sharedData.getDailyRate() * days;
     }
 
     @Override
     public String toString() {
         return "Room Details [" +
                 "ID: '" + roomId + '\'' +
-                ", Type: '" + roomType + '\'' +
+                ", Type: '" + sharedData.getRoomType() + '\'' +
+                ", Capacity: '" + sharedData.getCapacity() + '\'' +
                 ", Status: '" + occupancyStatus + '\'' +
-                ", Daily Rate: " + dailyRate +
+                ", Daily Rate: " + sharedData.getDailyRate() +
                 ']';
     }
-
 }

@@ -1,21 +1,22 @@
 package Package1;
 
+import Package1.roomsystemfactoryflyweight.Room;
 import Package3.RoomDAO;
 
 public class StayPatientServiceFactory implements HospitalServicFactory {
     private Room room;
 
     public StayPatientServiceFactory(int roomID) throws Exception {
-        
+
         RoomDAO roomDAO = RoomDAO.getInstance();
         this.room = roomDAO.getRoomById(roomID);
     }
 
     @Override
-    public Bill createBill( int patientId , int daysOfStay) {
-         RoomBill Bill =  new RoomBill(room);
-         Bill.generateBill(patientId, daysOfStay);
-         return Bill;
+    public Bill createBill(int patientId, int daysOfStay) {
+        RoomBill Bill = new RoomBill(room);
+        Bill.generateBill(patientId, daysOfStay);
+        return Bill;
 
     }
 

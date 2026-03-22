@@ -1,5 +1,3 @@
-
-
 package Package3;
 
 import java.sql.*;
@@ -8,17 +6,26 @@ import java.sql.*;
  * Database Connection Manager for MS SQL Server
  * Manages database connections using Singleton pattern
  */
+
 public class DatabaseConnection {
-    
-    private static final String SERVER_NAME = "LAPTOP-OUGK83B0\\SQLEXPRESS";
+
+    private static final String SERVER_NAME = "DESKTOP-B0TEC55\\SQLEXPRESS";
     private static final String DB_NAME = "hospital_mangament_system";
 
-     // جملة الاتصال الخاصة بـ SQL Server (بدون رقم البورت، ليعتمد على خدمة Browser)
+    // جملة الاتصال الخاصة بـ SQL Server (بدون رقم البورت، ليعتمد على خدمة Browser)
     private static final String DB_URL = "jdbc:sqlserver://" + SERVER_NAME +
-                                         ";databaseName=" + DB_NAME + 
-                                         ";integratedSecurity=true;trustServerCertificate=true;";
+            ";databaseName=" + DB_NAME +
+            ";integratedSecurity=true;trustServerCertificate=true;";
 
     private static Connection connection = null;
+    private static DatabaseConnection instance = null;
+
+    public static DatabaseConnection getInstance() {
+        if (instance == null) {
+            instance = new DatabaseConnection();
+        }
+        return instance;
+    }
 
     /**
      * Get database connection (Singleton pattern)
@@ -41,10 +48,12 @@ public class DatabaseConnection {
                 System.err.println("✗ Database connection failed!");
                 System.err.println("  Error: " + e.getMessage());
                 if (e.getMessage().contains("integrated security")) {
-                    System.err.println("  Hint: Did you copy the 'mssql-jdbc_auth' DLL file to your project's main folder?");
+                    System.err.println(
+                            "  Hint: Did you copy the 'mssql-jdbc_auth' DLL file to your project's main folder?");
                 }
                 if (e.getMessage().contains("SQL Server Browser")) {
-                    System.err.println("  Hint: Is the 'SQL Server Browser' service running? Check SQL Server Configuration Manager.");
+                    System.err.println(
+                            "  Hint: Is the 'SQL Server Browser' service running? Check SQL Server Configuration Manager.");
                 }
                 throw e;
             }
@@ -83,7 +92,7 @@ public class DatabaseConnection {
 
         } catch (SQLException e) {
             System.out.println("\n❌ Connection Test Failed.");
-        
+
         } finally {
             if (conn != null) {
                 closeConnection();

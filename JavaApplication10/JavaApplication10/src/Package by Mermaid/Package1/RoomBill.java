@@ -1,4 +1,6 @@
 package Package1;
+
+import Package1.roomsystemfactoryflyweight.Room;
 import Package2.*;
 
 public class RoomBill implements Bill {
@@ -9,14 +11,13 @@ public class RoomBill implements Bill {
     public int DaysOfStay;
     private Room room;
 
-
     // Constructor
     public RoomBill(Room room) {
-    this.room = room;
+        this.room = room;
     }
 
     @Override
-    public void generateBill(int patientId , int daysOfStay) {
+    public void generateBill(int patientId, int daysOfStay) {
 
         this.patientId = patientId;
         this.DaysOfStay = daysOfStay;

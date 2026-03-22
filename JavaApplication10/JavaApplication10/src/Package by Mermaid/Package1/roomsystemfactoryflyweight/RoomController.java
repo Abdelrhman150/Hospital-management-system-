@@ -1,7 +1,4 @@
-package Package2;
-
-import Package1.RoomFactory;
-import Package1.Room;
+package Package1.roomsystemfactoryflyweight;
 
 /**
  * 

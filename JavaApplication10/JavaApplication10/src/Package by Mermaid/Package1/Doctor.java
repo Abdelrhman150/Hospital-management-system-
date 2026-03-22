@@ -1,16 +1,16 @@
 package Package1;
+
 import Package2.*;
 
 public class Doctor extends User {
     private String specialization;
     private boolean availability;
 
-    public Doctor( int ID ,String name, String phone, String email, String specialization, boolean availability) {
-        super( ID, name, phone, email);
+    public Doctor(int id, String name, String phone, String email, String specialization, boolean availability) {
+        super(id, name, phone, email);
         this.specialization = specialization;
         this.availability = availability;
     }
-
 
     @Override
     public String getRole() {

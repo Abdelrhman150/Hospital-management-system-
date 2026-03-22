@@ -1,33 +1,28 @@
-package Package1;
+package Package1.roomsystemfactoryflyweight;
+
 import Package3.*;
+
 public class GeneralRoom implements Room {
 
     public int roomId;
-    public RoomType roomType;
-    public int Capacity;
     public RoomStatus occupancyStatus;
-    public double dailyRate;
+    private RoomSharedData sharedData;
 
-    // Constructor
     public GeneralRoom() {
-        // waits for the roomID to be assigned by ID generator
-        roomType = RoomType.GeneralWard;
-        occupancyStatus = RoomStatus.Available;
-        dailyRate = 100.0; 
+        this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.GeneralWard);
+        this.occupancyStatus = RoomStatus.Available;
     }
 
-        public GeneralRoom(int roomId, int capacity, RoomType roomType, RoomStatus occupancyStatus, double dailyRate) {
+    public GeneralRoom(int roomId, RoomStatus occupancyStatus) {
         this.roomId = roomId;
-        this.Capacity = capacity;
-        this.roomType = roomType;
         this.occupancyStatus = occupancyStatus;
-        this.dailyRate = dailyRate;
+        this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.GeneralWard);
     }
 
     @Override
     public void markOccupied(int roomID) {
         occupancyStatus = RoomStatus.Occupied;
-            RoomDAO roomdao = RoomDAO.getInstance() ;
+        RoomDAO roomdao = RoomDAO.getInstance();
         try {
             roomdao.markRoomOccupied(roomID);
         } catch (Exception e) {
@@ -38,9 +33,9 @@ public class GeneralRoom implements Room {
     @Override
     public void markAvailable() {
         occupancyStatus = RoomStatus.Available;
-            RoomDAO roomdao = RoomDAO.getInstance() ;
-        try {           
-             roomdao.markRoomAvailable(roomId);
+        RoomDAO roomdao = RoomDAO.getInstance();
+        try {
+            roomdao.markRoomAvailable(roomId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -53,17 +48,17 @@ public class GeneralRoom implements Room {
 
     @Override
     public double calculateCost(int days) {
-        double totalCost = dailyRate * days;
-        return totalCost;
+        return sharedData.getDailyRate() * days;
     }
 
     @Override
     public String toString() {
         return "Room Details [" +
                 "ID: '" + roomId + '\'' +
-                ", Type: '" + roomType + '\'' +
+                ", Type: '" + sharedData.getRoomType() + '\'' +
+                ", Capacity: '" + sharedData.getCapacity() + '\'' +
                 ", Status: '" + occupancyStatus + '\'' +
-                ", Daily Rate: " + dailyRate +
+                ", Daily Rate: " + sharedData.getDailyRate() +
                 ']';
     }
 }

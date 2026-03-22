@@ -1,5 +1,6 @@
 package Package3;
-import Package1.*;
+
+import Package1.roomsystemfactoryflyweight.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,8 +16,9 @@ public class RoomDAO {
     }
 
     public static synchronized RoomDAO getInstance() {
-        if (instance == null)
+        if (instance == null) {
             instance = new RoomDAO();
+        }
         return instance;
     }
 
@@ -63,6 +65,7 @@ public class RoomDAO {
     public void addRoom(RoomRecord room) throws Exception {
         String sql = "INSERT INTO rooms(roomId, roomType, capacity, availabilityStatus, dailyRate) VALUES(?,?,?,?,?)";
         Connection conn = DatabaseConnection.getConnection();
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, room.getRoomId());
             ps.setString(2, room.getRoomType());
@@ -77,8 +80,10 @@ public class RoomDAO {
         List<RoomRecord> rooms = new ArrayList<>();
         String sql = "SELECT * FROM rooms";
         Connection conn = DatabaseConnection.getConnection();
+
         try (Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
+
             while (rs.next()) {
                 rooms.add(new RoomRecord(
                         rs.getString("roomId"),
@@ -88,78 +93,91 @@ public class RoomDAO {
                         rs.getDouble("dailyRate")));
             }
         }
+
         return rooms;
     }
 
     public void updateRoom(RoomRecord room) throws Exception {
         String sql = "UPDATE rooms SET roomType=?, capacity=?, availabilityStatus=?, dailyRate=? WHERE roomId=?";
         Connection conn = DatabaseConnection.getConnection();
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, room.getRoomType());
             ps.setInt(2, room.getCapacity());
             ps.setString(3, room.getAvailabilityStatus());
             ps.setDouble(4, room.getDailyRate());
             ps.setString(5, room.getRoomId());
-            if (ps.executeUpdate() == 0)
+
+            if (ps.executeUpdate() == 0) {
                 throw new SQLException("No room found with ID: " + room.getRoomId());
+            }
         }
     }
 
     public void deleteRoom(String roomId) throws Exception {
         String sql = "DELETE FROM rooms WHERE roomId=?";
         Connection conn = DatabaseConnection.getConnection();
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, roomId);
-            if (ps.executeUpdate() == 0)
+
+            if (ps.executeUpdate() == 0) {
                 throw new SQLException("No room found with ID: " + roomId);
+            }
         }
     }
 
     public void markRoomOccupied(int roomId) throws Exception {
         String sql = "UPDATE rooms SET availabilityStatus='Occupied' WHERE roomId=?";
         Connection conn = DatabaseConnection.getConnection();
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, roomId);
-            if (ps.executeUpdate() == 0)
+
+            if (ps.executeUpdate() == 0) {
                 throw new SQLException("No room found with ID: " + roomId);
+            }
         }
     }
 
     public void markRoomAvailable(int roomId) throws Exception {
         String sql = "UPDATE rooms SET availabilityStatus='Available' WHERE roomId=?";
         Connection conn = DatabaseConnection.getConnection();
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, roomId);
-            if (ps.executeUpdate() == 0)
+
+            if (ps.executeUpdate() == 0) {
                 throw new SQLException("No room found with ID: " + roomId);
+            }
         }
     }
-
 
     public Room getRoomById(int roomId) throws Exception {
         String sql = "SELECT * FROM rooms WHERE roomId=?";
         Connection conn = DatabaseConnection.getConnection();
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, roomId);
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    RoomType roomType = RoomType.valueOf(rs.getString("roomType").toUpperCase());
-                    int capacity = rs.getInt("capacity");
-                    RoomStatus availabilityStatus = RoomStatus.valueOf(rs.getString("availabilityStatus").toUpperCase());
-                    double dailyRate = rs.getDouble("dailyRate");
-                    
-                    // Return appropriate Room implementation based on roomType
+                    RoomType roomType = RoomType.valueOf(rs.getString("roomType"));
+                    RoomStatus availabilityStatus = RoomStatus.valueOf(rs.getString("availabilityStatus"));
+
                     switch (roomType) {
-                        case GeneralWard : 
-                            return new GeneralRoom(roomId, capacity, roomType, availabilityStatus, dailyRate);
-                        case PrivateRoom :
-                            return new PrivateRoom(roomId, capacity, roomType, availabilityStatus, dailyRate);
+                        case GeneralWard:
+                            return new GeneralRoom(roomId, availabilityStatus);
+
+                        case PrivateRoom:
+                            return new PrivateRoom(roomId, availabilityStatus);
+
                         case ICU:
-                            return new ICU(roomId, capacity, roomType, availabilityStatus, dailyRate);
+                            return new ICU(roomId, availabilityStatus);
+
                         default:
                             throw new SQLException("Unknown room type: " + roomType);
                     }
-
                 } else {
                     throw new SQLException("No room found with ID: " + roomId);
                 }

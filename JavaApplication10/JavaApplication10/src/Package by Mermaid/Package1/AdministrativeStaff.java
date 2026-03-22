@@ -1,5 +1,7 @@
 package Package1;
+
 import Package2.*;
+
 public class AdministrativeStaff implements StaffFactory {
 
     private int staffId;
@@ -9,21 +11,9 @@ public class AdministrativeStaff implements StaffFactory {
     private String position;
     private Department department;
 
-    
-    public AdministrativeStaff( String name, String phone, String email,
-        String position, Department department) {
-    this.staffId = IdGenerator.getInstance().nextSecretaryId();
-    this.name = name;
-    this.phone = phone;
-    this.email = email;
-    this.position = position;
-    this.department = department;
-    }
-
-
-    public AdministrativeStaff(int staffId, String name, String phone, String email,
-    String position, Department department) {
-        this.staffId = staffId;
+    public AdministrativeStaff(String name, String phone, String email,
+            String position, Department department) {
+        this.staffId = IdGenerator.getInstance().nextSecretaryId();
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -31,6 +21,15 @@ public class AdministrativeStaff implements StaffFactory {
         this.department = department;
     }
 
+    public AdministrativeStaff(int staffId, String name, String phone, String email,
+            String position, Department department) {
+        this.staffId = staffId;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.position = position;
+        this.department = department;
+    }
 
     @Override
     public User createUser() {

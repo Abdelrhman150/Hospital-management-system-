@@ -6,7 +6,7 @@ import Package1.Report;
 
 
 /**
- * ReportFactory: تقليل الـ Coupling عبر فصل منطق إنشاء الكلاسات.
+ * ReportFactory: تقليبر فصل منطق إنشاء الكلاسات.
  */
 public class ReportFactory {
 

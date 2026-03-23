@@ -8,14 +8,14 @@ import java.sql.Timestamp;
 public class Notification {
     private String message;
     private String recipient;
-    private String channel; // EMAIL, SMS, MOBILE
-    private String status;  // SENT, FAILED, PENDING
+    private String channel; 
+    private String status;  
     private Timestamp sentAt;
 
     public Notification(String message, String recipient) {
         this.message = message;
         this.recipient = recipient;
-        this.status = "PENDING"; // Default status
+        this.status = "PENDING"; 
     }
 
     public String getMessage() {

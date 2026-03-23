@@ -21,6 +21,10 @@ public abstract class User {
         return id;
     }
 
+    public int getPersonId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

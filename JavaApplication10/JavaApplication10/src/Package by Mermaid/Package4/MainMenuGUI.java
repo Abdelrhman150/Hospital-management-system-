@@ -67,6 +67,10 @@ public class MainMenuGUI extends JFrame {
         btnPatient.setBounds(50, 310, 230, 80);
         mainPanel.add(btnPatient);
 
+        RoundedButton btnMedical = new RoundedButton("Medical Records", "🩺", new Color(0, 150, 136));
+        btnMedical.setBounds(50, 420, 230, 80);
+        mainPanel.add(btnMedical);
+
         // --- 3. CENTER DASHBOARD CARD ---
         JPanel dashCard = new JPanel(new BorderLayout()) {
             @Override
@@ -102,12 +106,28 @@ public class MainMenuGUI extends JFrame {
         btnExit.setBounds(720, 310, 230, 80);
         mainPanel.add(btnExit);
 
+        RoundedButton btnReports = new RoundedButton("Reports", "📊", new Color(255, 152, 0));
+        btnReports.setBounds(720, 420, 230, 80);
+        mainPanel.add(btnReports);
+
         // ACTIONS
         btnLogin.addActionListener(e -> navigateTo(new LoginGUI()));
         btnRegister.addActionListener(e -> navigateTo(new RegisterGUI()));
         btnPatient.addActionListener(e -> navigateTo(new PatientFormGUI()));
         btnDash.addActionListener(e -> JOptionPane.showMessageDialog(this, "Please Login First!"));
         btnExit.addActionListener(e -> System.exit(0));
+        btnMedical.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this,
+                "Please Login first to access Medical Records.",
+                "Login Required", JOptionPane.INFORMATION_MESSAGE);
+            navigateTo(new LoginGUI());
+        });
+        btnReports.addActionListener(e -> {
+            JOptionPane.showMessageDialog(this,
+                "Please Login first to access Reports.",
+                "Login Required", JOptionPane.INFORMATION_MESSAGE);
+            navigateTo(new LoginGUI());
+        });
     }
 
     private void navigateTo(JFrame frame) {

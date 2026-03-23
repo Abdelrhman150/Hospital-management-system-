@@ -1,0 +1,145 @@
+﻿javac : C:\Users\HP\OneDrive 
+- Egypt University of 
+Informatics\Desktop\Hospital 
+Mangement System\Hospital-man
+agement-system-\JavaApplicati
+on10\JavaApplication10\src\Pa
+ckage by Mermaid\Package2\Aut
+hController.java:30: error: 
+cannot find symbol
+At line:1 char:1
++ javac -encoding UTF-8 
+-source 11 -target 11 -d 
+build/classes -cp "lib ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (C:\User  
+  s\HP\One...not find symb   
+ ol:String) [], RemoteExc    
+eption
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+        if (user != null && u
+ser.getPassword().equals(pass
+word)) {
+                             
+   ^
+  symbol:   method 
+getPassword()
+  location: variable user of 
+type User
+C:\Users\HP\OneDrive - Egypt 
+University of 
+Informatics\Desktop\Hospital 
+Mangement System\Hospital-man
+agement-system-\JavaApplicati
+on10\JavaApplication10\src\Pa
+ckage by Mermaid\Package2\Aut
+hController.java:52: error: 
+User is abstract; cannot be 
+instantiated
+        User newUser = new 
+User(generatedId, fullName, 
+password, generatedEmail, 
+role);
+                       ^
+C:\Users\HP\OneDrive - Egypt 
+University of 
+Informatics\Desktop\Hospital 
+Mangement System\Hospital-man
+agement-system-\JavaApplicati
+on10\JavaApplication10\src\Pa
+ckage by Mermaid\Package2\Aut
+hController.java:71: error: 
+User is abstract; cannot be 
+instantiated
+        User newUser = new 
+User(username, "Unknown", 
+password, email, role);
+                       ^
+C:\Users\HP\OneDrive - Egypt 
+University of 
+Informatics\Desktop\Hospital 
+Mangement System\Hospital-man
+agement-system-\JavaApplicati
+on10\JavaApplication10\src\Pa
+ckage by Mermaid\Package3\Use
+rDatabase.java:68: error: 
+User is abstract; cannot be 
+instantiated
+        return new User(
+               ^
+C:\Users\HP\OneDrive - Egypt 
+University of 
+Informatics\Desktop\Hospital 
+Mangement System\Hospital-man
+agement-system-\JavaApplicati
+on10\JavaApplication10\src\Pa
+ckage by Mermaid\Package3\Use
+rDatabase.java:175: error: 
+cannot find symbol
+            ps.setString(1, 
+user.getUsername());
+                             
+   ^
+  symbol:   method 
+getUsername()
+  location: variable user of 
+type User
+C:\Users\HP\OneDrive - Egypt 
+University of 
+Informatics\Desktop\Hospital 
+Mangement System\Hospital-man
+agement-system-\JavaApplicati
+on10\JavaApplication10\src\Pa
+ckage by Mermaid\Package3\Use
+rDatabase.java:177: error: 
+cannot find symbol
+            ps.setString(3, 
+user.getPassword());
+                             
+   ^
+  symbol:   method 
+getPassword()
+  location: variable user of 
+type User
+C:\Users\HP\OneDrive - Egypt 
+University of 
+Informatics\Desktop\Hospital 
+Mangement System\Hospital-man
+agement-system-\JavaApplicati
+on10\JavaApplication10\src\Pa
+ckage by Mermaid\Package4\Das
+hboardGUI.java:59: error: 
+cannot find symbol
+        JLabel lblID = new 
+JLabel("ID: " + 
+user.getUsername());
+                             
+                  ^
+  symbol:   method 
+getUsername()
+  location: variable user of 
+type User
+C:\Users\HP\OneDrive - Egypt 
+University of 
+Informatics\Desktop\Hospital 
+Mangement System\Hospital-man
+agement-system-\JavaApplicati
+on10\JavaApplication10\src\Pa
+ckage by Mermaid\Package4\Log
+inUI.java:66: error: cannot 
+find symbol
+            
+System.out.println("Login 
+ID: " + user.getUsername());
+                             
+                     ^
+  symbol:   method 
+getUsername()
+  location: variable user of 
+type User
+8 errors

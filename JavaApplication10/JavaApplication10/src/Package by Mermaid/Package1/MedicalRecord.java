@@ -3,15 +3,10 @@ package Package1;
 import java.util.Date;
 
 /**
- * Represents a medical record.
+ * Pure data model for a medical record.
+ * Business logic is in MedicalRecordController (Package2).
  */
 public class MedicalRecord implements MedicalRecordInterface {
-
-    /**
-     * Default constructor
-     */
-    public MedicalRecord() {
-    }
 
     public int recordId;
     public Date dateCreated;
@@ -20,6 +15,8 @@ public class MedicalRecord implements MedicalRecordInterface {
     public int patientId;
     public int doctorId;
     public int appointmentId;
+
+    public MedicalRecord() {}
 
     @Override
     public String getDetails() {
@@ -31,18 +28,4 @@ public class MedicalRecord implements MedicalRecordInterface {
              + "\nComplaint     : " + chiefComplaint
              + "\nDiagnosis     : " + clinicalDiagnosis;
     }
-
-    /**
-     * @param newDiagnosis
-     */
-    public void updateDiagnosis(String newDiagnosis) {
-        // TODO implement here
-    }
-
-    /**
-     * @param text
-     */
-    public void addComplaint(String text) {
-        // TODO implement here
-    }
-}
+}

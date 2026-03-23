@@ -1,9 +1,14 @@
 package Package4;
 
 import Package1.User;
+import Package1.MedicalRecord;
+import Package2.DoctorView;
+import Package2.PatientView;
+import Package2.DesktopDisplay;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.Date;
 
 /**
  * Dashboard GUI: Displays functions based on the user's role after login.
@@ -41,12 +46,12 @@ public class DashboardGUI extends JFrame {
         // --- HEADER ---
         JPanel headerPanel = new JPanel(new GridLayout(3, 1));
         headerPanel.setOpaque(false);
-        
+
         JLabel lblWelcome = new JLabel("Welcome, " + user.getName());
         lblWelcome.setFont(new Font("Segoe UI", Font.BOLD, 22));
         lblWelcome.setForeground(new Color(46, 117, 180));
         lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
-        
+
         JLabel lblRole = new JLabel("Role: [" + user.getRole() + "]");
         lblRole.setFont(new Font("Segoe UI", Font.ITALIC, 16));
         lblRole.setHorizontalAlignment(SwingConstants.CENTER);
@@ -87,7 +92,7 @@ public class DashboardGUI extends JFrame {
 
     private void addRoleButtons(JPanel panel) {
         String role = currentUser.getRole().toLowerCase();
-        
+
         switch (role) {
             case "admin":
                 panel.add(createActionButton("Manage All Departments", "🏢"));
@@ -98,9 +103,10 @@ public class DashboardGUI extends JFrame {
                 break;
             case "doctor":
                 panel.add(createActionButton("View Patient Medical Records", "📋"));
-                panel.add(createActionButton("Diagnose Patient", "🩺"));
+                panel.add(createActionButton("Diagnose Patient (Doctor View)", "🩺"));
+                panel.add(createActionButton("Add New Medical Record", "➕"));
                 panel.add(createActionButton("Manage Appointments", "📅"));
-                panel.add(createActionButton("Generate Reports", "📊")); // Added for Doctor
+                panel.add(createActionButton("Generate Reports", "📊"));
                 break;
             case "nurse":
                 panel.add(createActionButton("Monitor Patient Vitals", "📉"));
@@ -126,31 +132,70 @@ public class DashboardGUI extends JFrame {
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btn.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(46, 117, 180), 1),
-            BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
+                BorderFactory.createLineBorder(new Color(46, 117, 180), 1),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)));
 
         // Navigation logic based on button text
         btn.addActionListener(e -> {
             if (text.equals("View Patient Medical Records")) {
                 new MedicalRecordGUI(currentUser).setVisible(true);
                 this.dispose();
+            } else if (text.equals("Diagnose Patient (Doctor View)")) {
+                // Uses Bridge Pattern: DoctorView + DesktopDisplay
+                String idStr = JOptionPane.showInputDialog(this,
+                        "Enter Patient ID to view full medical record:",
+                        "Doctor View - Diagnose Patient",
+                        JOptionPane.QUESTION_MESSAGE);
+                if (idStr != null && !idStr.trim().isEmpty()) {
+                    try {
+                        // Build a sample record to display via Bridge Pattern
+                        Package3.MedicalRecordDAO dao = Package3.MedicalRecordDAO.getInstance();
+                        java.sql.ResultSet rs = dao.getPatientHistory(Integer.parseInt(idStr.trim()));
+                        if (rs.next()) {
+                            MedicalRecord rec = new MedicalRecord();
+                            rec.recordId = rs.getInt("recordId");
+                            rec.patientId = Integer.parseInt(idStr.trim());
+                            rec.doctorId = currentUser.getId();
+                            rec.dateCreated = rs.getDate("recordDate");
+                            rec.chiefComplaint = rs.getString("complaint");
+                            rec.clinicalDiagnosis = rs.getString("diagnosis");
+                            // Bridge Pattern display
+                            StringBuilder sb = new StringBuilder();
+                            DoctorView view = new DoctorView(content -> sb.append(content));
+                            view.display(rec);
+                            JOptionPane.showMessageDialog(this, sb.toString(),
+                                    "Doctor View - Patient " + idStr,
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(this,
+                                    "No records found for Patient ID: " + idStr,
+                                    "Not Found", JOptionPane.WARNING_MESSAGE);
+                        }
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this,
+                                "Error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } else if (text.equals("Add New Medical Record")) {
+                new MedicalRecordGUI(currentUser).setVisible(true);
+                this.dispose();
             } else if (text.equals("Generate Reports")) {
-                new ReportGUI(currentUser).setVisible(true); // Pass currentUser
+                new ReportGUI(currentUser).setVisible(true);
                 this.dispose();
             } else if (text.equals("Send Notifications")) {
-                new NotificationGUI(currentUser).setVisible(true); // Pass currentUser
+                new NotificationGUI(currentUser).setVisible(true);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Feature coming soon: " + text);
             }
         });
-        
+
         // Add a simple hover effect
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn.setBackground(new Color(240, 248, 255));
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn.setBackground(Color.WHITE);
             }

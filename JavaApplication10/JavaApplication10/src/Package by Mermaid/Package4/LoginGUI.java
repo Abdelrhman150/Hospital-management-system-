@@ -167,11 +167,11 @@ public class LoginGUI extends JFrame {
 
         if (user != null) {
             String message = "Login Successful!\n\n" +
-                             "Welcome, " + user.getName() + "\n" +
-                             "Login ID: " + user.getUsername() + "\n" +
-                             "Official Email: " + user.getEmail() + "\n" +
-                             "Role: [" + user.getRole() + "]";
-            
+                    "Welcome, " + user.getName() + "\n" +
+                    "Login ID: " + user.getName() + "\n" +
+                    "Official Email: " + user.getEmail() + "\n" +
+                    "Role: [" + user.getRole() + "]";
+
             JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
             new DashboardGUI(user).setVisible(true); // Open Dashboard instead of MainMenu
             this.dispose();

@@ -16,7 +16,7 @@ public class NotificationController {
     }
 
     /**
-     * Sends a notification using the provided service and saves the record to the DB.
+     * بتخزن في داتا بيز
      */
     public void notifyPatient(NotificationService service, Notification notification) {
         if (service == null || notification == null) {
@@ -30,8 +30,12 @@ public class NotificationController {
         
         boolean isSent = service.sendNotification(notification);
         
+        if (isSent) {
+            notification.setStatus("SENT");
+        } else {
+            notification.setStatus("FAILED");
+        }
         
-        notification.setStatus(isSent ? "SENT" : "FAILED");
         notification.setSentAt(new Timestamp(System.currentTimeMillis()));
 
         

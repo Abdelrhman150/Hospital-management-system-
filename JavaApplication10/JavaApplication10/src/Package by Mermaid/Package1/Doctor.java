@@ -2,7 +2,7 @@ package Package1;
 
 import Package2.*;
 
-public class Doctor extends User {
+public class Doctor extends User implements DoctorService {
     private String specialization;
     private boolean availability;
 
@@ -10,6 +10,16 @@ public class Doctor extends User {
         super(id, name, phone, email);
         this.specialization = specialization;
         this.availability = availability;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Normal Doctor (" + specialization + ")";
+    }
+
+    @Override
+    public void performDuties() {
+        diagnosePatient();
     }
 
     @Override

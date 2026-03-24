@@ -1,6 +1,7 @@
 package Package3;
 
 import java.sql.*;
+import Package1.MedicalRecord;
 
 public class MedicalRecordDAO {
 
@@ -61,37 +62,9 @@ public class MedicalRecordDAO {
         return ps.executeQuery();
     }
 
-    // ==================== Decorator Methods ====================
+  
 
-    public void addLabResult(int recordId, String labResult) throws Exception {
-        String sql = "UPDATE MedicalRecords SET labResults=? WHERE recordId=?";
-        Connection conn = DatabaseConnection.getConnection();
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, labResult);
-            ps.setInt(2, recordId);
-            ps.executeUpdate();
-        }
-    }
-
-    public void addXRayScan(int recordId, String scanDetails) throws Exception {
-        String sql = "UPDATE MedicalRecords SET xrayScan=? WHERE recordId=?";
-        Connection conn = DatabaseConnection.getConnection();
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, scanDetails);
-            ps.setInt(2, recordId);
-            ps.executeUpdate();
-        }
-    }
-
-    public void addAllergyWarning(int recordId, String allergyWarning) throws Exception {
-        String sql = "UPDATE MedicalRecords SET allergyWarning=? WHERE recordId=?";
-        Connection conn = DatabaseConnection.getConnection();
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, allergyWarning);
-            ps.setInt(2, recordId);
-            ps.executeUpdate();
-        }
-    }
+   
 
     public ResultSet getFullRecord(int recordId) throws Exception {
         String sql = "SELECT * FROM MedicalRecords WHERE recordId=?";
@@ -99,5 +72,20 @@ public class MedicalRecordDAO {
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, recordId);
         return ps.executeQuery();
+    }
+
+    /**
+     * Helper method to convert ResultSet to MedicalRecord object
+     */
+    public MedicalRecord mapToModel(ResultSet rs) throws SQLException {
+        MedicalRecord record = new MedicalRecord();
+        record.recordId = rs.getInt("recordId");
+        record.patientId = rs.getInt("patientId");
+        record.doctorId = rs.getInt("doctorId");
+        record.dateCreated = rs.getDate("recordDate");
+        record.chiefComplaint = rs.getString("complaint");
+        record.clinicalDiagnosis = rs.getString("diagnosis");
+        // appointmentId might be missing in some schemas, let's keep it optional
+        return record;
     }
 }

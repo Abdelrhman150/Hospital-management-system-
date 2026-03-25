@@ -28,7 +28,7 @@ public class SecretaryUI {
      */
     public SecretaryUI() {
         // Create a demo secretary for testing
-        this.secretary = new Secretary(1, "John Doe", "123-456-7890", "john.doe@hospital.com", "Morning");
+        this.secretary = new Secretary("SEC001", "John Doe", "123-456-7890", "john.doe@hospital.com", "Morning");
         this.scanner = new Scanner(System.in);
     }
 
@@ -137,7 +137,7 @@ public class SecretaryUI {
 
         try {
             System.out.print("Enter Patient ID: ");
-            int patientId = Integer.parseInt(scanner.nextLine().trim());
+            String patientId = scanner.nextLine().trim();
 
             System.out.print("Enter Doctor Name: ");
             String doctorName = scanner.nextLine().trim();
@@ -162,7 +162,7 @@ public class SecretaryUI {
 
         try {
             System.out.print("Enter Patient ID: ");
-            int patientId = Integer.parseInt(scanner.nextLine().trim());
+            String patientId = scanner.nextLine().trim();
 
             System.out.print("Enter Doctor Name: ");
             String doctorName = scanner.nextLine().trim();
@@ -171,7 +171,7 @@ public class SecretaryUI {
             String appointmentDate = scanner.nextLine().trim();
 
             System.out.print("Enter Room ID: ");
-            int roomId = Integer.parseInt(scanner.nextLine().trim());
+            String roomId = scanner.nextLine().trim();
 
             System.out.print("Enter Days of Stay: ");
             int daysOfStay = Integer.parseInt(scanner.nextLine().trim());
@@ -205,7 +205,7 @@ public class SecretaryUI {
         System.out.println("\n--- Process Payment ---");
         try {
             System.out.print("Enter Bill ID: ");
-            int billId = Integer.parseInt(scanner.nextLine().trim());
+            String billId = scanner.nextLine().trim();
 
             System.out.print("Enter Amount to Pay: $");
             double amount = Double.parseDouble(scanner.nextLine().trim());
@@ -246,7 +246,7 @@ public class SecretaryUI {
         System.out.println("\n--- Appointment Details ---");
         try {
             System.out.print("Enter Bill ID: ");
-            int billId = Integer.parseInt(scanner.nextLine().trim());
+            String billId = scanner.nextLine().trim();
             secretary.DisplayAppointmentDetails(billId);
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid Bill ID. Please enter a number.");
@@ -263,7 +263,7 @@ public class SecretaryUI {
         System.out.println("\n--- Bill Details ---");
         try {
             System.out.print("Enter Bill ID: ");
-            int billId = Integer.parseInt(scanner.nextLine().trim());
+            String billId = scanner.nextLine().trim();
             secretary.DisplayBillDetails(billId);
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid Bill ID. Please enter a number.");

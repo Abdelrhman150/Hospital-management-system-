@@ -6,8 +6,8 @@ import Package2.IdGenerator;
 import Package3.BillDAO;
 
 public class VisitingBill implements Bill {
-    public int billId;
-    public int patientId;
+    public String billId;
+    public String patientId;
     public String billingDate;
     public double VistingFee = 50.0; // Flat fee for outpatient services
     PaymentProcessor paymentProcessor;
@@ -15,7 +15,7 @@ public class VisitingBill implements Bill {
     
 
     @Override
-    public void generateBill(int patientId, int daysOfStay, Room room) {
+    public void generateBill(String patientId, int daysOfStay, Room room) {
         this.patientId = patientId;
         this.room = room;
         billId = IdGenerator.getInstance().nextRecordId(); ///////////////
@@ -28,7 +28,7 @@ public class VisitingBill implements Bill {
     }
 
     @Override
-    public void getBillDetails(int billId) {
+    public void getBillDetails(String billId) {
         BillDAO billDAO = BillDAO.getInstance();
         try {
             billDAO.BillDetails(billId);

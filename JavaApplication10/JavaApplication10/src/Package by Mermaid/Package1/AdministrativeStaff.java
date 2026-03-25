@@ -4,7 +4,7 @@ import Package2.*;
 
 public class AdministrativeStaff implements StaffFactory {
 
-    private int staffId;
+    private String staffId;
     private String name;
     private String phone;
     private String email;
@@ -21,7 +21,7 @@ public class AdministrativeStaff implements StaffFactory {
         this.department = department;
     }
 
-    public AdministrativeStaff(int staffId, String name, String phone, String email,
+    public AdministrativeStaff(String staffId, String name, String phone, String email,
             String position, Department department) {
         this.staffId = staffId;
         this.name = name;

@@ -14,7 +14,7 @@ public class Secretary extends User {
     HospitalServiceController hospitalServiceController; 
     Bill bill ;
 
-    public Secretary(int id, String name, String phone, String email, String shift) {
+    public Secretary(String id, String name, String phone, String email, String shift) {
         super(id, name, phone, email);
         this.shift = shift;
     }
@@ -37,7 +37,7 @@ public class Secretary extends User {
         }
     }
 
-    public void bookVisitingAppointment(int patientId, String doctorName, String appointmentDate) {
+    public void bookVisitingAppointment(String patientId, String doctorName, String appointmentDate) {
         hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory());
         appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
                 null, null);
@@ -46,7 +46,7 @@ public class Secretary extends User {
         
     }
 
-    public void bookStayAppointment(int patientId, String doctorName, String appointmentDate, int roomID, int daysOfStay)
+    public void bookStayAppointment(String patientId, String doctorName, String appointmentDate, String roomID, int daysOfStay)
         throws Exception {
         hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory(roomID));
         appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
@@ -60,17 +60,17 @@ public class Secretary extends User {
         System.out.println("Bill generated successfully!");
     }
 
-    public void Payment(int billId, double amount, PaymentProcessor paymentProcessor) {
+    public void Payment(String billId, double amount, PaymentProcessor paymentProcessor) {
         bill.setPaymentProcessor(paymentProcessor);
         System.out.println("Payment processed successfully!");
     }
 
 
-    public void DisplayAppointmentDetails(int billId) {
+    public void DisplayAppointmentDetails(String billId) {
         appointment.displayDetails(billId);
     }
 
-    public void DisplayBillDetails(int billId) {
+    public void DisplayBillDetails(String billId) {
         bill.getBillDetails(billId);
     } 
 

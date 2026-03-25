@@ -13,7 +13,7 @@ public class Nurse {
     public Nurse() {
     }
 
-    public int nurseId;
+    public String nurseId;
     public String fullName;
     public ShiftType assignedShift;
     public String contactNumber;

@@ -2,12 +2,12 @@ package Package1;
 
 public class OutPatientServiceFactory implements HospitalServicFactory {
     @Override
-    public Bill createBill(int patientId , int daysOfStay) {
+    public Bill createBill(String patientId , int daysOfStay) {
         return new VisitingBill();
     }
 
     @Override
-    public Appointment createAppointment(int patientId, String doctorName, String appointmentDate, int roomID , int daysOfStay) {
+    public Appointment createAppointment(String patientId, String doctorName, String appointmentDate, String roomID , int daysOfStay) {
         return new VistingAppointment();
         
     }

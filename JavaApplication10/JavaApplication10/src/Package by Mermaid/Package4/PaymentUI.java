@@ -54,7 +54,7 @@ public class PaymentUI {
         }
     }
 
-    public void startForAmount(int billId, double amount, Bill bill) {
+    public void startForAmount(String billId, double amount, Bill bill) {
         if (bill == null) {
             System.out.println("No active bill to process payment.");
             return;
@@ -90,8 +90,6 @@ public class PaymentUI {
         } else if (bill instanceof VisitingBill) {
             ((VisitingBill) bill).setPaymentProcessor(processor);
         }
-
-        bill.processPayment(billId, amount);
 
         try {
             BillDAO.getInstance().markAsPaid(billId);

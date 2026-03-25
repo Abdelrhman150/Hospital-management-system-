@@ -7,19 +7,19 @@ import java.util.Date;
  */
 
 public abstract class Department {
-    protected int departmentId;
+    protected String departmentId;
     protected String departmentName;
     protected int floorNumber;
-    protected int departmentHeadId;
+    protected String departmentHeadId;
 
-    public Department(int departmentId, String departmentName, int floorNumber, int departmentHeadId) {
+    public Department(String departmentId, String departmentName, int floorNumber, String departmentHeadId) {
         this.departmentId = departmentId;
         this.departmentName = departmentName;
         this.floorNumber = floorNumber;
         this.departmentHeadId = departmentHeadId;
     }
 
-    public int getDepartmentId() {
+    public String getDepartmentId() {
         return departmentId;
     }
 
@@ -31,7 +31,7 @@ public abstract class Department {
         return floorNumber;
     }
 
-    public int getDepartmentHeadId() {
+    public String getDepartmentHeadId() {
         return departmentHeadId;
     }
 

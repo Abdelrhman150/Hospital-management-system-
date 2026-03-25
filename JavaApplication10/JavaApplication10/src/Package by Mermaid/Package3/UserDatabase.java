@@ -66,7 +66,7 @@ public class UserDatabase {
         }
 
         return new User(
-            rs.getInt("id"),
+            rs.getString("id"),
             rs.getString("username"),
             name,
             rs.getString("password"),
@@ -98,7 +98,7 @@ public class UserDatabase {
      * Finds a person in their official table (Doctors, Nurses, etc.)
      * Returns name and official email
      */
-    public String[] findOfficialPerson(int personId, String role) {
+    public String[] findOfficialPerson(String personId, String role) {
         String table = "";
         String idColumn = "";
         
@@ -115,7 +115,7 @@ public class UserDatabase {
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             
-            ps.setInt(1, personId);
+            ps.setString(1, personId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new String[] { rs.getString("name"), rs.getString("email") };
@@ -130,12 +130,12 @@ public class UserDatabase {
     /**
      * Checks if a person (ID + Role) already has an account
      */
-    public boolean isPersonRegistered(int personId, String role) {
+    public boolean isPersonRegistered(String personId, String role) {
         String query = "SELECT 1 FROM Users WHERE personId = ? AND role = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
             
-            ps.setInt(1, personId);
+            ps.setString(1, personId);
             ps.setString(2, role);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();

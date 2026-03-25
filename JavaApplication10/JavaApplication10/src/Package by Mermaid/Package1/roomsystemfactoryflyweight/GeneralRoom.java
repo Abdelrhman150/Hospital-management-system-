@@ -4,7 +4,7 @@ import Package3.*;
 
 public class GeneralRoom implements Room {
 
-    public int roomId;
+    public String roomId;
     public double daysBooked;
     public double dailyRate = 100.0; // Example daily rate for general rooms
     public RoomStatus occupancyStatus;
@@ -15,14 +15,14 @@ public class GeneralRoom implements Room {
         this.occupancyStatus = RoomStatus.Available;
     }
 
-    public GeneralRoom(int roomId, RoomStatus occupancyStatus) {
+    public GeneralRoom(String roomId, RoomStatus occupancyStatus) {
         this.roomId = roomId;
         this.occupancyStatus = occupancyStatus;
         this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.GeneralWard);
     }
 
     @Override
-    public void markOccupied(int roomID) {
+    public void markOccupied(String roomID) {
         occupancyStatus = RoomStatus.Occupied;
         RoomDAO roomdao = RoomDAO.getInstance();
         try {
@@ -49,7 +49,7 @@ public class GeneralRoom implements Room {
     }
 
     @Override
-    public int getRoomID() {
+    public String getRoomID() {
         return roomId;
     }
 

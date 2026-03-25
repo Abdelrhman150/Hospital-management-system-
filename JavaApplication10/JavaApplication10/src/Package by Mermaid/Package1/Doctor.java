@@ -5,11 +5,13 @@ import Package2.*;
 public class Doctor extends User {
     private String specialization;
     private boolean availability;
+    private double consultationFee;
 
-    public Doctor(int id, String name, String phone, String email, String specialization, boolean availability) {
+    public Doctor(String id, String name, String phone, String email, String specialization, boolean availability, double consultationFee) {
         super(id, name, phone, email);
         this.specialization = specialization;
         this.availability = availability;
+        this.consultationFee = consultationFee;
     }
 
     @Override
@@ -19,6 +21,14 @@ public class Doctor extends User {
 
     public String getSpecialization() {
         return specialization;
+    }
+
+    public double getConsultationFee() {
+        return consultationFee;
+    }
+
+    public void setConsultationFee(double consultationFee) {
+        this.consultationFee = consultationFee;
     }
 
     public boolean isAvailable() {

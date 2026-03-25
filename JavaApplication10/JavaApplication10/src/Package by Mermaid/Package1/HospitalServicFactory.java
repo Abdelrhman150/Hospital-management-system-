@@ -1,6 +1,6 @@
 package Package1;
 
 public interface HospitalServicFactory {
-    public Bill createBill(int patientId , int daysOfStay);
-    public Appointment createAppointment(int patientId, String doctorName, String appointmentDate, int roomID, int daysOfStay);
+    public Bill createBill(String patientId , int daysOfStay);
+    public Appointment createAppointment(String patientId, String doctorName, String appointmentDate, String roomID, int daysOfStay);
 }

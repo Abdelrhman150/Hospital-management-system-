@@ -1,2 +1,0 @@
-NurseStatus
-Package1.NurseStatus

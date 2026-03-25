@@ -173,7 +173,10 @@ public class SecretaryUI {
             System.out.print("Enter Room ID: ");
             int roomId = Integer.parseInt(scanner.nextLine().trim());
 
-            secretary.bookStayAppointment(patientId, doctorName, appointmentDate, roomId);
+            System.out.print("Enter Days of Stay: ");
+            int daysOfStay = Integer.parseInt(scanner.nextLine().trim());
+
+            secretary.bookStayAppointment(patientId, doctorName, appointmentDate, roomId, daysOfStay);
 
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid number format. Please enter valid numbers for ID and Room ID.");

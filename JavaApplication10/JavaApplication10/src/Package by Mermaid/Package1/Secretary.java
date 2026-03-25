@@ -40,17 +40,17 @@ public class Secretary extends User {
     public void bookVisitingAppointment(int patientId, String doctorName, String appointmentDate) {
         hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory());
         appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
-                null);
+                null, null);
         System.out.println("Appointment booked successfully!");
         
         
     }
 
-    public void bookStayAppointment(int patientId, String doctorName, String appointmentDate, int roomID)
+    public void bookStayAppointment(int patientId, String doctorName, String appointmentDate, int roomID, int daysOfStay)
         throws Exception {
         hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory(roomID));
         appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
-                roomID);
+                roomID, daysOfStay);
         System.out.println("Appointment booked successfully!");
         
     }

@@ -19,7 +19,7 @@ public class VistingAppointment implements Appointment {
 }
 
     @Override
-    public void scheduleAppointment(int patientId, String doctorName, String appointmentDate, Integer roomID) {
+    public void scheduleAppointment(int patientId, String doctorName, String appointmentDate, Integer roomID, Integer daysOfStay) {
         this.patientId = patientId;
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
@@ -38,5 +38,17 @@ public class VistingAppointment implements Appointment {
         } else {
             System.out.println("No appointment found with ID: " + appointmentId);
         }
+    }
+
+
+    @Override
+    public int getPatientId() {
+        return this.patientId;
+
+    }
+
+    @Override
+    public int getDaysOfStay() {
+        return 0; 
     }
 }

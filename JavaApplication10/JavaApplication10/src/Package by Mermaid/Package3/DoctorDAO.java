@@ -69,4 +69,11 @@ public class DoctorDAO {
         ps.setInt(1, doctorId);
         return ps.executeQuery();
     }
+
+    public ResultSet getAvailableDoctors() throws SQLException{
+        String sql = "Select doctorId , name , specialization from Doctors where AvailabilityStatus = 'Available'" ;
+        Connection conn = DatabaseConnection.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql);
+        return ps.executeQuery();
+    }
 }

@@ -1,7 +1,9 @@
 package Package1;
 
+import Package1.Payement_System.PaymentProcessor;
 import Package1.roomsystemfactoryflyweight.Room;
 import Package2.*;
+import Package3.BillDAO;
 
 public class RoomBill implements Bill {
     public int billId;
@@ -10,35 +12,46 @@ public class RoomBill implements Bill {
     public String billingDate;
     public int DaysOfStay;
     private Room room;
+    PaymentProcessor paymentProcessor;
+
 
     // Constructor
     public RoomBill(Room room) {
         this.room = room;
+
     }
 
     @Override
-    public void generateBill(int patientId, int daysOfStay) {
+    public void generateBill(int patientId, int daysOfStay, Room room) {
 
         this.patientId = patientId;
         this.DaysOfStay = daysOfStay;
+        this.room = room;
         billId = IdGenerator.getInstance().nextRecordId(); ///////////////
-        amount = room.calculateCost(daysOfStay);
+        amount = calculateamount(room, daysOfStay);;
         billingDate = java.time.LocalDate.now().toString(); // Get current date as billing date
     }
 
     @Override
     public void getBillDetails(int billId) {
-        if (this.billId == billId) {
-            System.out.println("===============================");
-            System.out.println("Bill Details:");
-            System.out.println("================================");
-            System.out.println("Billing Date: " + this.billingDate);
-            System.out.println("Bill ID: " + this.billId);
-            System.out.println("Patient ID: " + this.patientId);
-            System.out.println("Days of Stay: " + this.DaysOfStay);
-            System.out.println("Amount: $" + this.amount);
-        } else {
-            System.out.println("Bill not found for Bill ID: " + billId);
-        }
+            BillDAO billDAO = BillDAO.getInstance();
+            try {
+                billDAO.BillDetails(billId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+    }
+
+
+    @Override
+    public double calculateamount(Room room, double days) {
+        this.amount = room.getDailyRate() * (int) days;
+        return this.amount;
+    }
+
+    @Override
+    public void setPaymentProcessor(PaymentProcessor paymentProcessor) {
+        this.paymentProcessor = paymentProcessor;
+        paymentProcessor.processPayment(amount); // Process payment immediately for room bill
     }
 }

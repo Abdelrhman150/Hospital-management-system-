@@ -61,18 +61,8 @@ public class User {
     public int getPersonId() { return personId; }
     public void setPersonId(int personId) { this.personId = personId; }
 
-<<<<<<< HEAD
-    public int getPersonId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-=======
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
->>>>>>> 76be148b668c5adf33b60945c060c4d7885aeed7
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }

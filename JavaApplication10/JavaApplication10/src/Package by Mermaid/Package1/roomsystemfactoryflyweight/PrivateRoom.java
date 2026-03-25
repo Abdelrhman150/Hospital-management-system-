@@ -5,6 +5,8 @@ import Package3.RoomDAO;
 public class PrivateRoom implements Room {
 
     public int roomId;
+    public double daysBooked;
+    public double dailyRate = 300.0; // Example daily rate for private rooms
     public RoomStatus occupancyStatus;
     private RoomSharedData sharedData;
 
@@ -47,11 +49,25 @@ public class PrivateRoom implements Room {
     }
 
     @Override
-    public double calculateCost(int days) {
-        return sharedData.getDailyRate() * days;
+    public double setDays(int days) {
+        this.daysBooked = days;
+        return daysBooked;
+    }
+
+    public double getDailyRate() {
+        return dailyRate;
     }
 
     @Override
+    public int getRoomID() {
+        return roomId;
+    }
+
+    @Override
+    public double getDays() {
+        return daysBooked;
+    }
+
     public String toString() {
         return "Room Details [" +
                 "ID: '" + roomId + '\'' +

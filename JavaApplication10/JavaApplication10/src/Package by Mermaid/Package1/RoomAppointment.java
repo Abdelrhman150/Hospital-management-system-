@@ -2,6 +2,7 @@ package Package1;
 
 import Package1.roomsystemfactoryflyweight.Room;
 import Package2.IdGenerator;
+import Package3.AppointmentDAO;
 
 public class RoomAppointment implements Appointment {
     public int appointmentId;
@@ -15,14 +16,13 @@ public class RoomAppointment implements Appointment {
     }
 
     @Override
-    public void displayDetails() {
-        System.out.println("===============================");
-        System.out.println("Appointment Details:");
-        System.out.println("===============================");
-        System.out.println("Appointment ID: " + this.appointmentId);
-        System.out.println("Patient ID: " + this.patientId);
-        System.out.println("Doctor Name: " + this.doctorName);
-        System.out.println("Appointment Date: " + this.appointmentDate);
+    public void displayDetails(int appointmentId) {
+        AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
+        try {
+            appointmentDAO.GetAppointmentDetails(appointmentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

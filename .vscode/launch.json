@@ -3,6 +3,41 @@
     "configurations": [
         {
             "type": "java",
+            "name": "RoomUI",
+            "request": "launch",
+            "mainClass": "Package4.RoomUI",
+            "projectName": "Hospital Management System_685c54cb"
+        },
+        {
+            "type": "java",
+            "name": "PaymentUI",
+            "request": "launch",
+            "mainClass": "Package4.PaymentUI",
+            "projectName": "Hospital Management System_685c54cb"
+        },
+        {
+            "type": "java",
+            "name": "SecretaryUI",
+            "request": "launch",
+            "mainClass": "Package4.SecretaryUI",
+            "projectName": "Hospital Management System_685c54cb"
+        },
+        {
+            "type": "java",
+            "name": "ReportUI",
+            "request": "launch",
+            "mainClass": "Package4.ReportUI",
+            "projectName": "Hospital Management System_685c54cb"
+        },
+        {
+            "type": "java",
+            "name": "LoginUI",
+            "request": "launch",
+            "mainClass": "Package4.LoginUI",
+            "projectName": "Hospital Management System_685c54cb"
+        },
+        {
+            "type": "java",
             "name": "MainMenuGUI",
             "request": "launch",
             "mainClass": "Package4.MainMenuGUI",

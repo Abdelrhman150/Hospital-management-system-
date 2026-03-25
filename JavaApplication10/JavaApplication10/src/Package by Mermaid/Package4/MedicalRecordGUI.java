@@ -131,7 +131,7 @@ public class MedicalRecordGUI extends JFrame {
         }
 
         try {
-            int patientId = Integer.parseInt(idStr);
+            String patientId = idStr;
             tableModel.setRowCount(0); // Clear old data
 
             ResultSet rs = medicalRecordDAO.getPatientHistory(patientId);
@@ -150,8 +150,6 @@ public class MedicalRecordGUI extends JFrame {
                 JOptionPane.showMessageDialog(this, "No records found for this patient.", "Info",
                         JOptionPane.INFORMATION_MESSAGE);
             }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Patient ID must be numeric.", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error loading history: " + ex.getMessage(), "Database Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -170,8 +168,8 @@ public class MedicalRecordGUI extends JFrame {
         }
 
         try {
-            int patientId = Integer.parseInt(idStr);
-            int doctorId = currentUser.getPersonId(); // Assumes doctor's personId is stored in User object
+            String patientId = idStr;
+            String doctorId = String.valueOf(currentUser.getPersonId()); // Or currentUser.getId() if available
 
             medicalRecordDAO.createMedicalRecord(patientId, doctorId, diagnosis, complaint,
                     new java.sql.Date(System.currentTimeMillis()));
@@ -184,8 +182,6 @@ public class MedicalRecordGUI extends JFrame {
             txtComplaint.setText("");
             loadPatientHistory();
 
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Patient ID must be numeric.", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error saving record: " + ex.getMessage(), "Database Error",
                     JOptionPane.ERROR_MESSAGE);

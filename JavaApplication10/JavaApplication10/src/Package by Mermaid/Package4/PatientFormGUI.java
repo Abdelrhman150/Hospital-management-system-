@@ -89,6 +89,10 @@ public class PatientFormGUI extends JFrame {
 
 
 
+        // Blood Type
+        JTextField txtBloodType = new JTextField();
+        addFormRow(formPanel, gbc, "🩸 Blood Type:", txtBloodType, r++);
+
         centerWrapper.add(formPanel, BorderLayout.CENTER);
 
         // --- BOTTOM SECTION (BUTTONS) ---
@@ -100,15 +104,35 @@ public class PatientFormGUI extends JFrame {
         JButton btnCancel = createStyledButton("Cancel", new Color(130, 130, 130)); // gray
 
         btnSubmit.addActionListener(e -> {
-            if (txtName.getText().trim().isEmpty() || txtAge.getText().trim().isEmpty()) {
+            String name = txtName.getText().trim();
+            String ageStr = txtAge.getText().trim();
+            String gender = rbMale.isSelected() ? "Male" : (rbFemale.isSelected() ? "Female" : "Other");
+            String phone = txtContact.getText().trim();
+            String address = txtAddress.getText().trim();
+            String bloodType = txtBloodType.getText().trim();
+
+            if (name.isEmpty() || ageStr.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Please fill required fields (Name, Age).", "Validation Error",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            JOptionPane.showMessageDialog(this, "Patient Information Submitted Successfully!", "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-            new MainMenuGUI().setVisible(true);
-            this.dispose();
+
+            try {
+                String patientId = Package2.IdGenerator.getInstance().nextPatientId();
+                // Simple mapping of age to a dummy Date of Birth for now
+                java.util.Date dob = new java.util.Date(); 
+                
+                Package3.PatientDAO.getInstance().addPatient(patientId, name, gender, bloodType, phone, address, 
+                    new java.sql.Date(dob.getTime()));
+
+                JOptionPane.showMessageDialog(this, "Patient Registered Successfully!\nID: " + patientId, "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                new MainMenuGUI().setVisible(true);
+                this.dispose();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error saving patient: " + ex.getMessage(), "Database Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         btnCancel.addActionListener(e -> {

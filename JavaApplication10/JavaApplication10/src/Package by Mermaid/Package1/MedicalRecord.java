@@ -8,13 +8,13 @@ import java.util.Date;
  */
 public class MedicalRecord implements MedicalRecordInterface {
 
-    public int recordId;
+    public String recordId;
     public Date dateCreated;
     public String chiefComplaint;
     public String clinicalDiagnosis;
-    public int patientId;
-    public int doctorId;
-    public int appointmentId;
+    public String patientId;
+    public String doctorId;
+    public String appointmentId;
 
     public MedicalRecord() {}
 

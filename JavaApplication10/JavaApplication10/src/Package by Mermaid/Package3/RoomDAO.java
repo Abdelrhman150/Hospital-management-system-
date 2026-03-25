@@ -127,12 +127,12 @@ public class RoomDAO {
         }
     }
 
-    public void markRoomOccupied(int roomId) throws Exception {
+    public void markRoomOccupied(String roomId) throws Exception {
         String sql = "UPDATE rooms SET availabilityStatus='Occupied' WHERE roomId=?";
         Connection conn = DatabaseConnection.getConnection();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, roomId);
+            ps.setString(1, roomId);
 
             if (ps.executeUpdate() == 0) {
                 throw new SQLException("No room found with ID: " + roomId);
@@ -140,12 +140,12 @@ public class RoomDAO {
         }
     }
 
-    public void markRoomAvailable(int roomId) throws Exception {
+    public void markRoomAvailable(String roomId) throws Exception {
         String sql = "UPDATE rooms SET availabilityStatus='Available' WHERE roomId=?";
         Connection conn = DatabaseConnection.getConnection();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, roomId);
+            ps.setString(1, roomId);
 
             if (ps.executeUpdate() == 0) {
                 throw new SQLException("No room found with ID: " + roomId);
@@ -153,12 +153,12 @@ public class RoomDAO {
         }
     }
 
-    public Room getRoomById(int roomId) throws Exception {
+    public Room getRoomById(String roomId) throws Exception {
         String sql = "SELECT * FROM rooms WHERE roomId=?";
         Connection conn = DatabaseConnection.getConnection();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, roomId);
+            ps.setString(1, roomId);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {

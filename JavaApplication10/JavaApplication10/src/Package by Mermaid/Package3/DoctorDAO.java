@@ -19,12 +19,12 @@ public class DoctorDAO {
 
     // ==================== Operations ====================
 
-    public void addDoctor(int doctorId, String name, String specialization,
+    public void addDoctor(String doctorId, String name, String specialization,
             String contactEmail, double consultationFee) throws Exception {
         String sql = "INSERT INTO Doctors(doctorId, name, specialization, contactEmail, consultationFee) VALUES(?,?,?,?,?)";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, doctorId);
+            ps.setString(1, doctorId);
             ps.setString(2, name);
             ps.setString(3, specialization);
             ps.setString(4, contactEmail);
@@ -33,7 +33,7 @@ public class DoctorDAO {
         }
     }
 
-    public void updateDoctor(int doctorId, String name, String specialization,
+    public void updateDoctor(String doctorId, String name, String specialization,
             String contactEmail, double consultationFee) throws Exception {
         String sql = "UPDATE Doctors SET name=?, specialization=?, contactEmail=?, consultationFee=? WHERE doctorId=?";
         Connection conn = DatabaseConnection.getConnection();
@@ -42,16 +42,16 @@ public class DoctorDAO {
             ps.setString(2, specialization);
             ps.setString(3, contactEmail);
             ps.setDouble(4, consultationFee);
-            ps.setInt(5, doctorId);
+            ps.setString(5, doctorId);
             ps.executeUpdate();
         }
     }
 
-    public void deleteDoctor(int doctorId) throws Exception {
+    public void deleteDoctor(String doctorId) throws Exception {
         String sql = "DELETE FROM Doctors WHERE doctorId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, doctorId);
+            ps.setString(1, doctorId);
             ps.executeUpdate();
         }
     }
@@ -62,11 +62,11 @@ public class DoctorDAO {
         return conn.createStatement().executeQuery(sql);
     }
 
-    public ResultSet getDoctorById(int doctorId) throws Exception {
+    public ResultSet getDoctorById(String doctorId) throws Exception {
         String sql = "SELECT * FROM Doctors WHERE doctorId=?";
         Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, doctorId);
+        ps.setString(1, doctorId);
         return ps.executeQuery();
     }
 

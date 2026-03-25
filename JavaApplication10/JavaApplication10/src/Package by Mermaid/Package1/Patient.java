@@ -13,7 +13,7 @@ public class Patient {
     public Patient() {
     }
 
-    public int patientId;
+    public String patientId;
     public String name;
     public Date dateOfBirth;
     public Gender gender;

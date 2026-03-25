@@ -76,7 +76,7 @@ public class AuthController {
     }
 
 
-    public String[] validateOfficialId(int officialId, String role) {
+    public String[] validateOfficialId(String officialId, String role) {
         return userDatabase.findOfficialPerson(officialId, role);
     }
 }

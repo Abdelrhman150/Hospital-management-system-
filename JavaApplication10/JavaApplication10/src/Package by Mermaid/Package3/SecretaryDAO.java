@@ -19,39 +19,39 @@ public class SecretaryDAO {
 
     // ==================== Operations ====================
 
-    public void addSecretary(int secretaryId, String name, String phone,
-            String email, String shift, int departmentId) throws Exception {
+    public void addSecretary(String secretaryId, String name, String phone,
+            String email, String shift, String departmentId) throws Exception {
         String sql = "INSERT INTO Secretaries(secretaryId, name, phone, email, shift, departmentId) VALUES(?,?,?,?,?,?)";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, secretaryId);
+            ps.setString(1, secretaryId);
             ps.setString(2, name);
             ps.setString(3, phone);
             ps.setString(4, email);
             ps.setString(5, shift);
-            ps.setInt(6, departmentId);
+            ps.setString(6, departmentId);
 
             ps.executeUpdate();
         }
     }
 
-    public void updateSecretary(int secretaryId, String name, String phone) throws Exception {
+    public void updateSecretary(String secretaryId, String name, String phone) throws Exception {
         String sql = "UPDATE Secretaries SET name=?, phone=? WHERE secretaryId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
             ps.setString(2, phone);
-            ps.setInt(3, secretaryId);
+            ps.setString(3, secretaryId);
             ps.executeUpdate();
         }
     }
 
-    public void deleteSecretary(int secretaryId) throws Exception {
+    public void deleteSecretary(String secretaryId) throws Exception {
         String sql = "DELETE FROM Secretaries WHERE secretaryId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, secretaryId);
+            ps.setString(1, secretaryId);
             ps.executeUpdate();
         }
     }

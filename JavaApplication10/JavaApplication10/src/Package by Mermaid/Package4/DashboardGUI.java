@@ -150,11 +150,11 @@ public class DashboardGUI extends JFrame {
                     try {
                         // Build a sample record to display via Bridge Pattern
                         Package3.MedicalRecordDAO dao = Package3.MedicalRecordDAO.getInstance();
-                        java.sql.ResultSet rs = dao.getPatientHistory(Integer.parseInt(idStr.trim()));
+                        java.sql.ResultSet rs = dao.getPatientHistory(idStr.trim());
                         if (rs.next()) {
                             MedicalRecord rec = new MedicalRecord();
-                            rec.recordId = rs.getInt("recordId");
-                            rec.patientId = Integer.parseInt(idStr.trim());
+                            rec.recordId = rs.getString("recordId");
+                            rec.patientId = idStr.trim();
                             rec.doctorId = currentUser.getId();
                             rec.dateCreated = rs.getDate("recordDate");
                             rec.chiefComplaint = rs.getString("complaint");

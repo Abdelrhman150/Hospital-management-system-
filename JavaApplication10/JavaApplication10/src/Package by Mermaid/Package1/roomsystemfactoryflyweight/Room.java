@@ -1,7 +1,7 @@
 package Package1.roomsystemfactoryflyweight;
 
 public interface Room {
-    public void markOccupied(int roomID);
+    public void markOccupied(String roomID);
 
     public void markAvailable();
 
@@ -13,5 +13,5 @@ public interface Room {
     
     public double getDailyRate();
 
-    public int getRoomID();
+    public String getRoomID();
 }

@@ -19,22 +19,18 @@ public class MedicalRecordDAO {
 
     // ==================== Operations ====================
 
-    public void createMedicalRecord(int patientId, int doctorId,
+    public void createMedicalRecord(String patientId, String doctorId,
             String diagnosis, String complaint, Date recordDate) throws Exception {
         String sql = "INSERT INTO MedicalRecords(recordId, patientId, doctorId, diagnosis, complaint, recordDate) VALUES(?,?,?,?,?,?)";
         
-        // Get next recordId automatically
-        int nextRecordId = 1;
+        // Get next recordId automatically from IdGenerator
+        String nextRecordId = Package2.IdGenerator.getInstance().nextRecordId();
         Connection conn = DatabaseConnection.getConnection();
-        try (Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT ISNULL(MAX(recordId), 0) + 1 FROM MedicalRecords")) {
-            if (rs.next()) nextRecordId = rs.getInt(1);
-        }
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, nextRecordId);
-            ps.setInt(2, patientId);
-            ps.setInt(3, doctorId);
+            ps.setString(1, nextRecordId);
+            ps.setString(2, patientId);
+            ps.setString(3, doctorId);
             ps.setString(4, diagnosis);
             ps.setString(5, complaint);
             ps.setDate(6, recordDate);
@@ -42,62 +38,62 @@ public class MedicalRecordDAO {
         }
     }
 
-    public void updateMedicalRecord(int recordId, String diagnosis, String complaint) throws Exception {
+    public void updateMedicalRecord(String recordId, String diagnosis, String complaint) throws Exception {
         String sql = "UPDATE MedicalRecords SET diagnosis=?, complaint=? WHERE recordId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, diagnosis);
             ps.setString(2, complaint);
-            ps.setInt(3, recordId);
+            ps.setString(3, recordId);
             ps.executeUpdate();
         }
     }
 
-    public ResultSet getPatientHistory(int patientId) throws Exception {
+    public ResultSet getPatientHistory(String patientId) throws Exception {
         String sql = "SELECT * FROM MedicalRecords WHERE patientId=? ORDER BY recordDate DESC";
         Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, patientId);
+        ps.setString(1, patientId);
         return ps.executeQuery();
     }
 
     // ==================== Decorator Methods ====================
 
-    public void addLabResult(int recordId, String labResult) throws Exception {
+    public void addLabResult(String recordId, String labResult) throws Exception {
         String sql = "UPDATE MedicalRecords SET labResults=? WHERE recordId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, labResult);
-            ps.setInt(2, recordId);
+            ps.setString(2, recordId);
             ps.executeUpdate();
         }
     }
 
-    public void addXRayScan(int recordId, String scanDetails) throws Exception {
+    public void addXRayScan(String recordId, String scanDetails) throws Exception {
         String sql = "UPDATE MedicalRecords SET xrayScan=? WHERE recordId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, scanDetails);
-            ps.setInt(2, recordId);
+            ps.setString(2, recordId);
             ps.executeUpdate();
         }
     }
 
-    public void addAllergyWarning(int recordId, String allergyWarning) throws Exception {
+    public void addAllergyWarning(String recordId, String allergyWarning) throws Exception {
         String sql = "UPDATE MedicalRecords SET allergyWarning=? WHERE recordId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, allergyWarning);
-            ps.setInt(2, recordId);
+            ps.setString(2, recordId);
             ps.executeUpdate();
         }
     }
 
-    public ResultSet getFullRecord(int recordId) throws Exception {
+    public ResultSet getFullRecord(String recordId) throws Exception {
         String sql = "SELECT * FROM MedicalRecords WHERE recordId=?";
         Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, recordId);
+        ps.setString(1, recordId);
         return ps.executeQuery();
     }
 }

@@ -5,6 +5,8 @@ import Package3.*;
 public class ICU implements Room {
 
     public int roomId;
+    public double daysBooked;
+    public double dailyRate = 500.0; // Example daily rate for ICU rooms
     public RoomStatus occupancyStatus;
     private RoomSharedData sharedData;
 
@@ -47,8 +49,23 @@ public class ICU implements Room {
     }
 
     @Override
-    public double calculateCost(int days) {
-        return sharedData.getDailyRate() * days;
+    public double setDays(int days) {
+        this.daysBooked = days;
+        return daysBooked;
+    }
+
+    @Override
+    public double getDays() {
+        return daysBooked;
+    }
+
+    public double getDailyRate() {
+        return dailyRate;
+    }
+    
+    @Override
+    public int getRoomID() {
+        return roomId;
     }
 
     @Override

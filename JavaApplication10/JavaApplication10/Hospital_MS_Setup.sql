@@ -50,6 +50,7 @@ CREATE TABLE Doctors (
     phone NVARCHAR(20),
     email NVARCHAR(100),
     departmentId INT NOT NULL,
+    AvailabilityStatus NVARCHAR(50),
     CONSTRAINT FK_Doctors_Departments FOREIGN KEY (departmentId) REFERENCES Departments(departmentId)
 );
 
@@ -216,17 +217,17 @@ INSERT INTO Departments (departmentId, name) VALUES
 
 -- Doctors
 IF NOT EXISTS (SELECT 1 FROM Doctors WHERE doctorId = 1)
-INSERT INTO Doctors (doctorId, name, specialization, phone, email, departmentId) VALUES 
-(1, 'Dr. Ahmed Mansour', 'Cardiologist', '01012345678', 'ahmed@hospital.com', 1),
-(2, 'Dr. Sarah Hassan', 'Neurologist', '01123456789', 'sara@hospital.com', 2),
-(3, 'Dr. Mohamed Ibrahim', 'Pediatrician', '01234567890', 'mohamed@hospital.com', 3),
-(4, 'Dr. Mona Zaki', 'Orthopedic Surgeon', '01545678901', 'mona@hospital.com', 4),
-(5, 'Dr. Omar Farouk', 'Dermatologist', '01098765432', 'omar@hospital.com', 5),
-(6, 'Dr. Laila Nour', 'Cardiologist', '01187654321', 'laila@hospital.com', 1),
-(7, 'Dr. Khaled Said', 'Neurologist', '01276543210', 'khaled@hospital.com', 2),
-(8, 'Dr. Fatma Ali', 'Pediatrician', '01565432109', 'fatma@hospital.com', 3),
-(9, 'Dr. Youssef Kamal', 'Orthopedic Surgeon', '01054321098', 'youssef@hospital.com', 4),
-(10, 'Dr. Mariam El-Sayed', 'Dermatologist', '01143210987', 'mariam@hospital.com', 5);
+INSERT INTO Doctors (doctorId, name, specialization, phone, email, departmentId, AvailabilityStatus) VALUES 
+(1, 'Dr. Ahmed Mansour', 'Cardiologist', '01012345678', 'ahmed@hospital.com', 1, 'Available'),
+(2, 'Dr. Sarah Hassan', 'Neurologist', '01123456789', 'sara@hospital.com', 2, 'Busy'),
+(3, 'Dr. Mohamed Ibrahim', 'Pediatrician', '01234567890', 'mohamed@hospital.com', 3, 'Available'),
+(4, 'Dr. Mona Zaki', 'Orthopedic Surgeon', '01545678901', 'mona@hospital.com', 4, 'Busy'),
+(5, 'Dr. Omar Farouk', 'Dermatologist', '01098765432', 'omar@hospital.com', 5, 'Available'),
+(6, 'Dr. Laila Nour', 'Cardiologist', '01187654321', 'laila@hospital.com', 1, 'Busy'),
+(7, 'Dr. Khaled Said', 'Neurologist', '01276543210', 'khaled@hospital.com', 2, 'Available'),
+(8, 'Dr. Fatma Ali', 'Pediatrician', '01565432109', 'fatma@hospital.com', 3, 'Busy'),
+(9, 'Dr. Youssef Kamal', 'Orthopedic Surgeon', '01054321098', 'youssef@hospital.com', 4, 'Available'),
+(10, 'Dr. Mariam El-Sayed', 'Dermatologist', '01143210987', 'mariam@hospital.com', 5, 'Available');
 
 -- Update Department Heads
 UPDATE Departments SET headDoctorId = 1 WHERE departmentId = 1;

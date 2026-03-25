@@ -7,7 +7,11 @@ public interface Room {
 
     public void markUnderMaintenance();
 
-    public double calculateCost(int days);
-    // creation of room
-    //
+    public double setDays(int days);
+
+    public double getDays();
+    
+    public double getDailyRate();
+
+    public int getRoomID();
 }

@@ -15,15 +15,15 @@ public class StayPatientServiceFactory implements HospitalServicFactory {
     @Override
     public Bill createBill(int patientId, int daysOfStay) {
         RoomBill Bill = new RoomBill(room);
-        Bill.generateBill(patientId, daysOfStay);
+        Bill.generateBill(patientId, daysOfStay, room);
         return Bill;
 
     }
 
     @Override
-    public Appointment createAppointment(int patientId, String doctorName, String appointmentDate, int roomID) {
+    public Appointment createAppointment(int patientId, String doctorName, String appointmentDate, int roomID, int daysOfStay) {
         RoomAppointment appointment = new RoomAppointment(room);
-        appointment.scheduleAppointment(patientId, doctorName, appointmentDate, roomID);
+        appointment.scheduleAppointment(patientId, doctorName, appointmentDate, roomID, daysOfStay);
         return appointment;
     }
 }

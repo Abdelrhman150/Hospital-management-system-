@@ -2,12 +2,14 @@ package Package1;
 
 import Package1.roomsystemfactoryflyweight.Room;
 import Package2.IdGenerator;
+import Package3.AppointmentDAO;
 
 public class RoomAppointment implements Appointment {
     public int appointmentId;
     public int patientId;
     public String doctorName;
     public String appointmentDate;
+    public int daysOfStay;
     public Room room;
 
     public RoomAppointment(Room room) {
@@ -15,21 +17,21 @@ public class RoomAppointment implements Appointment {
     }
 
     @Override
-    public void displayDetails() {
-        System.out.println("===============================");
-        System.out.println("Appointment Details:");
-        System.out.println("===============================");
-        System.out.println("Appointment ID: " + this.appointmentId);
-        System.out.println("Patient ID: " + this.patientId);
-        System.out.println("Doctor Name: " + this.doctorName);
-        System.out.println("Appointment Date: " + this.appointmentDate);
+    public void displayDetails(int appointmentId) {
+        AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
+        try {
+            appointmentDAO.GetAppointmentDetails(appointmentId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void scheduleAppointment(int patientId, String doctorName, String appointmentDate, Integer roomID) {
+    public void scheduleAppointment(int patientId, String doctorName, String appointmentDate, Integer roomID, Integer daysOfStay) {
         this.patientId = patientId;
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
+        this.daysOfStay = daysOfStay; 
         this.appointmentId = IdGenerator.getInstance().nextAppointmentId(); ///////////////
         room.markOccupied(roomID);
     }
@@ -47,4 +49,15 @@ public class RoomAppointment implements Appointment {
             System.out.println("No appointment found with ID: " + appointmentId);
         }
     }
+
+    @Override
+    public int getPatientId() {
+        return this.patientId;
+
+    }
+
+    @Override
+    public int getDaysOfStay() {
+        return this.daysOfStay;
+        }
 }

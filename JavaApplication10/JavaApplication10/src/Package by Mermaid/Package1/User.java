@@ -56,6 +56,7 @@ public class User {
     }
 
     // Getters and Setters
+
     public int getId() {
         return id;
     }
@@ -107,6 +108,8 @@ public class User {
     public String getName() {
         return name;
     }
+
+
 
     public void setName(String name) {
         this.name = name;

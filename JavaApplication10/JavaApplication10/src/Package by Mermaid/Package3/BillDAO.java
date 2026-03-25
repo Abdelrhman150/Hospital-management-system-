@@ -210,4 +210,26 @@ public class BillDAO {
         }
         return 0.0;
     }
+
+    public void BillDetails(int billId) throws Exception {
+        String sql = "SELECT * FROM Bills WHERE billId=?";
+        Connection conn = DatabaseConnection.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, billId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    System.out.println("===============================");
+                    System.out.println("Bill Details:");
+                    System.out.println("================================");
+                    System.out.println("Billing Date: " + rs.getTimestamp("billDate"));
+                    System.out.println("Bill ID: " + rs.getInt("billId"));
+                    System.out.println("Patient ID: " + rs.getInt("patientId"));
+                    System.out.println("Amount: $" + rs.getDouble("amount"));
+                    System.out.println("Status: " + rs.getString("status"));
+                } else {
+                    System.out.println("Bill not found for Bill ID: " + billId);
+                }
+            }
+        }
+    }
 }

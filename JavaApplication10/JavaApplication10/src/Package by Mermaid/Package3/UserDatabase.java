@@ -11,6 +11,22 @@ import java.util.List;
  */
 public class UserDatabase {
 
+    // ==================== Singleton ====================
+
+    private static UserDatabase instance;
+
+    private UserDatabase() {
+    }
+
+    public static synchronized UserDatabase getInstance() {
+        if (instance == null) {
+            instance = new UserDatabase();
+        }
+        return instance;
+    }
+
+    // ==================== Operations ====================
+
     /**
      * Retrieves a user from the database by their username
      */

@@ -14,7 +14,7 @@ public class AuthController {
     private IdGenerator idGenerator;
 
     public AuthController() {
-        this.userDatabase = new UserDatabase();
+        this.userDatabase = UserDatabase.getInstance();
         this.idGenerator = IdGenerator.getInstance();
     }
 

@@ -1,9 +1,19 @@
 package Package1;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import Package1.Payement_System.Insurance;
+import Package1.Payement_System.InsuranceAdaptor;
+import Package1.Payement_System.PaymentProcessor;
 import Package2.*;
+import Package3.DoctorDAO;
 
 public class Secretary extends User {
     private String shift;
+    Appointment appointment;
+    HospitalServiceController hospitalServiceController; 
+    Bill bill ;
 
     public Secretary(int id, String name, String phone, String email, String shift) {
         super(id, name, phone, email);
@@ -19,23 +29,48 @@ public class Secretary extends User {
         return shift;
     }
 
+    public ResultSet showAvailableDoctors() throws SQLException {
+        DoctorDAO Doctors = DoctorDAO.getInstance();
+        return Doctors.getAvailableDoctors();
+    }
+
     public void bookVisitingAppointment(int patientId, String doctorName, String appointmentDate) {
-        HospitalServiceController hospitalServiceController = new HospitalServiceController(
-                new OutPatientServiceFactory());
-        Appointment appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
-                null);
+        hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory());
+        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
+                null, null);
         System.out.println("Appointment booked successfully!");
-
+        
+        
     }
 
-    public void bookStayAppointment(int patientId, String doctorName, String appointmentDate, int roomID)
-            throws Exception {
-        HospitalServiceController hospitalServiceController = new HospitalServiceController(
-                new StayPatientServiceFactory(roomID));
-        Appointment appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
-                roomID);
+    public void bookStayAppointment(int patientId, String doctorName, String appointmentDate, int roomID, int daysOfStay)
+        throws Exception {
+        hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory(roomID));
+        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
+                roomID, daysOfStay);
         System.out.println("Appointment booked successfully!");
+        
     }
+
+    public void GenerateBill(){
+        bill = hospitalServiceController.CreateBill(appointment.getPatientId(), appointment.getDaysOfStay());
+        System.out.println("Bill generated successfully!");
+    }
+
+    public void Payment(int billId, double amount, PaymentProcessor paymentProcessor) {
+        bill.setPaymentProcessor(paymentProcessor);
+        System.out.println("Payment processed successfully!");
+    }
+
+
+    public void DisplayAppointmentDetails(int billId) {
+        appointment.displayDetails(billId);
+    }
+
+    public void DisplayBillDetails(int billId) {
+        bill.getBillDetails(billId);
+    } 
+
 
     @Override
     public void displayInfo() {

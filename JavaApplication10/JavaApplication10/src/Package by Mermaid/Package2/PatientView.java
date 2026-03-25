@@ -16,5 +16,5 @@ public class PatientView extends RecordView {
                 "Diagnosis: " + record.clinicalDiagnosis;
 
         platform.display(content);
-    }
+    } 
 }

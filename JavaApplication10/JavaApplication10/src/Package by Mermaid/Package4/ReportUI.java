@@ -55,14 +55,15 @@ public class ReportUI {
         System.out.print("\nEnter Patient ID: ");
         try {
             int patientId = Integer.parseInt(scanner.nextLine());
-            
+
             // Choose Formatter
             ReportFormatter formatter = chooseFormatter();
-            if (formatter == null) return;
+            if (formatter == null)
+                return;
 
             System.out.println("\n--- Generating Patient Report ---");
             Report report = reportController.createPatientReport(patientId, formatter);
-            
+
             if (report != null) {
                 System.out.println(report.getFullContent());
                 System.out.println("✓ Patient Report generated successfully.");
@@ -77,11 +78,12 @@ public class ReportUI {
     private void handleFinancialReport() {
         // Choose Formatter
         ReportFormatter formatter = chooseFormatter();
-        if (formatter == null) return;
+        if (formatter == null)
+            return;
 
         System.out.println("\n--- Generating Financial Report ---");
         Report report = reportController.createFinancialReport(formatter);
-        
+
         if (report != null) {
             System.out.println(report.getFullContent());
             System.out.println("✓ Financial Report generated successfully.");
@@ -98,7 +100,7 @@ public class ReportUI {
         System.out.println("1. PDF");
         System.out.println("2. Excel");
         System.out.print("Choice: ");
-        
+
         String choice = scanner.nextLine();
         switch (choice) {
             case "1":

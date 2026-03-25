@@ -33,6 +33,27 @@ public class AppointmentDAO {
             ps.executeUpdate();
         }
     }
+    
+
+    public void GetAppointmentDetails(int appointmentId) throws Exception {
+        String sql = "SELECT * FROM Appointments WHERE appointmentId=?";
+        Connection conn = DatabaseConnection.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, appointmentId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                System.out.println("Appointment ID: " + rs.getInt("appointmentId"));
+                System.out.println("Patient ID: " + rs.getInt("patientId"));
+                System.out.println("Doctor ID: " + rs.getInt("doctorId"));
+                System.out.println("Appointment Time: " + rs.getTimestamp("appointmentTime"));
+                System.out.println("Type: " + rs.getString("type"));
+                System.out.println("Status: " + rs.getString("status"));
+            } else {
+                System.out.println("No appointment found with ID: " + appointmentId);
+            }
+        }
+    }
+
 
     public void rescheduleAppointment(int appointmentId, Timestamp newTime) throws Exception {
         String sql = "UPDATE Appointments SET appointmentTime=? WHERE appointmentId=?";

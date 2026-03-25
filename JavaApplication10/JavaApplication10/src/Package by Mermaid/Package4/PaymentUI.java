@@ -75,7 +75,7 @@ public class PaymentUI {
                 processor = a -> System.out.println("Processing cash payment of $" + amount + "...\nPayment completed.");
                 break;
             case "2":
-                processor = new InsuranceAdaptor(new Insurance());
+                processor = new InsuranceAdaptor();
                 break;
             case "3":
                 processor = new paypalAdapter(new Paypal());
@@ -118,7 +118,7 @@ public class PaymentUI {
         String input = scanner.nextLine();
         try {
             double amount = Double.parseDouble(input);
-            new InsuranceAdaptor(new Insurance()).processPayment(amount);
+            new InsuranceAdaptor().processPayment(amount);
             System.out.println("Insurance payment requested.");
         } catch (NumberFormatException e) {
             System.out.println("Invalid number format.");

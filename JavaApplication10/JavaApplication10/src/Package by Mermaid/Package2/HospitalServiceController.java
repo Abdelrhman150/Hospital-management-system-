@@ -12,7 +12,7 @@ public class HospitalServiceController {
         return hospitalServiceFactory.createBill(patientId, daysOfStay);
     }
 
-    public Appointment CreateAppointment(int patientId, String doctorName, String appointmentDate, Integer roomID) {
-        return hospitalServiceFactory.createAppointment(patientId, doctorName, appointmentDate, roomID  );
+    public Appointment CreateAppointment(int patientId, String doctorName, String appointmentDate, int roomID, int daysOfStay) {
+        return hospitalServiceFactory.createAppointment(patientId, doctorName, appointmentDate, roomID, daysOfStay);
     }
 }

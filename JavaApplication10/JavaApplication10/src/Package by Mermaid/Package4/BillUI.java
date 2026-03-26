@@ -79,7 +79,7 @@ public class BillUI {
             currentBillId = visitingBill.billId;
             currentAmount = visitingBill.calculateamount(null, 0);
             System.out.println("Visiting bill created with amount: $" + currentAmount);
-            BillDAO.getInstance().addBill(patientId, currentAmount, "Unpaid");
+            BillDAO.getInstance().addBill(bill.getBillId(),patientId, currentAmount, "Unpaid");
         } else {
             System.out.println("Failed to create visiting bill.");
         }
@@ -103,7 +103,7 @@ public class BillUI {
             currentBillId = roomBill.billId;
             currentAmount = roomBill.amount;
             System.out.println("Room bill created with amount: $" + currentAmount);
-            BillDAO.getInstance().addBill(patientId, currentAmount, "Unpaid");
+            BillDAO.getInstance().addBill(bill.getBillId(),patientId, currentAmount, "Unpaid");
         } else {
             System.out.println("Failed to create room bill.");
         }

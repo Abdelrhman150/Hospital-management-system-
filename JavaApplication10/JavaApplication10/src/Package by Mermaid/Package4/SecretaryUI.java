@@ -1,6 +1,7 @@
 package Package4;
 
 import Package1.Secretary;
+import Package1.Payement_System.Insurance;
 import Package1.Payement_System.InsuranceAdaptor;
 import Package1.Payement_System.Paypal;
 import Package1.Payement_System.paypalAdapter;
@@ -127,6 +128,7 @@ public class SecretaryUI {
     private void showAvailableDoctors() {
         System.out.println("\n--- Available Doctors ---");
         secretary.showAvailableDoctors();
+        
     }
 
     /**
@@ -223,7 +225,7 @@ public class SecretaryUI {
                     secretary.Payment(billId, amount, paypalProcessor);
                     break;
                 case "2":
-                    InsuranceAdaptor insuranceProcessor = new InsuranceAdaptor();
+                    InsuranceAdaptor insuranceProcessor = new InsuranceAdaptor(new Insurance());
                     secretary.Payment(billId, amount, insuranceProcessor);
                     break;
                 default:

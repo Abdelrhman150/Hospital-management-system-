@@ -3,6 +3,10 @@ package Package1.Payement_System;
 public class InsuranceAdaptor implements PaymentProcessor {
     private Insurance insurance;
      
+   
+    public InsuranceAdaptor(Insurance insurance) {
+        this.insurance = insurance;
+    }
 
     @Override
     public void processPayment(double amount) {

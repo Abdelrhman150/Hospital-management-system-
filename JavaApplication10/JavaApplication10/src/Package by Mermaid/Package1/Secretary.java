@@ -48,7 +48,6 @@ public class Secretary extends User {
     public String bookVisitingAppointment(String patientId, String doctorName, String appointmentDate) {
         hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory());
         appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
-        
         System.out.println("Appointment booked successfully!");
         return appointment.getAppointmentId() ;
         

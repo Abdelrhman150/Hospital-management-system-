@@ -13,24 +13,58 @@ GO
 USE hospital_mangament_system;
 GO
 
--- 2. Drop foreign keys first to avoid errors
--- Drop FKs dynamically
-DECLARE @sql NVARCHAR(MAX) = N'';
+-- 2. Drop foreign keys and tables in correct order to avoid circular dependencies
+-- Drop constraints and tables systematically
 
-SELECT @sql += 'ALTER TABLE ' + QUOTENAME(OBJECT_NAME(parent_object_id)) +
-               ' DROP CONSTRAINT ' + QUOTENAME(name) + ';' + CHAR(13)
-FROM sys.foreign_keys;
+-- Drop foreign key constraints first
+IF OBJECT_ID('DoctorRoles', 'U') IS NOT NULL
+    ALTER TABLE DoctorRoles DROP CONSTRAINT FK_DoctorRoles_Doctors;
 
-EXEC sp_executesql @sql;
-GO
+IF OBJECT_ID('Appointments', 'U') IS NOT NULL
+BEGIN
+    ALTER TABLE Appointments DROP CONSTRAINT FK_Appointments_Patients;
+    ALTER TABLE Appointments DROP CONSTRAINT FK_Appointments_Doctors;
+    ALTER TABLE Appointments DROP CONSTRAINT FK_Appointments_Rooms;
+END
 
--- 3. Drop tables if exist
-DECLARE @tables NVARCHAR(MAX) = N'';
+IF OBJECT_ID('MedicalRecords', 'U') IS NOT NULL
+BEGIN
+    ALTER TABLE MedicalRecords DROP CONSTRAINT FK_MedicalRecords_Patients;
+    ALTER TABLE MedicalRecords DROP CONSTRAINT FK_MedicalRecords_Doctors;
+END
 
-SELECT @tables += 'DROP TABLE IF EXISTS ' + QUOTENAME(name) + ';' + CHAR(13)
-FROM sys.tables;
+IF OBJECT_ID('Bills', 'U') IS NOT NULL
+    ALTER TABLE Bills DROP CONSTRAINT FK_Bills_Patients;
 
-EXEC sp_executesql @tables;
+IF OBJECT_ID('Reports', 'U') IS NOT NULL
+BEGIN
+    ALTER TABLE Reports DROP CONSTRAINT FK_Reports_Patients;
+    ALTER TABLE Reports DROP CONSTRAINT FK_Reports_Doctors;
+END
+
+IF OBJECT_ID('Doctors', 'U') IS NOT NULL
+    ALTER TABLE Doctors DROP CONSTRAINT FK_Doctors_Departments;
+
+IF OBJECT_ID('Departments', 'U') IS NOT NULL
+    ALTER TABLE Departments DROP CONSTRAINT FK_Departments_HeadDoctor;
+
+-- Drop tables
+DROP TABLE IF EXISTS DoctorRoles;
+DROP TABLE IF EXISTS Appointments;
+DROP TABLE IF EXISTS MedicalRecords;
+DROP TABLE IF EXISTS Bills;
+DROP TABLE IF EXISTS Reports;
+DROP TABLE IF EXISTS Notifications;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Roles;
+DROP TABLE IF EXISTS Doctors;
+DROP TABLE IF EXISTS Departments;
+DROP TABLE IF EXISTS Patients;
+DROP TABLE IF EXISTS Nurses;
+DROP TABLE IF EXISTS Secretaries;
+DROP TABLE IF EXISTS Admins;
+DROP TABLE IF EXISTS Security;
+DROP TABLE IF EXISTS rooms;
 GO
 
 -- 4. Create Tables
@@ -115,7 +149,6 @@ CREATE TABLE Appointments (
     patientId NVARCHAR(20) NOT NULL,
     doctorId NVARCHAR(20) NOT NULL,
     appointmentTime DATETIME NOT NULL,
-    
     type NVARCHAR(50),
     status NVARCHAR(50) DEFAULT 'Scheduled',
     roomId NVARCHAR(20) NULL,
@@ -148,9 +181,9 @@ CREATE TABLE Roles(
 -- Users
 CREATE TABLE Users(
     id INT IDENTITY(1,1) PRIMARY KEY,
-    personId NVARCHAR(20) NULL, -- Optional link to doctorId, nurseId, etc.
+    personId NVARCHAR(20) NULL,
     full_name NVARCHAR(100) NOT NULL,
-    username NVARCHAR(50) UNIQUE NOT NULL, -- This will store generated IDs (D001, A001, etc.)
+    username NVARCHAR(50) UNIQUE NOT NULL,
     password NVARCHAR(255) NOT NULL,
     email NVARCHAR(100) UNIQUE NOT NULL,
     role NVARCHAR(20) NOT NULL CHECK (role IN ('Doctor', 'Nurse', 'Secretary', 'Admin', 'Patient')),
@@ -189,8 +222,8 @@ CREATE TABLE Notifications (
     id INT PRIMARY KEY IDENTITY(1,1),
     message NVARCHAR(MAX) NOT NULL,
     recipient NVARCHAR(100) NOT NULL,
-    channel NVARCHAR(20) NOT NULL, -- EMAIL, SMS, MOBILE
-    status NVARCHAR(20) NOT NULL,  -- SENT, FAILED
+    channel NVARCHAR(20) NOT NULL,
+    status NVARCHAR(20) NOT NULL,
     sentAt DATETIME DEFAULT GETDATE()
 );
 
@@ -253,11 +286,6 @@ INSERT INTO Patients (patientId, name, gender, bloodType, phone, email, address,
 ('PAT008', 'Nour El-Din', 'Male', 'AB_Neg', '01588899900', 'nour@hospital.com', 'Mansoura, Talkha', '1992-11-11'),
 ('PAT009', 'Yasmin Gamal', 'Female', 'A_Pos', '01099900011', 'yasmin@hospital.com', 'Tanta, Sea St.', '1998-04-09'),
 ('PAT010', 'Sherif Mounir', 'Male', 'O_Pos', '01100011122', 'sherif@hospital.com', 'Cairo, Zamalek', '1970-01-01');
-(6, 'Salma Ahmed', 'Female', 'O_Pos', '01166677788', 'salma@hospital.com', 'Cairo, Heliopolis', '1995-07-14'),
-(7, 'Karim Walid', 'Male', 'B_Neg', '01277788899', 'karim_p@hospital.com', 'Suez, Port Tawfik', '1988-02-28'),
-(8, 'Nour El-Din', 'Male', 'AB_Neg', '01588899900', 'nour@hospital.com', 'Mansoura, Talkha', '1992-11-11'),
-(9, 'Yasmin Gamal', 'Female', 'A_Pos', '01099900011', 'yasmin@hospital.com', 'Tanta, Sea St.', '1998-04-09'),
-(10, 'Sherif Mounir', 'Male', 'O_Pos', '01100011122', 'sherif@hospital.com', 'Cairo, Zamalek', '1970-01-01');
 
 -- Nurses
 IF NOT EXISTS (SELECT 1 FROM Nurses WHERE nurseId = 'N001')

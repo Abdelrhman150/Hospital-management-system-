@@ -1,21 +1,5 @@
 package Package1;
 
-
-/*public class Doctor {
-
-    public static void main(String[] args) {
-
-        DoctorSalary salary = new BaseDoctorSalary(10000);
-
-        salary = new NightShiftBonusDecorator(salary, 5, 200);
-        salary = new OnCallAllowanceDecorator(salary, 2, 300);
-        salary = new HazardAllowanceDecorator(salary, "ICU", 1000);
-
-        System.out.println("Salary Details: " + salary.getDescription());
-        System.out.println("Final Salary: " + salary.calculateSalary());
-    }
-}*/
-
 interface DoctorSalary {
     double calculateSalary();
     String getDescription();

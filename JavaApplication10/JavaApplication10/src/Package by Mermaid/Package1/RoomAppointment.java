@@ -49,9 +49,9 @@ public class RoomAppointment implements Appointment {
         DoctorDAO doctorDAO = DoctorDAO.getInstance();
         try {
             // Look up the doctor ID from the doctor name
-            int doctorId = doctorDAO.getDoctorIdByName(doctorName);
+            String doctorId = doctorDAO.getDoctorIdByName(doctorName);
             // Pass the doctor ID as a string to bookAppointment
-            appointmentDAO.bookAppointment(this.appointmentId, this.patientId, String.valueOf(doctorId), java.sql.Timestamp.valueOf(appointmentDate), "Stay", room.getRoomID(), daysOfStay);
+            appointmentDAO.bookAppointment(this.appointmentId, this.patientId, doctorId, java.sql.Timestamp.valueOf(appointmentDate), "Stay", room.getRoomID(), daysOfStay);
         } catch (Exception e) {
             System.out.println("Error scheduling appointment: " + e.getMessage());
             e.printStackTrace();

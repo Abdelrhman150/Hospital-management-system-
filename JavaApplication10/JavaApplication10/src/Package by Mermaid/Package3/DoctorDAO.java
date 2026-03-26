@@ -2,6 +2,8 @@ package Package3;
 
 import java.sql.*;
 
+import Package1.Doctor;
+
 public class DoctorDAO {
 
     // ==================== Singleton ====================
@@ -77,16 +79,49 @@ public class DoctorDAO {
         return ps.executeQuery();
     }
 
-    public int getDoctorIdByName(String doctorName) throws Exception {
+    public String getDoctorIdByName(String doctorName) throws Exception {
         String sql = "SELECT doctorId FROM Doctors WHERE name=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, doctorName);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getInt("doctorId");
+                return rs.getString("doctorId");
             }
         }
         throw new Exception("Doctor not found with name: " + doctorName);
     }
+    public Doctor findDoctorObjectById(String doctorId) throws Exception {
+    String sql = "SELECT * FROM Doctors WHERE doctorId=?";
+    Connection conn = DatabaseConnection.getConnection();
+
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, doctorId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                String id = rs.getString("doctorId");
+                String name = rs.getString("name");
+                String specialization = rs.getString("specialization");
+                String phone = rs.getString("phone");
+                String email = rs.getString("email");
+                boolean availability = rs.getString("AvailabilityStatus").equalsIgnoreCase("Available");
+
+                double consultationFee = 0.0; // لو مش موجود في الجدول أو مش محتاجاه هنا
+
+                return new Doctor(
+                        id,
+                        name,
+                        phone,
+                        email,
+                        specialization,
+                        availability,
+                        consultationFee
+                );
+            }
+        }
+    }
+
+    return null;
+}
 }

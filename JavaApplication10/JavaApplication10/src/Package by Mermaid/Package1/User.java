@@ -83,7 +83,7 @@ public class User {
 
     public void displayInfo() {
         System.out.println("--- User Profile ---");
-        System.out.println("Username: " + username);
+        System.out.println("Name: " + name);
         System.out.println("Email: " + email);
         System.out.println("Role: " + role);
         System.out.println("--------------------");

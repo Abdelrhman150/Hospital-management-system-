@@ -7,7 +7,7 @@ public class OutPatientServiceFactory implements HospitalServicFactory {
     }
 
     @Override
-    public Appointment createAppointment(String patientId, String doctorName, String appointmentDate, String roomID , int daysOfStay) {
+    public Appointment createAppointment(String patientId, String doctorName, String appointmentDate) {
         return new VistingAppointment();
         
     }

@@ -1,6 +1,7 @@
 package Package4;
 
 import Package1.Secretary;
+import Package1.Payement_System.Insurance;
 import Package1.Payement_System.InsuranceAdaptor;
 import Package1.Payement_System.Paypal;
 import Package1.Payement_System.paypalAdapter;
@@ -145,13 +146,16 @@ public class SecretaryUI {
             System.out.print("Enter Appointment Date (YYYY-MM-DD): ");
             String appointmentDate = scanner.nextLine().trim();
 
-            secretary.bookVisitingAppointment(patientId, doctorName, appointmentDate);
+            String AppointmentID = secretary.bookVisitingAppointment(patientId, doctorName, appointmentDate);
+            secretary.DisplayAppointmentDetails(AppointmentID);
+
 
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid patient ID. Please enter a number.");
         } catch (Exception e) {
             System.out.println("Error booking appointment: " + e.getMessage());
         }
+
     }
 
     /**
@@ -176,7 +180,9 @@ public class SecretaryUI {
             System.out.print("Enter Days of Stay: ");
             int daysOfStay = Integer.parseInt(scanner.nextLine().trim());
 
-            secretary.bookStayAppointment(patientId, doctorName, appointmentDate, roomId, daysOfStay);
+            String AppointmentID = secretary.bookStayAppointment(patientId, doctorName, appointmentDate, roomId, daysOfStay);
+            System.out.println("Stay appointment booked successfully!");
+            secretary.DisplayAppointmentDetails(AppointmentID);
 
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid number format. Please enter valid numbers for ID and Room ID.");
@@ -192,6 +198,8 @@ public class SecretaryUI {
         System.out.println("\n--- Generate Bill ---");
         try {
             secretary.GenerateBill();
+            System.out.println();
+            secretary.DisplayBillDetailsAfterGeneration();
         } catch (Exception e) {
             System.out.println("Error generating bill: " + e.getMessage());
             System.out.println("(Make sure an appointment has been booked first.)");
@@ -223,7 +231,7 @@ public class SecretaryUI {
                     secretary.Payment(billId, amount, paypalProcessor);
                     break;
                 case "2":
-                    InsuranceAdaptor insuranceProcessor = new InsuranceAdaptor();
+                    InsuranceAdaptor insuranceProcessor = new InsuranceAdaptor(new Insurance());
                     secretary.Payment(billId, amount, insuranceProcessor);
                     break;
                 default:
@@ -245,11 +253,11 @@ public class SecretaryUI {
     private void displayAppointmentDetails() {
         System.out.println("\n--- Appointment Details ---");
         try {
-            System.out.print("Enter Bill ID: ");
-            String billId = scanner.nextLine().trim();
-            secretary.DisplayAppointmentDetails(billId);
+            System.out.print("Enter Appointment ID: ");
+            String appointmentId = scanner.nextLine().trim();
+            secretary.DisplayAppointmentDetails(appointmentId);
         } catch (NumberFormatException e) {
-            System.out.println("Error: Invalid Bill ID. Please enter a number.");
+            System.out.println("Error: Invalid Appointment ID. Please enter a number.");
         } catch (Exception e) {
             System.out.println("Error displaying appointment details: " + e.getMessage());
             System.out.println("(Make sure an appointment has been booked first.)");

@@ -1,6 +1,7 @@
 package Package1;
 
 import java.sql.SQLException;
+import java.sql.ResultSet;
 
 import Package1.Payement_System.Insurance;
 import Package1.Payement_System.InsuranceAdaptor;
@@ -31,33 +32,49 @@ public class Secretary extends User {
     public void showAvailableDoctors(){
         DoctorDAO Doctors = DoctorDAO.getInstance();
         try {
-            Doctors.getAvailableDoctors();
+            ResultSet rs = Doctors.getAvailableDoctors();
+            System.out.println("Available Doctors:");
+            while (rs.next()) {
+                String doctorId = rs.getString("doctorId");
+                String name = rs.getString("name");
+                String specialization = rs.getString("specialization");
+                System.out.println("ID: " + doctorId + ", Name: " + name + ", Specialization: " + specialization);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void bookVisitingAppointment(String patientId, String doctorName, String appointmentDate) {
+    public String bookVisitingAppointment(String patientId, String doctorName, String appointmentDate) {
         hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory());
-        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
-                null, null);
+        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
+        
         System.out.println("Appointment booked successfully!");
+        return appointment.getAppointmentId() ;
         
         
     }
 
-    public void bookStayAppointment(String patientId, String doctorName, String appointmentDate, String roomID, int daysOfStay)
+    public String bookStayAppointment(String patientId, String doctorName, String appointmentDate, String roomID, int daysOfStay)
         throws Exception {
         hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory(roomID));
-        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
-                roomID, daysOfStay);
+        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
         System.out.println("Appointment booked successfully!");
-        
+        return appointment.getAppointmentId() ;
+
     }
 
     public void GenerateBill(){
         bill = hospitalServiceController.CreateBill(appointment.getPatientId(), appointment.getDaysOfStay());
         System.out.println("Bill generated successfully!");
+    }
+
+    public void DisplayBillDetailsAfterGeneration() {
+        if (bill != null && bill.getBillId() != null) {
+            bill.getBillDetails(bill.getBillId());
+        } else {
+            System.out.println("No bill has been generated yet.");
+        }
     }
 
     public void Payment(String billId, double amount, PaymentProcessor paymentProcessor) {

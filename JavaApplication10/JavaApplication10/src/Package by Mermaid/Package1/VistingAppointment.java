@@ -19,11 +19,17 @@ public class VistingAppointment implements Appointment {
 }
 
     @Override
-    public void scheduleAppointment(String patientId, String doctorName, String appointmentDate, String roomID, Integer daysOfStay) {
+    public void scheduleAppointment(String patientId, String doctorName, String appointmentDate) {
         this.patientId = patientId;
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
         this.appointmentId = IdGenerator.getInstance().nextAppointmentId(); ///////////////
+        AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
+        try {
+            appointmentDAO.bookAppointment(this.appointmentId, this.patientId, doctorName, java.sql.Timestamp.valueOf(appointmentDate), "Visiting", null, 0);
+        } catch (Exception e) {
+            e.printStackTrace();   
+        }
     }
 
     @Override
@@ -45,6 +51,10 @@ public class VistingAppointment implements Appointment {
     public String getPatientId() {
         return this.patientId;
 
+    }
+
+    public String getAppointmentId() {
+        return this.appointmentId;
     }
 
     @Override

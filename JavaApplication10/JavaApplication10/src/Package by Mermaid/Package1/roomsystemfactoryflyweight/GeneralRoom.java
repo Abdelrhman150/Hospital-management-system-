@@ -78,4 +78,9 @@ public class GeneralRoom implements Room {
                 ", Daily Rate: " + sharedData.getDailyRate() +
                 ']';
     }
+
+    @Override
+    public String getAvailabilityStatus() {
+        return occupancyStatus.toString();
+    }
 }

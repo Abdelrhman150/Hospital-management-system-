@@ -50,6 +50,11 @@ public class RoomBill implements Bill {
     }
 
     @Override
+    public String getBillId() {
+        return billId;
+    }
+
+    @Override
     public void setPaymentProcessor(PaymentProcessor paymentProcessor) {
         this.paymentProcessor = paymentProcessor;
         paymentProcessor.processPayment(amount); // Process payment immediately for room bill

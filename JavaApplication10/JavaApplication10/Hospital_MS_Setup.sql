@@ -114,10 +114,14 @@ CREATE TABLE Appointments (
     patientId INT NOT NULL,
     doctorId INT NOT NULL,
     appointmentTime DATETIME NOT NULL,
+    
     type NVARCHAR(50),
     status NVARCHAR(50) DEFAULT 'Scheduled',
+    roomId NVARCHAR(20) NULL,
+    daysOfStay INT NULL,
     CONSTRAINT FK_Appointments_Patients FOREIGN KEY (patientId) REFERENCES Patients(patientId),
-    CONSTRAINT FK_Appointments_Doctors FOREIGN KEY (doctorId) REFERENCES Doctors(doctorId)
+    CONSTRAINT FK_Appointments_Doctors FOREIGN KEY (doctorId) REFERENCES Doctors(doctorId),
+    CONSTRAINT FK_Appointments_Rooms FOREIGN KEY (roomId) REFERENCES rooms(roomId)
 );
 
 -- MedicalRecords
@@ -284,17 +288,17 @@ INSERT INTO rooms (roomId, roomType, capacity, availabilityStatus, dailyRate) VA
 ('ROOM010', 'GeneralWard', 4, 'Available', 200.0);
 
 -- Appointments
-INSERT INTO Appointments (appointmentId, patientId, doctorId, appointmentTime, type, status) VALUES 
-(1, 1, 1, '2026-03-08 10:00:00', 'WalkIn', 'Scheduled'),
-(2, 2, 2, '2026-03-08 11:30:00', 'FollowUp', 'Scheduled'),
-(3, 3, 3, '2026-03-08 09:15:00', 'Online', 'Scheduled'),
-(4, 4, 4, '2026-03-09 13:00:00', 'WalkIn', 'Scheduled'),
-(5, 5, 5, '2026-03-09 14:45:00', 'FollowUp', 'Scheduled'),
-(6, 6, 6, '2026-03-10 08:30:00', 'Online', 'Scheduled'),
-(7, 7, 7, '2026-03-10 12:00:00', 'WalkIn', 'Scheduled'),
-(8, 8, 8, '2026-03-11 10:45:00', 'FollowUp', 'Scheduled'),
-(9, 9, 9, '2026-03-11 15:30:00', 'Online', 'Scheduled'),
-(10, 10, 10, '2026-03-12 11:00:00', 'WalkIn', 'Scheduled');
+INSERT INTO Appointments (appointmentId, patientId, doctorId, appointmentTime, type, status, roomId, daysOfStay) VALUES 
+(1, 1, 1, '2026-03-08 10:00:00', 'Stay', 'Scheduled', 'ROOM001', 5),
+(2, 2, 2, '2026-03-08 11:30:00', 'Visiting', 'Scheduled', NULL, NULL),
+(3, 3, 3, '2026-03-08 09:15:00', 'Stay', 'Scheduled', 'ROOM003', 3),
+(4, 4, 4, '2026-03-09 13:00:00', 'Visiting', 'Scheduled', NULL, NULL),
+(5, 5, 5, '2026-03-09 14:45:00', 'Stay', 'Scheduled', 'ROOM005', 7),
+(6, 6, 6, '2026-03-10 08:30:00', 'Visiting', 'Scheduled', NULL, NULL),
+(7, 7, 7, '2026-03-10 12:00:00', 'Visiting', 'Scheduled', NULL, NULL),
+(8, 8, 8, '2026-03-11 10:45:00', 'Visiting', 'Scheduled', NULL, NULL),
+(9, 9, 9, '2026-03-11 15:30:00', 'Visiting', 'Scheduled', NULL, NULL),
+(10, 10, 10, '2026-03-12 11:00:00', 'Visiting', 'Scheduled', NULL, NULL);
 
 -- MedicalRecords
 INSERT INTO MedicalRecords (recordId, patientId, doctorId, diagnosis, complaint, recordDate) VALUES 

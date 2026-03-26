@@ -27,8 +27,14 @@ public class RoomBill implements Bill {
         this.patientId = patientId;
         this.DaysOfStay = daysOfStay;
         this.room = room;
+        BillDAO billDAO = BillDAO.getInstance() ;
         billId = IdGenerator.getInstance().nextRecordId(); ///////////////
         amount = calculateamount(room, daysOfStay);;
+        try {
+            billDAO.addBill(patientId, amount, "Unpaid");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         billingDate = java.time.LocalDate.now().toString(); // Get current date as billing date
     }
 
@@ -41,7 +47,6 @@ public class RoomBill implements Bill {
                 e.printStackTrace();
             }
     }
-
 
     @Override
     public double calculateamount(Room room, double days) {

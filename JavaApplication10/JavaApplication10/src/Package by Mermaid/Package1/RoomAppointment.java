@@ -36,10 +36,14 @@ public class RoomAppointment implements Appointment {
         this.appointmentDate = appointmentDate;
         this.appointmentId = IdGenerator.getInstance().nextAppointmentId(); ///////////////
         try {
-            getExtraDetails();
+            CheckingRoomAvailablity();
+            // Only ask for days of stay if room is available
+            setDaysOfStay();
+            
         } catch (Exception e) {
             e.printStackTrace();
-        }
+            return; // Exit if room check fails
+        } 
 
         AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
         DoctorDAO doctorDAO = DoctorDAO.getInstance();
@@ -84,20 +88,22 @@ public class RoomAppointment implements Appointment {
         return this.appointmentId;
     }
 
-        public void getExtraDetails() throws Exception {
-             System.out.println("Enter ROOM ID: ");
-        String roomID = System.console().readLine();
+    public void CheckingRoomAvailablity() throws Exception {
+
         if (room.getAvailabilityStatus() != "Available") {
-            System.out.println("Selected room is not available. Please choose another room.");
-            return;
+        System.out.println("Selected room is not available. Please choose another room.");
+        return;
         }
         else {
             RoomDAO roomDAO = RoomDAO.getInstance();
-            this.room = roomDAO.getRoomById(roomID);
-            room.markOccupied(roomID);
-            System.out.println("Room " + roomID + " has been Booked.");
+            this.room = roomDAO.getRoomById(room.getRoomID());
+            room.markOccupied(room.getRoomID());
+            System.out.println("Room " + room.getRoomID() + " has been Booked.");
         }
+    }
 
+
+    public void setDaysOfStay(){
         System.out.println("Enter Days of Stay: ");
         this.daysOfStay = Integer.parseInt(System.console().readLine());
     }

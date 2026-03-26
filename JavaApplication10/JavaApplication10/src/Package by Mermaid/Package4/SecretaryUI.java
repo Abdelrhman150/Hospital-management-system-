@@ -178,10 +178,7 @@ public class SecretaryUI {
             System.out.print("Enter Room ID: ");
             String roomId = scanner.nextLine().trim();
 
-            System.out.print("Enter Days of Stay: ");
-            int daysOfStay = Integer.parseInt(scanner.nextLine().trim());
-
-            String AppointmentID = secretary.bookStayAppointment(patientId, doctorName, appointmentDate, roomId, daysOfStay);
+            String AppointmentID = secretary.bookStayAppointment(patientId, doctorName, appointmentDate, roomId);
             System.out.println("Stay appointment booked successfully!");
             secretary.DisplayAppointmentDetails(AppointmentID);
 

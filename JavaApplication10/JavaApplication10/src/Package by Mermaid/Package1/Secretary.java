@@ -55,7 +55,7 @@ public class Secretary extends User {
         
     }
 
-    public String bookStayAppointment(String patientId, String doctorName, String appointmentDate, String roomID, int daysOfStay)
+    public String bookStayAppointment(String patientId, String doctorName, String appointmentDate, String roomID)
         throws Exception {
         hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory(roomID));
         appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
@@ -67,7 +67,9 @@ public class Secretary extends User {
 
     public void GenerateBill(){
         bill = hospitalServiceController.CreateBill(appointment.getPatientId(), appointment.getDaysOfStay());
-        System.out.println("Bill generated successfully!");
+        System.out.println("Bill Generated Successfully. ");
+
+        bill.getBillDetails(bill.getBillId());
     }
 
     public void DisplayBillDetailsAfterGeneration() {

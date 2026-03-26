@@ -48,6 +48,7 @@ public class Secretary extends User {
     public String bookVisitingAppointment(String patientId, String doctorName, String appointmentDate) {
         hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory());
         appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
+        appointment.scheduleAppointment(patientId, doctorName, appointmentDate);
         System.out.println("Appointment booked successfully!");
         return appointment.getAppointmentId() ;
         
@@ -58,6 +59,7 @@ public class Secretary extends User {
         throws Exception {
         hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory(roomID));
         appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
+        appointment.scheduleAppointment(patientId, doctorName, appointmentDate);
         System.out.println("Appointment booked successfully!");
         return appointment.getAppointmentId() ;
 

@@ -1,2 +1,0 @@
-AppointmentType
-Package1.AppointmentType

@@ -128,6 +128,7 @@ public class SecretaryUI {
     private void showAvailableDoctors() {
         System.out.println("\n--- Available Doctors ---");
         secretary.showAvailableDoctors();
+        
     }
 
     /**

@@ -1,2 +1,0 @@
-Package1.ShiftType
-ShiftType

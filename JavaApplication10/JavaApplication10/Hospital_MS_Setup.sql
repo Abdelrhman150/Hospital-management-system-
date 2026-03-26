@@ -50,6 +50,7 @@ CREATE TABLE Doctors (
     phone NVARCHAR(20),
     email NVARCHAR(100),
     departmentId INT NOT NULL,
+    AvailabilityStatus NVARCHAR(50),
     CONSTRAINT FK_Doctors_Departments FOREIGN KEY (departmentId) REFERENCES Departments(departmentId)
 );
 
@@ -110,7 +111,7 @@ CREATE TABLE rooms (
 
 -- Appointments
 CREATE TABLE Appointments (
-    appointmentId INT PRIMARY KEY,
+    appointmentId NVARCHAR(20) PRIMARY KEY,
     patientId INT NOT NULL,
     doctorId INT NOT NULL,
     appointmentTime DATETIME NOT NULL,
@@ -134,9 +135,6 @@ CREATE TABLE MedicalRecords (
     recordDate DATE,
     treatment NVARCHAR(MAX) NULL,
     visitDate DATE NULL,
-    labResults    NVARCHAR(500) NULL,
-    xrayScan      NVARCHAR(500) NULL,
-    allergyWarning NVARCHAR(500) NULL,
     CONSTRAINT FK_MedicalRecords_Patients FOREIGN KEY (patientId) REFERENCES Patients(patientId),
     CONSTRAINT FK_MedicalRecords_Doctors FOREIGN KEY (doctorId) REFERENCES Doctors(doctorId)
 );
@@ -194,6 +192,15 @@ CREATE TABLE Notifications (
     channel NVARCHAR(20) NOT NULL, -- EMAIL, SMS, MOBILE
     status NVARCHAR(20) NOT NULL,  -- SENT, FAILED
     sentAt DATETIME DEFAULT GETDATE()
+);
+
+-- DoctorRoles (New Table for Decorator Pattern)
+CREATE TABLE DoctorRoles (
+    roleId INT PRIMARY KEY IDENTITY(1,1),
+    doctorId INT NOT NULL,
+    roleName NVARCHAR(50) NOT NULL,
+    assignedAt DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_DoctorRoles_Doctors FOREIGN KEY (doctorId) REFERENCES Doctors(doctorId) ON DELETE CASCADE
 );
 
 -- Add FK for Department head after Doctors table exists
@@ -311,7 +318,9 @@ INSERT INTO MedicalRecords (recordId, patientId, doctorId, diagnosis, complaint,
 (7, 7, 7, 'Epilepsy', 'Seizures', '2026-03-01'),
 (8, 8, 8, 'Asthma', 'Shortness of breath', '2026-03-03'),
 (9, 9, 9, 'Knee Osteoarthritis', 'Chronic knee pain', '2026-03-05'),
-(10, 10, 10, 'Psoriasis', 'Scaly skin patches', '2026-03-06');
+(10, 10, 10, 'Psoriasis', 'Scaly skin patches', '2026-03-06'),
+(11, 1, 1, 'Type 2 Diabetes', 'Increased thirst and frequent urination', '2026-03-10'),
+(12, 2, 2, 'Anxiety Disorder', 'Persistent worry and restlessness', '2026-03-15');
 
 -- Roles
 INSERT INTO Roles (roleName) VALUES
@@ -348,6 +357,17 @@ INSERT INTO Notifications (message, recipient, channel, status) VALUES
 ('Your appointment is confirmed for tomorrow.', 'Mahmoud Abbas', 'SMS', 'SENT'),
 ('Please check your latest medical report.', 'Zainab Soliman', 'EMAIL', 'SENT'),
 ('A new message from Dr. Ahmed.', 'Mahmoud Abbas', 'MOBILE', 'SENT');
+GO
+
+-- Doctor Roles (Decorator Pattern Data)
+IF NOT EXISTS (SELECT 1 FROM DoctorRoles WHERE doctorId = 1)
+BEGIN
+    INSERT INTO DoctorRoles (doctorId, roleName) VALUES 
+    (1, 'Surgeon'),
+    (1, 'Head of Department'),
+    (4, 'Surgeon'),
+    (9, 'On-call');
+END
 GO
 
 PRINT 'Full Database setup completed successfully.';

@@ -76,4 +76,17 @@ public class DoctorDAO {
         PreparedStatement ps = conn.prepareStatement(sql);
         return ps.executeQuery();
     }
+
+    public int getDoctorIdByName(String doctorName) throws Exception {
+        String sql = "SELECT doctorId FROM Doctors WHERE name=?";
+        Connection conn = DatabaseConnection.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, doctorName);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("doctorId");
+            }
+        }
+        throw new Exception("Doctor not found with name: " + doctorName);
+    }
 }

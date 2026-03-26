@@ -4,6 +4,7 @@ import Package1.roomsystemfactoryflyweight.Room;
 import Package1.roomsystemfactoryflyweight.RoomStatus;
 import Package2.IdGenerator;
 import Package3.AppointmentDAO;
+import Package3.DoctorDAO;
 import Package3.RoomDAO;
 
 public class RoomAppointment implements Appointment {
@@ -41,9 +42,14 @@ public class RoomAppointment implements Appointment {
         }
 
         AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
+        DoctorDAO doctorDAO = DoctorDAO.getInstance();
         try {
-            appointmentDAO.bookAppointment(this.appointmentId, this.patientId, doctorName, java.sql.Timestamp.valueOf(appointmentDate), "Stay", room.getRoomID(), daysOfStay);
+            // Look up the doctor ID from the doctor name
+            int doctorId = doctorDAO.getDoctorIdByName(doctorName);
+            // Pass the doctor ID as a string to bookAppointment
+            appointmentDAO.bookAppointment(this.appointmentId, this.patientId, String.valueOf(doctorId), java.sql.Timestamp.valueOf(appointmentDate), "Stay", room.getRoomID(), daysOfStay);
         } catch (Exception e) {
+            System.out.println("Error scheduling appointment: " + e.getMessage());
             e.printStackTrace();
         }
     }

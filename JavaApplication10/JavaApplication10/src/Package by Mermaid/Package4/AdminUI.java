@@ -130,7 +130,6 @@ public class AdminUI {
                             hasHazard = true;
                         }
 
-                        // 👇 هنا بقى نستخدم النسخة الجديدة من الديكوريتر
                         loggedInAdmin.assignSalaryToDoctor(
                                 doctor,
                                 nightShifts,

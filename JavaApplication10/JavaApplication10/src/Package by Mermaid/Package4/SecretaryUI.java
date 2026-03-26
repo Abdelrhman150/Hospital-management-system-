@@ -219,7 +219,8 @@ public class SecretaryUI {
             System.out.print("Enter Doctor Name: ");
             String doctorName = scanner.nextLine().trim();
 
-            String appointmentDate = java.time.LocalDate.now().toString();
+            System.out.print("Enter Appointment Date (YYYY-MM-DD): ");
+            String appointmentDate = scanner.nextLine().trim();
 
             System.out.print("Enter Room ID: ");
             String roomId = scanner.nextLine().trim();

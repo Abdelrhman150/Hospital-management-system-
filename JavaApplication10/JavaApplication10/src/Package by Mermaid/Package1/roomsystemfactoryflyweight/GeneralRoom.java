@@ -6,7 +6,6 @@ public class GeneralRoom implements Room {
 
     public String roomId;
     public double daysBooked;
-    public double dailyRate = 100.0; // Example daily rate for general rooms
     public RoomStatus occupancyStatus;
     private RoomSharedData sharedData;
 
@@ -54,6 +53,11 @@ public class GeneralRoom implements Room {
     }
 
     @Override
+    public void setRoomID(String roomId) {
+        this.roomId = roomId;
+    }
+
+    @Override
     public double setDays(int days) {
         this.daysBooked = days;
         return daysBooked;
@@ -64,8 +68,19 @@ public class GeneralRoom implements Room {
         return daysBooked;
     }
 
+    @Override
     public double getDailyRate() {
-        return dailyRate;
+        return sharedData.getDailyRate();
+    }
+
+    @Override
+    public String getRoomType() {
+        return sharedData.getRoomType().toString();
+    }
+
+    @Override
+    public int getCapacity() {
+        return sharedData.getCapacity();
     }
 
     @Override

@@ -6,20 +6,17 @@ public class ICU implements Room {
 
     public String roomId;
     public double daysBooked;
-    public double dailyRate = 500.0; // Example daily rate for ICU rooms
     public RoomStatus occupancyStatus;
     private RoomSharedData sharedData;
 
     public ICU() {
         this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.ICU);
         this.occupancyStatus = RoomStatus.Available;
-        // id generation logic can be added here if needed
     }
 
     public ICU(String roomId, RoomStatus occupancyStatus) {
         this.roomId = roomId;
         this.occupancyStatus = occupancyStatus;
-        RoomDAO roomdao = RoomDAO.getInstance();
         this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.ICU);
     }
 
@@ -61,13 +58,29 @@ public class ICU implements Room {
         return daysBooked;
     }
 
+    @Override
     public double getDailyRate() {
-        return dailyRate;
+        return sharedData.getDailyRate();
     }
-    
+
     @Override
     public String getRoomID() {
         return roomId;
+    }
+
+    @Override
+    public void setRoomID(String roomId) {
+        this.roomId = roomId;
+    }
+
+    @Override
+    public String getRoomType() {
+        return sharedData.getRoomType().toString();
+    }
+
+    @Override
+    public int getCapacity() {
+        return sharedData.getCapacity();
     }
 
     @Override

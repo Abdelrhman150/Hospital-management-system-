@@ -6,7 +6,6 @@ public class PrivateRoom implements Room {
 
     public String roomId;
     public double daysBooked;
-    public double dailyRate = 300.0; // Example daily rate for private rooms
     public RoomStatus occupancyStatus;
     private RoomSharedData sharedData;
 
@@ -54,8 +53,9 @@ public class PrivateRoom implements Room {
         return daysBooked;
     }
 
+    @Override
     public double getDailyRate() {
-        return dailyRate;
+        return sharedData.getDailyRate();
     }
 
     @Override
@@ -64,8 +64,23 @@ public class PrivateRoom implements Room {
     }
 
     @Override
+    public void setRoomID(String roomId) {
+        this.roomId = roomId;
+    }
+
+    @Override
     public double getDays() {
         return daysBooked;
+    }
+
+    @Override
+    public String getRoomType() {
+        return sharedData.getRoomType().toString();
+    }
+
+    @Override
+    public int getCapacity() {
+        return sharedData.getCapacity();
     }
 
     public String toString() {
@@ -82,5 +97,4 @@ public class PrivateRoom implements Room {
     public String getAvailabilityStatus() {
         return occupancyStatus.toString();
     }
-
 }

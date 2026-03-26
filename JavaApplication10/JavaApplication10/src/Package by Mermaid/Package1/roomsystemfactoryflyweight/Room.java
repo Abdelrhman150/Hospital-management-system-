@@ -16,4 +16,10 @@ public interface Room {
     public String getRoomID();
 
     public String getAvailabilityStatus();
+
+    String getRoomType();
+
+    int getCapacity();
+
+    void setRoomID(String roomId);
 }

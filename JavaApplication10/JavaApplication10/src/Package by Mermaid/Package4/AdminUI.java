@@ -5,6 +5,7 @@ import Package1.Doctor;
 import Package2.IdGenerator;
 import Package3.AdminDAO;
 import Package3.DoctorDAO;
+import Package1.roomsystemfactoryflyweight.*;
 
 import java.util.Scanner;
 
@@ -61,12 +62,19 @@ public class AdminUI {
                         String newEmail = input.nextLine();
 
                         String generatedAdminId = IdGenerator.getInstance().generateUserIdByRole("admin");
-
                         adminDAO.addAdmin(generatedAdminId, newName, newPhone, newEmail);
 
                         System.out.println("\nAdmin account created successfully.");
                         System.out.println("Generated Admin ID: " + generatedAdminId);
                         break;
+
+                    case 3:
+                        System.out.println("\nExiting...");
+                        input.close();
+                        return;
+
+                    default:
+                        System.out.println("\nInvalid choice. Please try again.");
                 }
             }
 
@@ -77,7 +85,8 @@ public class AdminUI {
                 System.out.println("         ADMIN FUNCTIONS");
                 System.out.println("=================================");
                 System.out.println("1. Assign Salary To Doctor");
-                System.out.println("2. Logout");
+                System.out.println("2. Create Room");
+                System.out.println("3. Logout");
                 System.out.print("Choose an option: ");
 
                 int option = input.nextInt();
@@ -97,9 +106,7 @@ public class AdminUI {
                         }
 
                         System.out.println("\nDoctor found successfully:");
-                        System.out.println("---------------------------------");
                         doctor.displayInfo();
-                        System.out.println("---------------------------------");
 
                         int nightShifts = 0;
                         int onCallDays = 0;
@@ -130,12 +137,7 @@ public class AdminUI {
                             hasHazard = true;
                         }
 
-                        loggedInAdmin.assignSalaryToDoctor(
-                                doctor,
-                                nightShifts,
-                                onCallDays,
-                                hasHazard
-                        );
+                        loggedInAdmin.assignSalaryToDoctor(doctor, nightShifts, onCallDays, hasHazard);
 
                         System.out.println("\n========= SALARY BREAKDOWN =========");
                         doctor.viewSalary();
@@ -143,6 +145,45 @@ public class AdminUI {
                         break;
 
                     case 2:
+                        System.out.println("\n------ Create Room ------");
+                        System.out.println("Choose Room Type:");
+                        System.out.println("1. General Ward");
+                        System.out.println("2. Private Room");
+                        System.out.println("3. ICU");
+                        System.out.print("Enter choice: ");
+
+                        int roomChoice = input.nextInt();
+                        input.nextLine();
+
+                        RoomFactory factory = null;
+
+                        switch (roomChoice) {
+                            case 1:
+                                factory = new GeneralRoomFactory();
+                                break;
+                            case 2:
+                                factory = new PrivateRoomFactory();
+                                break;
+                            case 3:
+                                factory = new ICUFactory();
+                                break;
+                            default:
+                                System.out.println("Invalid room type.");
+                                break;
+                        }
+
+                        if (factory == null) {
+                            break;
+                        }
+
+                        RoomController roomController = new RoomController(factory);
+                        Room createdRoom = roomController.createRoom();
+
+                        System.out.println("\nRoom created successfully:");
+                        System.out.println(createdRoom);
+                        break;
+
+                    case 3:
                         System.out.println("\nLogged out successfully.");
                         running = false;
                         break;

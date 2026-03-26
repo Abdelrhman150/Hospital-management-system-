@@ -8,11 +8,11 @@ public class HospitalServiceController {
         this.hospitalServiceFactory = hospitalServiceFactory;
     }
 
-    public Bill CreateBill(int patientId, int daysOfStay) {
+    public Bill CreateBill(String patientId, int daysOfStay) {
         return hospitalServiceFactory.createBill(patientId, daysOfStay);
     }
 
-    public Appointment CreateAppointment(int patientId, String doctorName, String appointmentDate, Integer roomID, Integer daysOfStay) {
-        return hospitalServiceFactory.createAppointment(patientId, doctorName, appointmentDate, roomID, daysOfStay);
+    public Appointment CreateAppointment(String patientId, String doctorName, String appointmentDate) {
+        return hospitalServiceFactory.createAppointment(patientId, doctorName, appointmentDate);
     }
 }

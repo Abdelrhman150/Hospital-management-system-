@@ -8,13 +8,11 @@ import java.sql.ResultSet;
 public class StaffService {
 
     public void createAndSaveDoctor(String name, String phone, String email,
-            String specialization, boolean availability, int departmentId) {
+            String specialization, boolean availability, double consultationFee, String departmentId) {
         try {
             // prepare el database
             DoctorDAO doctorDAO = DoctorDAO.getInstance();
             DepartmentDAO departmentDAO = DepartmentDAO.getInstance();
-            // genetate ID gdeed
-            int newDoctorId = IdGenerator.getInstance().nextDoctorId();
             // make sure en el department mawgood
             ResultSet rs = departmentDAO.getDepartmentById(departmentId);
             // lw msh mawgood yegib error
@@ -25,7 +23,7 @@ public class StaffService {
             // get el data bta3el el department 3shan a creat Medical Department
             String departmentName = rs.getString("name");
             int floorNumber = rs.getInt("floorNumber");
-            int headDoctorId = rs.getInt("headDoctorId");
+            String headDoctorId = rs.getString("headDoctorId");
             Department department = new MedicalDepartment(departmentId, departmentName, floorNumber, headDoctorId);
             // create factory
             StaffFactory factory = new MedicalStaff(
@@ -34,6 +32,7 @@ public class StaffService {
                     email,
                     specialization,
                     availability,
+                    consultationFee,
                     department);
             // create user
             User user = factory.createUser();
@@ -45,8 +44,8 @@ public class StaffService {
                     doctor.getId(),
                     doctor.getName(),
                     doctor.getSpecialization(),
-                    doctor.getPhone(),
-                    department.getDepartmentId());
+                    doctor.getEmail(),
+                    doctor.getConsultationFee());
 
             System.out.println("Doctor added successfully.");
             doctor.displayInfo();
@@ -58,12 +57,12 @@ public class StaffService {
     }
 
     public void createAndSaveSecretary(String name, String phone, String email,
-            String shift, int departmentId) {
+            String shift, String departmentId) {
         try {
             SecretaryDAO secretaryDAO = SecretaryDAO.getInstance();
             DepartmentDAO departmentDAO = DepartmentDAO.getInstance();
 
-            int newSecretaryId = IdGenerator.getInstance().nextSecretaryId();
+            String newSecretaryId = IdGenerator.getInstance().nextSecretaryId();
 
             ResultSet rs = departmentDAO.getDepartmentById(departmentId);
 
@@ -75,7 +74,7 @@ public class StaffService {
             String departmentName = rs.getString("name");
 
             int floorNumber = rs.getInt("floorNumber");
-            int headDoctorId = rs.getInt("headDoctorId");
+            String headDoctorId = rs.getString("headDoctorId");
             Department department = new AdministrativeDepartment(departmentId, departmentName, floorNumber,
                     headDoctorId);
 

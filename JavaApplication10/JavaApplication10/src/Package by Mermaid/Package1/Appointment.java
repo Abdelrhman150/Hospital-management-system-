@@ -1,9 +1,10 @@
 package Package1;
 
 public interface Appointment {
-    public void displayDetails(int appointmentId);
-    public void cancelAppointment(int appointmentId);
-    public int getPatientId();
+    public void displayDetails(String appointmentId);
+    public void cancelAppointment(String appointmentId);
+    public String getPatientId();
     public int getDaysOfStay();
-    void scheduleAppointment(int patientId, String doctorName, String appointmentDate, Integer roomID,Integer daysOfStay);
+    public String getAppointmentId();
+    void scheduleAppointment(String patientId, String doctorName, String appointmentDate);
 }

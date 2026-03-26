@@ -1,10 +1,8 @@
 package Package1;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.ResultSet;
 
-import Package1.Payement_System.Insurance;
-import Package1.Payement_System.InsuranceAdaptor;
 import Package1.Payement_System.PaymentProcessor;
 import Package2.*;
 import Package3.DoctorDAO;
@@ -15,7 +13,7 @@ public class Secretary extends User {
     HospitalServiceController hospitalServiceController; 
     Bill bill ;
 
-    public Secretary(int id, String name, String phone, String email, String shift) {
+    public Secretary(String id, String name, String phone, String email, String shift) {
         super(id, name, phone, email);
         this.shift = shift;
     }
@@ -29,45 +27,66 @@ public class Secretary extends User {
         return shift;
     }
 
-    public ResultSet showAvailableDoctors() throws SQLException {
+    public void showAvailableDoctors(){
         DoctorDAO Doctors = DoctorDAO.getInstance();
-        return Doctors.getAvailableDoctors();
+        try {
+            ResultSet rs = Doctors.getAvailableDoctors();
+            System.out.println("Available Doctors:");
+            while (rs.next()) {
+                String doctorId = rs.getString("doctorId");
+                String name = rs.getString("name");
+                String specialization = rs.getString("specialization");
+                System.out.println("ID: " + doctorId + ", Name: " + name + ", Specialization: " + specialization);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void bookVisitingAppointment(int patientId, String doctorName, String appointmentDate) {
+    public String bookVisitingAppointment(String patientId, String doctorName, String appointmentDate) {
         hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory());
-        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
-                null, null);
+        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
+        appointment.scheduleAppointment(patientId, doctorName, appointmentDate);
         System.out.println("Appointment booked successfully!");
+        return appointment.getAppointmentId() ;
         
         
     }
 
-    public void bookStayAppointment(int patientId, String doctorName, String appointmentDate, int roomID, int daysOfStay)
+    public String bookStayAppointment(String patientId, String doctorName, String appointmentDate, String roomID)
         throws Exception {
         hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory(roomID));
-        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate,
-                roomID, daysOfStay);
+        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
+        appointment.scheduleAppointment(patientId, doctorName, appointmentDate);
         System.out.println("Appointment booked successfully!");
-        
+        return appointment.getAppointmentId() ;
+
     }
 
     public void GenerateBill(){
         bill = hospitalServiceController.CreateBill(appointment.getPatientId(), appointment.getDaysOfStay());
-        System.out.println("Bill generated successfully!");
+        System.out.println("Bill Generated Successfully. ");
     }
 
-    public void Payment(int billId, double amount, PaymentProcessor paymentProcessor) {
+    public void DisplayBillDetailsAfterGeneration() {
+        if (bill != null && bill.getBillId() != null) {
+            bill.getBillDetails(bill.getBillId());
+        } else {
+            System.out.println("No bill has been generated yet.");
+        }
+    }
+
+    public void Payment(PaymentProcessor paymentProcessor) {
         bill.setPaymentProcessor(paymentProcessor);
-        System.out.println("Payment processed successfully!");
+        System.out.println("Payment processed successfully for bill : " + bill.getBillId());
     }
 
 
-    public void DisplayAppointmentDetails(int billId) {
+    public void DisplayAppointmentDetails(String billId) {
         appointment.displayDetails(billId);
     }
 
-    public void DisplayBillDetails(int billId) {
+    public void DisplayBillDetails(String billId) {
         bill.getBillDetails(billId);
     } 
 

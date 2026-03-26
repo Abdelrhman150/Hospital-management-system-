@@ -19,12 +19,12 @@ public class PatientDAO {
 
     // ==================== Operations ====================
 
-    public void addPatient(int patientId, String name, String gender, String bloodType,
+    public void addPatient(String patientId, String name, String gender, String bloodType,
             String phone, String address, Date dateOfBirth) throws Exception {
         String sql = "INSERT INTO Patients(patientId, name, gender, bloodType, phone, address, dateOfBirth) VALUES(?,?,?,?,?,?,?)";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, patientId);
+            ps.setString(1, patientId);
             ps.setString(2, name);
             ps.setString(3, gender);
             ps.setString(4, bloodType);
@@ -35,23 +35,23 @@ public class PatientDAO {
         }
     }
 
-    public void updatePatient(int patientId, String name, String phone, String address) throws Exception {
+    public void updatePatient(String patientId, String name, String phone, String address) throws Exception {
         String sql = "UPDATE Patients SET name=?, phone=?, address=? WHERE patientId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, name);
             ps.setString(2, phone);
             ps.setString(3, address);
-            ps.setInt(4, patientId);
+            ps.setString(4, patientId);
             ps.executeUpdate();
         }
     }
 
-    public void deletePatient(int patientId) throws Exception {
+    public void deletePatient(String patientId) throws Exception {
         String sql = "DELETE FROM Patients WHERE patientId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, patientId);
+            ps.setString(1, patientId);
             ps.executeUpdate();
         }
     }
@@ -64,11 +64,11 @@ public class PatientDAO {
         return ps.executeQuery();
     }
 
-    public ResultSet getPatientById(int patientId) throws Exception {
+    public ResultSet getPatientById(String patientId) throws Exception {
         String sql = "SELECT * FROM Patients WHERE patientId=?";
         Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, patientId);
+        ps.setString(1, patientId);
         return ps.executeQuery();
     }
 }

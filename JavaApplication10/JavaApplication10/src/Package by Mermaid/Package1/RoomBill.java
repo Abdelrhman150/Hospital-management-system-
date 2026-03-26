@@ -6,8 +6,8 @@ import Package2.*;
 import Package3.BillDAO;
 
 public class RoomBill implements Bill {
-    public int billId;
-    public int patientId;
+    public String billId;
+    public String patientId;
     public double amount;
     public String billingDate;
     public int DaysOfStay;
@@ -22,18 +22,24 @@ public class RoomBill implements Bill {
     }
 
     @Override
-    public void generateBill(int patientId, int daysOfStay, Room room) {
+    public void generateBill(String patientId, int daysOfStay, Room room) {
 
         this.patientId = patientId;
         this.DaysOfStay = daysOfStay;
         this.room = room;
-        billId = IdGenerator.getInstance().nextRecordId(); ///////////////
-        amount = calculateamount(room, daysOfStay);;
+        BillDAO billDAO = BillDAO.getInstance() ;
+        amount = calculateamount(room, daysOfStay);
+        this.billId = IdGenerator.getInstance().nextBillId() ;
+        try {
+            billDAO.addBill(billId,patientId, amount, "Unpaid");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         billingDate = java.time.LocalDate.now().toString(); // Get current date as billing date
     }
 
     @Override
-    public void getBillDetails(int billId) {
+    public void getBillDetails(String billId) {
             BillDAO billDAO = BillDAO.getInstance();
             try {
                 billDAO.BillDetails(billId);
@@ -42,11 +48,15 @@ public class RoomBill implements Bill {
             }
     }
 
-
     @Override
     public double calculateamount(Room room, double days) {
         this.amount = room.getDailyRate() * (int) days;
         return this.amount;
+    }
+
+    @Override
+    public String getBillId() {
+        return billId;
     }
 
     @Override

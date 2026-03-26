@@ -2,11 +2,6 @@ package Package4;
 
 import Package1.User;
 import Package1.MedicalRecord;
-import Package1.DoctorService;
-import Package1.Doctor;
-import Package1.SurgeonDecorator;
-import Package1.HeadOfDepartmentDecorator;
-import Package1.OnCallDoctorDecorator;
 import Package2.DoctorView;
 import Package2.PatientView;
 import Package2.DesktopDisplay;
@@ -112,11 +107,6 @@ public class DashboardGUI extends JFrame {
                 panel.add(createActionButton("Add New Medical Record", "➕"));
                 panel.add(createActionButton("Manage Appointments", "📅"));
                 panel.add(createActionButton("Generate Reports", "📊"));
-
-                // --- DECORATOR PATTERN ROLES ---
-                panel.add(createActionButton("Perform Surgery (Surgeon Role)", "🔪"));
-                panel.add(createActionButton("Manage Staff (Head of Dept Role)", "👨‍💼"));
-                panel.add(createActionButton("Emergency Duties (On-call Role)", "🚨"));
                 break;
             case "nurse":
                 panel.add(createActionButton("Monitor Patient Vitals", "📉"));
@@ -160,11 +150,11 @@ public class DashboardGUI extends JFrame {
                     try {
                         // Build a sample record to display via Bridge Pattern
                         Package3.MedicalRecordDAO dao = Package3.MedicalRecordDAO.getInstance();
-                        java.sql.ResultSet rs = dao.getPatientHistory(Integer.parseInt(idStr.trim()));
+                        java.sql.ResultSet rs = dao.getPatientHistory(idStr.trim());
                         if (rs.next()) {
                             MedicalRecord rec = new MedicalRecord();
-                            rec.recordId = rs.getInt("recordId");
-                            rec.patientId = Integer.parseInt(idStr.trim());
+                            rec.recordId = rs.getString("recordId");
+                            rec.patientId = idStr.trim();
                             rec.doctorId = currentUser.getId();
                             rec.dateCreated = rs.getDate("recordDate");
                             rec.chiefComplaint = rs.getString("complaint");
@@ -195,42 +185,6 @@ public class DashboardGUI extends JFrame {
             } else if (text.equals("Send Notifications")) {
                 new NotificationGUI(currentUser).setVisible(true);
                 this.dispose();
-            } else if (text.equals("Perform Surgery (Surgeon Role)")) {
-                // Example of Decorator Pattern: Adding Surgeon role
-                Doctor basicDoc = new Doctor(currentUser.getId(), currentUser.getName(), "", currentUser.getEmail(), "Surgery Specialist", true);
-                DoctorService surgeon = new SurgeonDecorator(basicDoc);
-                
-                JOptionPane.showMessageDialog(this, 
-                    "Decorator Pattern in Action:\n" + 
-                    "Role: " + surgeon.getDescription() + "\n" +
-                    "Performing specialized surgery duties.", 
-                    "Surgeon Role", JOptionPane.INFORMATION_MESSAGE);
-                surgeon.performDuties();
-                
-            } else if (text.equals("Manage Staff (Head of Dept Role)")) {
-                // Example of Decorator Pattern: Adding Head of Department role
-                Doctor basicDoc = new Doctor(currentUser.getId(), currentUser.getName(), "", currentUser.getEmail(), "Department Head", true);
-                DoctorService head = new HeadOfDepartmentDecorator(basicDoc);
-                
-                JOptionPane.showMessageDialog(this, 
-                    "Decorator Pattern in Action:\n" + 
-                    "Role: " + head.getDescription() + "\n" +
-                    "Managing administrative duties.", 
-                    "Head of Department Role", JOptionPane.INFORMATION_MESSAGE);
-                head.performDuties();
-                
-            } else if (text.equals("Emergency Duties (On-call Role)")) {
-                // Example of Decorator Pattern: Adding On-call role
-                Doctor basicDoc = new Doctor(currentUser.getId(), currentUser.getName(), "", currentUser.getEmail(), "Emergency Specialist", true);
-                DoctorService onCall = new OnCallDoctorDecorator(basicDoc);
-                
-                JOptionPane.showMessageDialog(this, 
-                    "Decorator Pattern in Action:\n" + 
-                    "Role: " + onCall.getDescription() + "\n" +
-                    "Handling emergency and night shifts.", 
-                    "On-call Role", JOptionPane.INFORMATION_MESSAGE);
-                onCall.performDuties();
-                
             } else {
                 JOptionPane.showMessageDialog(this, "Feature coming soon: " + text);
             }

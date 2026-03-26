@@ -3,28 +3,30 @@ package Package1;
 import Package2.*;
 
 public class MedicalStaff implements StaffFactory {
-    private int id;
+    private String id;
     private String name;
     private String phone;
     private String email;
     private String specialization;
     private boolean availability;
+    private double consultationFee;
     private Department department;
 
     public MedicalStaff(String name, String phone, String email,
-            String specialization, boolean availability, Department department) {
+            String specialization, boolean availability, double consultationFee, Department department) {
         this.id = IdGenerator.getInstance().nextDoctorId();
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.specialization = specialization;
         this.availability = availability;
+        this.consultationFee = consultationFee;
         this.department = department;
     }
 
     @Override
     public User createUser() {
-        return new Doctor(id, name, phone, email, specialization, availability);
+        return new Doctor(id, name, phone, email, specialization, availability, consultationFee);
     }
 
     @Override

@@ -82,7 +82,7 @@ public class RoomUI {
 
     private void showRoomDetails() throws Exception {
         System.out.print("Enter room ID: ");
-        int roomId = Integer.parseInt(scanner.nextLine());
+        String roomId = scanner.nextLine();
         Room room = RoomDAO.getInstance().getRoomById(roomId);
         System.out.println("\n--- Room Details ---");
         System.out.println(room);
@@ -90,7 +90,7 @@ public class RoomUI {
 
     private void changeRoomStatus(String action) throws Exception {
         System.out.print("Enter room ID: ");
-        int roomId = Integer.parseInt(scanner.nextLine());
+        String roomId = scanner.nextLine();
         RoomDAO roomDAO = RoomDAO.getInstance();
 
         switch (action) {

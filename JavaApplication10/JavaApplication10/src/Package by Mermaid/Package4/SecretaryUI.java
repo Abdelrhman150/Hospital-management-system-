@@ -1,11 +1,10 @@
 package Package4;
 
 import Package1.Secretary;
+import Package1.Payement_System.Insurance;
 import Package1.Payement_System.InsuranceAdaptor;
 import Package1.Payement_System.Paypal;
 import Package1.Payement_System.paypalAdapter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
@@ -30,7 +29,7 @@ public class SecretaryUI {
      */
     public SecretaryUI() {
         // Create a demo secretary for testing
-        this.secretary = new Secretary(1, "John Doe", "123-456-7890", "john.doe@hospital.com", "Morning");
+        this.secretary = new Secretary("SEC001", "John Doe", "123-456-7890", "john.doe@hospital.com", "Morning");
         this.scanner = new Scanner(System.in);
     }
 
@@ -48,14 +47,11 @@ public class SecretaryUI {
             System.out.println("2.  Get Secretary Role");
             System.out.println("3.  Get Secretary Shift");
             System.out.println("4.  Show Available Doctors");
-            System.out.println("5.  Book Visiting Appointment");
-            System.out.println("6.  Book Stay Appointment");
-            System.out.println("7.  Generate Bill");
-            System.out.println("8.  Process Payment");
-            System.out.println("9.  Display Appointment Details");
-            System.out.println("10. Display Bill Details");
-            System.out.println("11. Exit");
-            System.out.print("Choose an option (1-11): ");
+            System.out.println("5.  Manage Appointment");
+            System.out.println("6.  Display Appointment Details");
+            System.out.println("7.  Display Bill Details");
+            System.out.println("8.  Exit");
+            System.out.print("Choose an option (1-8): ");
 
             String choice = scanner.nextLine().trim();
 
@@ -73,28 +69,79 @@ public class SecretaryUI {
                     showAvailableDoctors();
                     break;
                 case "5":
-                    bookVisitingAppointment();
+                    manageAppointmentMenu();
                     break;
                 case "6":
-                    bookStayAppointment();
-                    break;
-                case "7":
-                    generateBill();
-                    break;
-                case "8":
-                    processPayment();
-                    break;
-                case "9":
                     displayAppointmentDetails();
                     break;
-                case "10":
+                case "7":
                     displayBillDetails();
                     break;
-                case "11":
+                case "8":
                     System.out.println("Exiting Secretary Control Panel. Goodbye!");
                     return;
                 default:
-                    System.out.println("Invalid choice. Please select 1-11.");
+                    System.out.println("Invalid choice. Please select 1-8.");
+            }
+        }
+    }
+
+    /**
+     * Sub-menu for Managing Appointments (Booking, Billing, Payment)
+     */
+    private void manageAppointmentMenu() {
+        while (true) {
+            System.out.println("\n--- Manage Appointment ---");
+            System.out.println("1. Book Appointment");
+            System.out.println("2. Generate Bill");
+            System.out.println("3. Process Payment");
+            System.out.println("4. Back to Main Menu");
+            System.out.print("Choose an option (1-4): ");
+
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1":
+                    bookAppointmentSubMenu();
+                    break;
+                case "2":
+                    generateBill();
+                    break;
+                case "3":
+                    processPayment();
+                    break;
+                case "4":
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please select 1-4.");
+            }
+        }
+    }
+
+    /**
+     * Sub-sub-menu for Booking Appointments
+     */
+    private void bookAppointmentSubMenu() {
+        while (true) {
+            System.out.println("\n--- Book Appointment ---");
+            System.out.println("1. Visiting Appointment");
+            System.out.println("2. Stay Appointment");
+            System.out.println("3. Back");
+            System.out.print("Choose an option (1-3): ");
+
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1":
+                    bookVisitingAppointment();
+                    return; // Return to parent menu after operation
+                case "2":
+                    bookStayAppointment();
+                    return; // Return to parent menu after operation
+                case "3":
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please select 1-3.");
             }
         }
     }
@@ -128,23 +175,8 @@ public class SecretaryUI {
      */
     private void showAvailableDoctors() {
         System.out.println("\n--- Available Doctors ---");
-        try {
-            ResultSet rs = secretary.showAvailableDoctors();
-            boolean found = false;
-            while (rs.next()) {
-                String name = rs.getString("name");
-                String spec = rs.getString("specialization");
-                System.out.println("Doctor: " + name + " (" + spec + ")");
-                found = true;
-            }
-            if (!found) {
-                System.out.println("No doctors available at the moment.");
-            }
-        } catch (SQLException e) {
-            System.out.println("Error fetching available doctors: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("An error occurred: " + e.getMessage());
-        }
+        secretary.showAvailableDoctors();
+
     }
 
     /**
@@ -155,21 +187,23 @@ public class SecretaryUI {
 
         try {
             System.out.print("Enter Patient ID: ");
-            int patientId = Integer.parseInt(scanner.nextLine().trim());
+            String patientId = scanner.nextLine().trim();
 
             System.out.print("Enter Doctor Name: ");
             String doctorName = scanner.nextLine().trim();
 
-            System.out.print("Enter Appointment Date (YYYY-MM-DD): ");
+            System.out.print("Enter Appointment Date (yyyy-MM-dd): ");
             String appointmentDate = scanner.nextLine().trim();
 
-            secretary.bookVisitingAppointment(patientId, doctorName, appointmentDate);
+            String AppointmentID = secretary.bookVisitingAppointment(patientId, doctorName, appointmentDate);
+            secretary.DisplayAppointmentDetails(AppointmentID);
 
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid patient ID. Please enter a number.");
         } catch (Exception e) {
             System.out.println("Error booking appointment: " + e.getMessage());
         }
+
     }
 
     /**
@@ -180,21 +214,20 @@ public class SecretaryUI {
 
         try {
             System.out.print("Enter Patient ID: ");
-            int patientId = Integer.parseInt(scanner.nextLine().trim());
+            String patientId = scanner.nextLine().trim();
 
             System.out.print("Enter Doctor Name: ");
             String doctorName = scanner.nextLine().trim();
 
-            System.out.print("Enter Appointment Date (YYYY-MM-DD): ");
+            System.out.print("Enter Appointment Date (yyyy-MM-dd): ");
             String appointmentDate = scanner.nextLine().trim();
 
             System.out.print("Enter Room ID: ");
-            int roomId = Integer.parseInt(scanner.nextLine().trim());
+            String roomId = scanner.nextLine().trim();
 
-            System.out.print("Enter Days of Stay: ");
-            int daysOfStay = Integer.parseInt(scanner.nextLine().trim());
-
-            secretary.bookStayAppointment(patientId, doctorName, appointmentDate, roomId, daysOfStay);
+            String AppointmentID = secretary.bookStayAppointment(patientId, doctorName, appointmentDate, roomId);
+            System.out.println("Stay appointment booked successfully!");
+            secretary.DisplayAppointmentDetails(AppointmentID);
 
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid number format. Please enter valid numbers for ID and Room ID.");
@@ -210,6 +243,8 @@ public class SecretaryUI {
         System.out.println("\n--- Generate Bill ---");
         try {
             secretary.GenerateBill();
+            System.out.println();
+            secretary.DisplayBillDetailsAfterGeneration();
         } catch (Exception e) {
             System.out.println("Error generating bill: " + e.getMessage());
             System.out.println("(Make sure an appointment has been booked first.)");
@@ -219,15 +254,10 @@ public class SecretaryUI {
     /**
      * Process payment using PayPal or Insurance
      */
+
     private void processPayment() {
         System.out.println("\n--- Process Payment ---");
         try {
-            System.out.print("Enter Bill ID: ");
-            int billId = Integer.parseInt(scanner.nextLine().trim());
-
-            System.out.print("Enter Amount to Pay: $");
-            double amount = Double.parseDouble(scanner.nextLine().trim());
-
             System.out.println("Select Payment Method:");
             System.out.println("1. PayPal");
             System.out.println("2. Insurance");
@@ -238,11 +268,11 @@ public class SecretaryUI {
                 case "1":
                     Paypal paypal = new Paypal();
                     paypalAdapter paypalProcessor = new paypalAdapter(paypal);
-                    secretary.Payment(billId, amount, paypalProcessor);
+                    secretary.Payment(paypalProcessor);
                     break;
                 case "2":
-                    InsuranceAdaptor insuranceProcessor = new InsuranceAdaptor();
-                    secretary.Payment(billId, amount, insuranceProcessor);
+                    InsuranceAdaptor insuranceProcessor = new InsuranceAdaptor(new Insurance());
+                    secretary.Payment(insuranceProcessor);
                     break;
                 default:
                     System.out.println("Invalid payment method selected.");
@@ -263,11 +293,11 @@ public class SecretaryUI {
     private void displayAppointmentDetails() {
         System.out.println("\n--- Appointment Details ---");
         try {
-            System.out.print("Enter Bill ID: ");
-            int billId = Integer.parseInt(scanner.nextLine().trim());
-            secretary.DisplayAppointmentDetails(billId);
+            System.out.print("Enter Appointment ID: ");
+            String appointmentId = scanner.nextLine().trim();
+            secretary.DisplayAppointmentDetails(appointmentId);
         } catch (NumberFormatException e) {
-            System.out.println("Error: Invalid Bill ID. Please enter a number.");
+            System.out.println("Error: Invalid Appointment ID. Please enter a number.");
         } catch (Exception e) {
             System.out.println("Error displaying appointment details: " + e.getMessage());
             System.out.println("(Make sure an appointment has been booked first.)");
@@ -281,7 +311,7 @@ public class SecretaryUI {
         System.out.println("\n--- Bill Details ---");
         try {
             System.out.print("Enter Bill ID: ");
-            int billId = Integer.parseInt(scanner.nextLine().trim());
+            String billId = scanner.nextLine().trim();
             secretary.DisplayBillDetails(billId);
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid Bill ID. Please enter a number.");

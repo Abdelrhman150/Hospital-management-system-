@@ -2,7 +2,7 @@ package Package1;
 
 public class MedicalDepartment extends Department {
 
-    public MedicalDepartment(int departmentId, String departmentName, int floorNumber, int departmentHeadId) {
+    public MedicalDepartment(String departmentId, String departmentName, int floorNumber, String departmentHeadId) {
         super(departmentId, departmentName, floorNumber, departmentHeadId);
     }
 

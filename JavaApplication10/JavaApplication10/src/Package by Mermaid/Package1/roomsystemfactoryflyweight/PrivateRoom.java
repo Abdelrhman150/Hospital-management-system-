@@ -4,7 +4,7 @@ import Package3.RoomDAO;
 
 public class PrivateRoom implements Room {
 
-    public int roomId;
+    public String roomId;
     public double daysBooked;
     public double dailyRate = 300.0; // Example daily rate for private rooms
     public RoomStatus occupancyStatus;
@@ -15,14 +15,14 @@ public class PrivateRoom implements Room {
         this.occupancyStatus = RoomStatus.Available;
     }
 
-    public PrivateRoom(int roomId, RoomStatus occupancyStatus) {
+    public PrivateRoom(String roomId, RoomStatus occupancyStatus) {
         this.roomId = roomId;
         this.occupancyStatus = occupancyStatus;
         this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.PrivateRoom);
     }
 
     @Override
-    public void markOccupied(int roomID) {
+    public void markOccupied(String roomID) {
         occupancyStatus = RoomStatus.Occupied;
         RoomDAO roomdao = RoomDAO.getInstance();
         try {
@@ -59,7 +59,7 @@ public class PrivateRoom implements Room {
     }
 
     @Override
-    public int getRoomID() {
+    public String getRoomID() {
         return roomId;
     }
 
@@ -77,4 +77,10 @@ public class PrivateRoom implements Room {
                 ", Daily Rate: " + sharedData.getDailyRate() +
                 ']';
     }
+
+    @Override
+    public String getAvailabilityStatus() {
+        return occupancyStatus.toString();
+    }
+
 }

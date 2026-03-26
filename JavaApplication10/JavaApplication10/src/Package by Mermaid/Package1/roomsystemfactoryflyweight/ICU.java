@@ -4,7 +4,7 @@ import Package3.*;
 
 public class ICU implements Room {
 
-    public int roomId;
+    public String roomId;
     public double daysBooked;
     public double dailyRate = 500.0; // Example daily rate for ICU rooms
     public RoomStatus occupancyStatus;
@@ -13,16 +13,18 @@ public class ICU implements Room {
     public ICU() {
         this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.ICU);
         this.occupancyStatus = RoomStatus.Available;
+        // id generation logic can be added here if needed
     }
 
-    public ICU(int roomId, RoomStatus occupancyStatus) {
+    public ICU(String roomId, RoomStatus occupancyStatus) {
         this.roomId = roomId;
         this.occupancyStatus = occupancyStatus;
+        RoomDAO roomdao = RoomDAO.getInstance();
         this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.ICU);
     }
 
     @Override
-    public void markOccupied(int roomID) {
+    public void markOccupied(String roomID) {
         occupancyStatus = RoomStatus.Occupied;
         RoomDAO roomdao = RoomDAO.getInstance();
         try {
@@ -64,7 +66,7 @@ public class ICU implements Room {
     }
     
     @Override
-    public int getRoomID() {
+    public String getRoomID() {
         return roomId;
     }
 
@@ -77,5 +79,10 @@ public class ICU implements Room {
                 ", Status: '" + occupancyStatus + '\'' +
                 ", Daily Rate: " + sharedData.getDailyRate() +
                 ']';
+    }
+
+    @Override
+    public String getAvailabilityStatus() {
+        return occupancyStatus.toString();
     }
 }

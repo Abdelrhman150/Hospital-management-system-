@@ -6,14 +6,14 @@ import Package3.RoomDAO;
 public class StayPatientServiceFactory implements HospitalServicFactory {
     private Room room;
 
-    public StayPatientServiceFactory(int roomID) throws Exception {
+    public StayPatientServiceFactory(String roomID) throws Exception {
 
         RoomDAO roomDAO = RoomDAO.getInstance();
         this.room = roomDAO.getRoomById(roomID);
     }
 
     @Override
-    public Bill createBill(int patientId, int daysOfStay) {
+    public Bill createBill(String patientId, int daysOfStay) {
         RoomBill Bill = new RoomBill(room);
         Bill.generateBill(patientId, daysOfStay, room);
         return Bill;
@@ -21,9 +21,8 @@ public class StayPatientServiceFactory implements HospitalServicFactory {
     }
 
     @Override
-    public Appointment createAppointment(int patientId, String doctorName, String appointmentDate, int roomID, int daysOfStay) {
+    public Appointment createAppointment(String patientId, String doctorName, String appointmentDate) {
         RoomAppointment appointment = new RoomAppointment(room);
-        appointment.scheduleAppointment(patientId, doctorName, appointmentDate, roomID, daysOfStay);
         return appointment;
     }
 }

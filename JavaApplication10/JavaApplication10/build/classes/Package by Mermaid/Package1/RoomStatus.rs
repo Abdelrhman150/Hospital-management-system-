@@ -1,2 +1,0 @@
-RoomStatus
-Package1.RoomStatus

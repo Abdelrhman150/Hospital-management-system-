@@ -1,15 +1,16 @@
 package Package1;
 import Package2.*;
 import Package3.AppointmentDAO;
+import Package3.DoctorDAO;
 
 public class VistingAppointment implements Appointment {
-    public int appointmentId;
-    public int patientId;
+    public String appointmentId;
+    public String patientId;
     public String doctorName;
     public String appointmentDate;
 
     @Override
-    public void displayDetails(int appointmentId) {
+    public void displayDetails(String appointmentId) {
         AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
         try {
             appointmentDAO.GetAppointmentDetails(appointmentId);
@@ -19,22 +20,33 @@ public class VistingAppointment implements Appointment {
 }
 
     @Override
-    public void scheduleAppointment(int patientId, String doctorName, String appointmentDate, Integer roomID, Integer daysOfStay) {
+    public void scheduleAppointment(String patientId, String doctorName, String appointmentDate) {
         this.patientId = patientId;
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
-        this.appointmentId = IdGenerator.getInstance().nextAppointmentId(); ///////////////
+        this.appointmentId = IdGenerator.getInstance().nextAppointmentId();
+        AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
+        DoctorDAO doctorDAO = DoctorDAO.getInstance();
+        try {
+            // Look up the doctor ID from the doctor name
+            String doctorId = doctorDAO.getDoctorIdByName(doctorName);
+            // Pass the doctor ID as a string to bookAppointment
+            appointmentDAO.bookAppointment(this.appointmentId, this.patientId, doctorId, java.sql.Timestamp.valueOf(appointmentDate), "Visiting", null, 0);
+        } catch (Exception e) {
+            System.out.println("Error scheduling appointment: " + e.getMessage());
+            e.printStackTrace();   
+        }
     }
 
     @Override
-    public void cancelAppointment(int appointmentId) {
-        if (this.appointmentId == appointmentId) {
+    public void cancelAppointment(String appointmentId) {
+        if (this.appointmentId != null && this.appointmentId.equals(appointmentId)) {
             System.out.println("Appointment with ID " + appointmentId + " has been cancelled.");
             // Reset appointment details
-            this.patientId = 0;
+            this.patientId = null;
             this.doctorName = null;
             this.appointmentDate = null;
-            this.appointmentId = 0; // Resetting to indicate cancellation
+            this.appointmentId = null; // Resetting to indicate cancellation
         } else {
             System.out.println("No appointment found with ID: " + appointmentId);
         }
@@ -42,9 +54,13 @@ public class VistingAppointment implements Appointment {
 
 
     @Override
-    public int getPatientId() {
+    public String getPatientId() {
         return this.patientId;
 
+    }
+
+    public String getAppointmentId() {
+        return this.appointmentId;
     }
 
     @Override

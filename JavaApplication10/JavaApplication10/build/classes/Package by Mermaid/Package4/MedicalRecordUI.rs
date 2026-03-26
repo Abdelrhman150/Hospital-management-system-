@@ -1,2 +1,0 @@
-Package4.MedicalRecordUI
-MedicalRecordUI

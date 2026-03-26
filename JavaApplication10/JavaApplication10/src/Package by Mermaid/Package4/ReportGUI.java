@@ -192,7 +192,7 @@ public class ReportGUI extends JFrame {
 
     private void generateReport() {
         boolean isPatientReport = rbtnPatientReport.isSelected();
-        int patientId = 0;
+        String patientId = "";
 
         if (isPatientReport) {
             String idStr = txtPatientId.getText().trim();
@@ -202,7 +202,7 @@ public class ReportGUI extends JFrame {
                 return;
             }
             try {
-                patientId = Integer.parseInt(idStr);
+                //patientId = Integer.parseInt(idStr);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Patient ID must be numeric.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;

@@ -54,7 +54,7 @@ public class PaymentUI {
         }
     }
 
-    public void startForAmount(int billId, double amount, Bill bill) {
+    public void startForAmount(String billId, double amount, Bill bill) {
         if (bill == null) {
             System.out.println("No active bill to process payment.");
             return;
@@ -75,7 +75,7 @@ public class PaymentUI {
                 processor = a -> System.out.println("Processing cash payment of $" + amount + "...\nPayment completed.");
                 break;
             case "2":
-                processor = new InsuranceAdaptor();
+                processor = new InsuranceAdaptor(new Insurance());
                 break;
             case "3":
                 processor = new paypalAdapter(new Paypal());
@@ -90,8 +90,6 @@ public class PaymentUI {
         } else if (bill instanceof VisitingBill) {
             ((VisitingBill) bill).setPaymentProcessor(processor);
         }
-
-        bill.processPayment(billId, amount);
 
         try {
             BillDAO.getInstance().markAsPaid(billId);
@@ -118,7 +116,7 @@ public class PaymentUI {
         String input = scanner.nextLine();
         try {
             double amount = Double.parseDouble(input);
-            new InsuranceAdaptor().processPayment(amount);
+            new InsuranceAdaptor(new Insurance()).processPayment(amount);
             System.out.println("Insurance payment requested.");
         } catch (NumberFormatException e) {
             System.out.println("Invalid number format.");

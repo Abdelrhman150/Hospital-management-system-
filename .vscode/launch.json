@@ -3,6 +3,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainMenuGUI",
+            "request": "launch",
+            "mainClass": "Package4.MainMenuGUI",
+            "projectName": "Hospital Management System_685c54cb"
+        },
+        {
+            "type": "java",
+            "name": "RegisterGUI",
+            "request": "launch",
+            "mainClass": "Package4.RegisterGUI",
+            "projectName": "Hospital Management System_685c54cb"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "Hospital Management System_685c54cb"
+        },
+        {
+            "type": "java",
             "name": "RoomUI",
             "request": "launch",
             "mainClass": "Package4.RoomUI",

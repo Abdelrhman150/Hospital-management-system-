@@ -24,11 +24,11 @@ public class DoctorRoleDAO {
     /**
      * Assigns a role to a doctor in the DoctorRoles table.
      */
-    public void assignRoleToDoctor(int doctorId, String roleName) throws SQLException {
+    public void assignRoleToDoctor(String doctorId, String roleName) throws SQLException {
         String sql = "INSERT INTO DoctorRoles (doctorId, roleName) VALUES (?, ?)";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, doctorId);
+            ps.setString(1, doctorId);
             ps.setString(2, roleName);
             ps.executeUpdate();
         }
@@ -37,12 +37,12 @@ public class DoctorRoleDAO {
     /**
      * Retrieves all roles assigned to a specific doctor.
      */
-    public ArrayList<String> getRolesForDoctor(int doctorId) throws SQLException {
+    public ArrayList<String> getRolesForDoctor(String doctorId) throws SQLException {
         ArrayList<String> roles = new ArrayList<String>();
         String sql = "SELECT roleName FROM DoctorRoles WHERE doctorId = ?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, doctorId);
+            ps.setString(1, doctorId);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     roles.add(rs.getString("roleName"));
@@ -55,11 +55,11 @@ public class DoctorRoleDAO {
     /**
      * Removes a specific role from a doctor.
      */
-    public void removeRoleFromDoctor(int doctorId, String roleName) throws SQLException {
+    public void removeRoleFromDoctor(String doctorId, String roleName) throws SQLException {
         String sql = "DELETE FROM DoctorRoles WHERE doctorId = ? AND roleName = ?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, doctorId);
+            ps.setString(1, doctorId);
             ps.setString(2, roleName);
             ps.executeUpdate();
         }

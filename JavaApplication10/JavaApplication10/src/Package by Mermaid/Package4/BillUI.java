@@ -1,16 +1,10 @@
 package Package4;
 
 import Package1.Bill;
-import Package1.HospitalServicFactory;
 import Package1.OutPatientServiceFactory;
 import Package1.RoomBill;
 import Package1.StayPatientServiceFactory;
-import Package1.VistingAppointment;
 import Package1.VisitingBill;
-import Package1.Payement_System.Insurance;
-import Package1.Payement_System.InsuranceAdaptor;
-import Package1.Payement_System.Paypal;
-import Package1.Payement_System.paypalAdapter;
 import Package2.HospitalServiceController;
 import Package3.BillDAO;
 import Package1.roomsystemfactoryflyweight.Room;
@@ -22,13 +16,13 @@ public class BillUI {
 
     private Scanner scanner;
     private Bill currentBill;
-    private int currentBillId;
+    private String currentBillId;
     private double currentAmount;
 
     public BillUI() {
         this.scanner = new Scanner(System.in);
         this.currentBill = null;
-        this.currentBillId = -1;
+        this.currentBillId = "";
     }
 
     public void start() {
@@ -74,7 +68,7 @@ public class BillUI {
 
     private void createVisitingBill() throws Exception {
         System.out.print("Enter Patient ID: ");
-        int patientId = Integer.parseInt(scanner.nextLine());
+        String patientId = scanner.nextLine();
 
         HospitalServiceController controller = new HospitalServiceController(new OutPatientServiceFactory());
         Bill bill = controller.CreateBill(patientId, 0);
@@ -85,7 +79,7 @@ public class BillUI {
             currentBillId = visitingBill.billId;
             currentAmount = visitingBill.calculateamount(null, 0);
             System.out.println("Visiting bill created with amount: $" + currentAmount);
-            BillDAO.getInstance().addBill(patientId, currentAmount, "Unpaid");
+            BillDAO.getInstance().addBill(bill.getBillId(),patientId, currentAmount, "Unpaid");
         } else {
             System.out.println("Failed to create visiting bill.");
         }
@@ -93,9 +87,9 @@ public class BillUI {
 
     private void createRoomBill() throws Exception {
         System.out.print("Enter Patient ID: ");
-        int patientId = Integer.parseInt(scanner.nextLine());
+        String patientId = scanner.nextLine();
         System.out.print("Enter Room ID: ");
-        int roomId = Integer.parseInt(scanner.nextLine());
+        String roomId = scanner.nextLine();
         System.out.print("Enter Days of Stay: ");
         int days = Integer.parseInt(scanner.nextLine());
 
@@ -109,7 +103,7 @@ public class BillUI {
             currentBillId = roomBill.billId;
             currentAmount = roomBill.amount;
             System.out.println("Room bill created with amount: $" + currentAmount);
-            BillDAO.getInstance().addBill(patientId, currentAmount, "Unpaid");
+            BillDAO.getInstance().addBill(bill.getBillId(),patientId, currentAmount, "Unpaid");
         } else {
             System.out.println("Failed to create room bill.");
         }

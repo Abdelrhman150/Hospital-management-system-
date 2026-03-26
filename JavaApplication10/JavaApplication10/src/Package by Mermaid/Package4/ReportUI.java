@@ -53,25 +53,26 @@ public class ReportUI {
 
     private void handlePatientReport() {
         System.out.print("\nEnter Patient ID: ");
-        try {
-            int patientId = Integer.parseInt(scanner.nextLine());
+        String patientId = scanner.nextLine();
 
-            // Choose Formatter
-            ReportFormatter formatter = chooseFormatter();
-            if (formatter == null)
-                return;
+        if (patientId == null || patientId.trim().isEmpty()) {
+            System.out.println("✗ Patient ID cannot be empty.");
+            return;
+        }
 
-            System.out.println("\n--- Generating Patient Report ---");
-            Report report = reportController.createPatientReport(patientId, formatter);
+        // Choose Formatter
+        ReportFormatter formatter = chooseFormatter();
+        if (formatter == null)
+            return;
 
-            if (report != null) {
-                System.out.println(report.getFullContent());
-                System.out.println("✓ Patient Report generated successfully.");
-            } else {
-                System.out.println("✗ Failed to generate Patient Report. Please check ID.");
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("✗ Invalid ID format. Please enter a numeric ID.");
+        System.out.println("\n--- Generating Patient Report ---");
+        Report report = reportController.createPatientReport(patientId, formatter);
+
+        if (report != null) {
+            System.out.println(report.getFullContent());
+            System.out.println("✓ Patient Report generated successfully.");
+        } else {
+            System.out.println("✗ Failed to generate Patient Report. Please check ID.");
         }
     }
 

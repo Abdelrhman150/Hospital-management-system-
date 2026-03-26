@@ -20,7 +20,7 @@ public class ReportDAO {
     }
 
   
-    public String getPatientHistoryData(int patientId) throws Exception {
+    public String getPatientHistoryData(String patientId) throws Exception {
         String sql = "SELECT p.name, mr.diagnosis, mr.treatment, mr.visitDate " +
                      "FROM Patients p " +
                      "JOIN MedicalRecords mr ON p.patientId = mr.patientId " +
@@ -29,7 +29,7 @@ public class ReportDAO {
         
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, patientId);
+            ps.setString(1, patientId);
             try (ResultSet rs = ps.executeQuery()) {
                 StringBuilder data = new StringBuilder();
                 boolean found = false;
@@ -57,7 +57,7 @@ public class ReportDAO {
     }
 
   
-    public String[] getLatestPatientInfo(int patientId) throws Exception {
+    public String[] getLatestPatientInfo(String patientId) throws Exception {
         
         String sql = "SELECT TOP 1 p.name, mr.diagnosis " +
                      "FROM Patients p " +
@@ -69,7 +69,7 @@ public class ReportDAO {
        
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, patientId);
+            ps.setString(1, patientId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new String[]{rs.getString("name"), rs.getString("diagnosis")};

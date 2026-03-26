@@ -19,7 +19,7 @@ public class MedicalRecordBridgeController {
      * @param platformType "web" or "desktop"
      * @param viewType "doctor" or "patient"
      */
-    public void viewRecord(int recordId, String platformType, String viewType) {
+    public void viewRecord(String recordId, String platformType, String viewType) {
         try {
             // 1. Fetch data from DB
             ResultSet rs = dao.getFullRecord(recordId);

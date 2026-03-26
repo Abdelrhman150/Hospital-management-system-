@@ -20,47 +20,59 @@ public class IdGenerator {
 
     // ==================== Helper (private) ====================
 
-    private int nextId(String table, String column) {
+    private String generatePrefixId(String table, String column, String prefix) {
+        String newId = prefix + "001";
         try {
             Connection conn = DatabaseConnection.getConnection();
-            ResultSet rs = conn.createStatement()
-                    .executeQuery("SELECT ISNULL(MAX(" + column + "), 0) + 1 FROM " + table);
-            if (rs.next())
-                return rs.getInt(1);
+            String query = "SELECT " + column + " FROM " + table + " WHERE " + column + " LIKE '" + prefix + "%' ORDER BY LEN(" + column + ") DESC, " + column + " DESC";
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(query)) {
+                
+                if (rs.next()) {
+                    String maxId = rs.getString(1);
+                    if (maxId != null && maxId.startsWith(prefix)) {
+                        String numericPart = maxId.substring(prefix.length());
+                        if (numericPart.matches("\\d+")) {
+                            int num = Integer.parseInt(numericPart);
+                            newId = String.format(prefix + "%03d", num + 1);
+                        }
+                    }
+                }
+            }
         } catch (Exception e) {
             System.err.println("Error generating ID for " + table + ": " + e.getMessage());
         }
-        return 1;
+        return newId;
     }
 
     // ==================== Public Methods ====================
 
-    public int nextDoctorId() {
-        return nextId("Doctors", "doctorId");
+    public String nextDoctorId() {
+        return generatePrefixId("Doctors", "doctorId", "DOC");
     }
 
-    public int nextNurseId() {
-        return nextId("Nurses", "nurseId");
+    public String nextNurseId() {
+        return generatePrefixId("Nurses", "nurseId", "NUR");
     }
 
-    public int nextPatientId() {
-        return nextId("Patients", "patientId");
+    public String nextPatientId() {
+        return generatePrefixId("Patients", "patientId", "PAT");
     }
 
-    public int nextSecretaryId() {
-        return nextId("Secretaries", "secretaryId");
+    public String nextSecretaryId() {
+        return generatePrefixId("Secretaries", "secretaryId", "SEC");
     }
 
-    public int nextDepartmentId() {
-        return nextId("Departments", "departmentId");
+    public String nextDepartmentId() {
+        return generatePrefixId("Departments", "departmentId", "DEP");
     }
 
-    public int nextAppointmentId() {
-        return nextId("Appointments", "appointmentId");
+    public String nextAppointmentId() {
+        return generatePrefixId("Appointments", "appointmentId", "APP");
     }
 
-    public int nextRecordId() {
-        return nextId("MedicalRecords", "recordId");
+    public String nextRecordId() {
+        return generatePrefixId("MedicalRecords", "recordId", "REC");
     }
 
     /**
@@ -137,5 +149,9 @@ public class IdGenerator {
             System.err.println("Error generating room ID: " + e.getMessage());
         }
         return newId;
+    }
+
+    public String nextBillId() {
+        return generatePrefixId("Bills", "billId", "BILL");
     }
 }

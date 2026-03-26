@@ -1,8 +1,11 @@
 package Package1;
 
 import Package1.roomsystemfactoryflyweight.Room;
+import Package1.roomsystemfactoryflyweight.RoomStatus;
 import Package2.IdGenerator;
 import Package3.AppointmentDAO;
+import Package3.DoctorDAO;
+import Package3.RoomDAO;
 
 public class RoomAppointment implements Appointment {
     public String appointmentId;
@@ -27,13 +30,28 @@ public class RoomAppointment implements Appointment {
     }
 
     @Override
-    public void scheduleAppointment(String patientId, String doctorName, String appointmentDate, String roomID, Integer daysOfStay) {
+    public void scheduleAppointment(String patientId, String doctorName, String appointmentDate) {
         this.patientId = patientId;
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
-        this.daysOfStay = daysOfStay; 
         this.appointmentId = IdGenerator.getInstance().nextAppointmentId(); ///////////////
-        room.markOccupied(roomID);
+        try {
+            getExtraDetails();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
+        DoctorDAO doctorDAO = DoctorDAO.getInstance();
+        try {
+            // Look up the doctor ID from the doctor name
+            int doctorId = doctorDAO.getDoctorIdByName(doctorName);
+            // Pass the doctor ID as a string to bookAppointment
+            appointmentDAO.bookAppointment(this.appointmentId, this.patientId, String.valueOf(doctorId), java.sql.Timestamp.valueOf(appointmentDate), "Stay", room.getRoomID(), daysOfStay);
+        } catch (Exception e) {
+            System.out.println("Error scheduling appointment: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -60,4 +78,27 @@ public class RoomAppointment implements Appointment {
     public int getDaysOfStay() {
         return this.daysOfStay;
         }
+
+    @Override
+    public String getAppointmentId() {
+        return this.appointmentId;
+    }
+
+        public void getExtraDetails() throws Exception {
+             System.out.println("Enter ROOM ID: ");
+        String roomID = System.console().readLine();
+        if (room.getAvailabilityStatus() != "Available") {
+            System.out.println("Selected room is not available. Please choose another room.");
+            return;
+        }
+        else {
+            RoomDAO roomDAO = RoomDAO.getInstance();
+            this.room = roomDAO.getRoomById(roomID);
+            room.markOccupied(roomID);
+            System.out.println("Room " + roomID + " has been Booked.");
+        }
+
+        System.out.println("Enter Days of Stay: ");
+        this.daysOfStay = Integer.parseInt(System.console().readLine());
+    }
 }

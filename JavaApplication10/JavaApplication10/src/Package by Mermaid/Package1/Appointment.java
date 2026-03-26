@@ -5,5 +5,6 @@ public interface Appointment {
     public void cancelAppointment(String appointmentId);
     public String getPatientId();
     public int getDaysOfStay();
-    void scheduleAppointment(String patientId, String doctorName, String appointmentDate, String roomID, Integer daysOfStay);
+    public String getAppointmentId();
+    void scheduleAppointment(String patientId, String doctorName, String appointmentDate);
 }

@@ -1,6 +1,7 @@
 package Package1;
 import Package2.*;
 import Package3.AppointmentDAO;
+import Package3.DoctorDAO;
 
 public class VistingAppointment implements Appointment {
     public String appointmentId;
@@ -19,11 +20,22 @@ public class VistingAppointment implements Appointment {
 }
 
     @Override
-    public void scheduleAppointment(String patientId, String doctorName, String appointmentDate, String roomID, Integer daysOfStay) {
+    public void scheduleAppointment(String patientId, String doctorName, String appointmentDate) {
         this.patientId = patientId;
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
-        this.appointmentId = IdGenerator.getInstance().nextAppointmentId(); ///////////////
+        this.appointmentId = IdGenerator.getInstance().nextAppointmentId();
+        AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
+        DoctorDAO doctorDAO = DoctorDAO.getInstance();
+        try {
+            // Look up the doctor ID from the doctor name
+            int doctorId = doctorDAO.getDoctorIdByName(doctorName);
+            // Pass the doctor ID as a string to bookAppointment
+            appointmentDAO.bookAppointment(this.appointmentId, this.patientId, String.valueOf(doctorId), java.sql.Timestamp.valueOf(appointmentDate), "Visiting", null, 0);
+        } catch (Exception e) {
+            System.out.println("Error scheduling appointment: " + e.getMessage());
+            e.printStackTrace();   
+        }
     }
 
     @Override
@@ -45,6 +57,10 @@ public class VistingAppointment implements Appointment {
     public String getPatientId() {
         return this.patientId;
 
+    }
+
+    public String getAppointmentId() {
+        return this.appointmentId;
     }
 
     @Override

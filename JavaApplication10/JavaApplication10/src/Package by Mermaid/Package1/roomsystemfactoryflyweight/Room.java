@@ -14,4 +14,6 @@ public interface Room {
     public double getDailyRate();
 
     public String getRoomID();
+
+    public String getAvailabilityStatus();
 }

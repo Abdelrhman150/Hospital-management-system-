@@ -20,8 +20,8 @@ public class AppointmentDAO {
     // ==================== Operations ====================
 
     public void bookAppointment(String appointmentId, String patientId, String doctorId,
-            Timestamp appointmentTime, String type) throws Exception {
-        String sql = "INSERT INTO Appointments(appointmentId, patientId, doctorId, appointmentTime, type, status) VALUES(?,?,?,?,?,?)";
+            Timestamp appointmentTime, String type, String roomId, int daysOfStay) throws Exception {
+        String sql = "INSERT INTO Appointments(appointmentId, patientId, doctorId, appointmentTime, type, status, roomId, daysOfStay) VALUES(?,?,?,?,?,?,?,?)";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, appointmentId);
@@ -30,6 +30,8 @@ public class AppointmentDAO {
             ps.setTimestamp(4, appointmentTime);
             ps.setString(5, type);
             ps.setString(6, "Scheduled");
+            ps.setString(7, roomId);
+            ps.setInt(8, daysOfStay);
             ps.executeUpdate();
         }
     }
@@ -48,6 +50,14 @@ public class AppointmentDAO {
                 System.out.println("Appointment Time: " + rs.getTimestamp("appointmentTime"));
                 System.out.println("Type: " + rs.getString("type"));
                 System.out.println("Status: " + rs.getString("status"));
+                String roomId = rs.getString("roomId");
+                if (roomId != null) {
+                    System.out.println("Room ID: " + roomId);
+                }
+                int daysOfStay = rs.getInt("daysOfStay");
+                if (!rs.wasNull()) {
+                    System.out.println("Days of Stay: " + daysOfStay);
+                }
             } else {
                 System.out.println("No appointment found with ID: " + appointmentId);
             }

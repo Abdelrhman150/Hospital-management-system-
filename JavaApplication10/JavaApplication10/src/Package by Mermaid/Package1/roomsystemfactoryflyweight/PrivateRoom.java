@@ -77,4 +77,10 @@ public class PrivateRoom implements Room {
                 ", Daily Rate: " + sharedData.getDailyRate() +
                 ']';
     }
+
+    @Override
+    public String getAvailabilityStatus() {
+        return occupancyStatus.toString();
+    }
+
 }

@@ -42,4 +42,9 @@ public class VisitingBill implements Bill {
         this.paymentProcessor = paymentProcessor;
         paymentProcessor.processPayment(VistingFee); // Process payment immediately for visiting bill
     }
+
+    @Override
+    public String getBillId() {
+        return billId;
+    }
 }

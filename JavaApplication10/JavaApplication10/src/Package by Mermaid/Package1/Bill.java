@@ -8,4 +8,5 @@ public interface Bill {
     public void getBillDetails(String billId);
     public void setPaymentProcessor(PaymentProcessor paymentProcessor);
     public double calculateamount(Room room, double days);
+    public String getBillId();
 }

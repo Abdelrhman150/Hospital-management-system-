@@ -10,15 +10,22 @@ import java.util.List;
  * Handles all database operations for the User entity
  */
 public class UserDatabase {
-
+    private static UserDatabase instance;
     /**
      * Retrieves a user from the database by their username
      */
+    public static synchronized UserDatabase getInstance() {
+        if (instance == null) {
+            instance = new UserDatabase();
+        }
+        return instance;
+    }
+
     public User getUserByUsername(String username) {
         String query = "SELECT * FROM Users WHERE username = ?";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(query)) {
-            
+                
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {

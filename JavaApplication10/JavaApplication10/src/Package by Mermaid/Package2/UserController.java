@@ -13,7 +13,7 @@ public class UserController {
     private UserDatabase userDatabase;
 
     public UserController() {
-        this.userDatabase = new UserDatabase();
+        this.userDatabase = UserDatabase.getInstance();
     }
 
     /**

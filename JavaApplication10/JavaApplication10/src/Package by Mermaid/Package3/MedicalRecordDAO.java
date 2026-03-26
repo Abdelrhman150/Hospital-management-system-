@@ -2,6 +2,8 @@ package Package3;
 
 import java.sql.*;
 
+import Package1.MedicalRecord;
+
 public class MedicalRecordDAO {
 
     // ==================== Singleton ====================
@@ -95,5 +97,17 @@ public class MedicalRecordDAO {
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setString(1, recordId);
         return ps.executeQuery();
+    }
+
+    public MedicalRecord mapToModel(ResultSet rs) throws SQLException {
+        MedicalRecord record = new MedicalRecord();
+        record.recordId = String.valueOf(rs.getInt("recordId"));
+        record.patientId = String.valueOf(rs.getInt("patientId"));
+        record.doctorId = String.valueOf(rs.getInt("doctorId"));
+        record.dateCreated = rs.getDate("recordDate");
+        record.chiefComplaint = rs.getString("complaint");
+        record.clinicalDiagnosis = rs.getString("diagnosis");
+        // appointmentId might be missing in some schemas, let's keep it optional
+        return record;
     }
 }

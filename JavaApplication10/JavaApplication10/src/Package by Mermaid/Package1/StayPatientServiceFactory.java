@@ -23,7 +23,6 @@ public class StayPatientServiceFactory implements HospitalServicFactory {
     @Override
     public Appointment createAppointment(String patientId, String doctorName, String appointmentDate) {
         RoomAppointment appointment = new RoomAppointment(room);
-        appointment.scheduleAppointment(patientId, doctorName, appointmentDate);
         return appointment;
     }
 }

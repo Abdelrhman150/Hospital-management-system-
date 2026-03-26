@@ -30,6 +30,7 @@ public class RoomBill implements Bill {
         BillDAO billDAO = BillDAO.getInstance() ;
         amount = calculateamount(room, daysOfStay);
         this.billId = IdGenerator.getInstance().nextBillId() ;
+        System.out.println(billId);
         try {
             billDAO.addBill(billId,patientId, amount, "Unpaid");
         } catch (Exception e) {

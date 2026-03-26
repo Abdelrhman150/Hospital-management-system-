@@ -6,7 +6,6 @@ import Package1.Payement_System.InsuranceAdaptor;
 import Package1.Payement_System.Paypal;
 import Package1.Payement_System.paypalAdapter;
 import java.util.Scanner;
-import java.time.LocalDate;
 
 /**
  * UI for Secretary operations
@@ -193,8 +192,8 @@ public class SecretaryUI {
             System.out.print("Enter Doctor Name: ");
             String doctorName = scanner.nextLine().trim();
 
-            String appointmentDate = LocalDate.now().toString();
-            System.out.println("Appointment Date (Automatic): " + appointmentDate);
+            System.out.print("Enter Appointment Date (YYYY-MM-DD): ");
+            String appointmentDate = scanner.nextLine().trim();
 
             String AppointmentID = secretary.bookVisitingAppointment(patientId, doctorName, appointmentDate);
             secretary.DisplayAppointmentDetails(AppointmentID);
@@ -220,8 +219,8 @@ public class SecretaryUI {
             System.out.print("Enter Doctor Name: ");
             String doctorName = scanner.nextLine().trim();
 
-            String appointmentDate = LocalDate.now().toString();
-            System.out.println("Appointment Date (Automatic): " + appointmentDate);
+            System.out.print("Enter Appointment Date (YYYY-MM-DD): ");
+            String appointmentDate = scanner.nextLine().trim();
 
             System.out.print("Enter Room ID: ");
             String roomId = scanner.nextLine().trim();

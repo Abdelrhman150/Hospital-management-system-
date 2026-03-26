@@ -6,20 +6,19 @@ interface DoctorSalary {
 }
 
 class BaseDoctorSalary implements DoctorSalary {
-    private double baseSalary;
+    private static final double BASE_SALARY = 100000.0;
 
-    public BaseDoctorSalary(double baseSalary) {
-        this.baseSalary = baseSalary;
+    public BaseDoctorSalary() {
     }
 
     @Override
     public double calculateSalary() {
-        return baseSalary;
+        return BASE_SALARY;
     }
 
     @Override
     public String getDescription() {
-        return "Base Doctor Salary = " + baseSalary;
+        return String.format("Base Salary: %.2f", BASE_SALARY);
     }
 }
 
@@ -42,67 +41,68 @@ abstract class DoctorSalaryDecorator implements DoctorSalary {
 }
 
 class NightShiftBonusDecorator extends DoctorSalaryDecorator {
+    private static final double BONUS_PER_SHIFT = 300.0;
     private int numberOfNightShifts;
-    private double bonusPerShift;
 
-    public NightShiftBonusDecorator(DoctorSalary wrappedSalary, int numberOfNightShifts, double bonusPerShift) {
+    public NightShiftBonusDecorator(DoctorSalary wrappedSalary, int numberOfNightShifts) {
         super(wrappedSalary);
         this.numberOfNightShifts = numberOfNightShifts;
-        this.bonusPerShift = bonusPerShift;
     }
 
     @Override
     public double calculateSalary() {
-        return super.calculateSalary() + (numberOfNightShifts * bonusPerShift);
+        return super.calculateSalary() + (numberOfNightShifts * BONUS_PER_SHIFT);
     }
 
     @Override
     public String getDescription() {
         return super.getDescription() +
-                " + Night Shift Bonus (" + numberOfNightShifts + " shifts × " + bonusPerShift + ")";
+                String.format("\nNight Shift Bonus: %d x %.2f = %.2f",
+                        numberOfNightShifts,
+                        BONUS_PER_SHIFT,
+                        numberOfNightShifts * BONUS_PER_SHIFT);
     }
 }
 
 class OnCallAllowanceDecorator extends DoctorSalaryDecorator {
+    private static final double ALLOWANCE_PER_DAY = 100.0;
     private int onCallDays;
-    private double allowancePerDay;
 
-    public OnCallAllowanceDecorator(DoctorSalary wrappedSalary, int onCallDays, double allowancePerDay) {
+    public OnCallAllowanceDecorator(DoctorSalary wrappedSalary, int onCallDays) {
         super(wrappedSalary);
         this.onCallDays = onCallDays;
-        this.allowancePerDay = allowancePerDay;
     }
 
     @Override
     public double calculateSalary() {
-        return super.calculateSalary() + (onCallDays * allowancePerDay);
+        return super.calculateSalary() + (onCallDays * ALLOWANCE_PER_DAY);
     }
 
     @Override
     public String getDescription() {
         return super.getDescription() +
-                " + On-Call Allowance (" + onCallDays + " days × " + allowancePerDay + ")";
+                String.format("\nOn-Call Allowance: %d x %.2f = %.2f",
+                        onCallDays,
+                        ALLOWANCE_PER_DAY,
+                        onCallDays * ALLOWANCE_PER_DAY);
     }
 }
 
 class HazardAllowanceDecorator extends DoctorSalaryDecorator {
-    private String department;
-    private double hazardAllowance;
+    private static final double HAZARD_AMOUNT = 200.0;
 
-    public HazardAllowanceDecorator(DoctorSalary wrappedSalary, String department, double hazardAllowance) {
+    public HazardAllowanceDecorator(DoctorSalary wrappedSalary) {
         super(wrappedSalary);
-        this.department = department;
-        this.hazardAllowance = hazardAllowance;
     }
 
     @Override
     public double calculateSalary() {
-        return super.calculateSalary() + hazardAllowance;
+        return super.calculateSalary() + HAZARD_AMOUNT;
     }
 
     @Override
     public String getDescription() {
         return super.getDescription() +
-                " + Hazard Allowance for " + department + " = " + hazardAllowance;
+                String.format("\nHazard Allowance: %.2f", HAZARD_AMOUNT);
     }
 }

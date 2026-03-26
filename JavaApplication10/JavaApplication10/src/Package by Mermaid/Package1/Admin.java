@@ -1,5 +1,7 @@
 package Package1;
 
+import Package3.DoctorDAO;
+
 public class Admin extends User {
 
     public Admin() {
@@ -16,26 +18,34 @@ public class Admin extends User {
     }
 
     public void assignSalaryToDoctor(Doctor doctor,
-                                     double baseSalary,
-                                     int nightShifts, double bonusPerShift,
-                                     int onCallDays, double onCallAllowancePerDay,
-                                     boolean hasHazardAllowance, String department, double hazardAmount) {
+                                     int nightShifts,
+                                     int onCallDays,
+                                     boolean hasHazard) throws Exception {
 
-        DoctorSalary salary = new BaseDoctorSalary(baseSalary);
+        DoctorSalary salary = new BaseDoctorSalary();
 
         if (nightShifts > 0) {
-            salary = new NightShiftBonusDecorator(salary, nightShifts, bonusPerShift);
+            salary = new NightShiftBonusDecorator(salary, nightShifts);
         }
 
         if (onCallDays > 0) {
-            salary = new OnCallAllowanceDecorator(salary, onCallDays, onCallAllowancePerDay);
+            salary = new OnCallAllowanceDecorator(salary, onCallDays);
         }
 
-        if (hasHazardAllowance) {
-            salary = new HazardAllowanceDecorator(salary, department, hazardAmount);
+        if (hasHazard) {
+            salary = new HazardAllowanceDecorator(salary);
         }
 
         doctor.setSalary(salary);
-        System.out.println("Salary assigned successfully to Dr. " + doctor.getName());
+
+        double finalSalary = salary.calculateSalary();
+        String description = salary.getDescription();
+
+        DoctorDAO.getInstance().saveDoctorSalary(doctor.getId(), finalSalary, description);
+
+        doctor.setSavedSalary(finalSalary);
+        doctor.setSavedSalaryDescription(description);
+
+        System.out.println("\nSalary assigned and saved successfully to Dr. " + doctor.getName());
     }
 }

@@ -2,6 +2,7 @@ package Package4;
 
 import Package1.Admin;
 import Package1.Doctor;
+import Package2.IdGenerator;
 import Package3.AdminDAO;
 import Package3.DoctorDAO;
 
@@ -49,8 +50,6 @@ public class AdminUI {
 
                     case 2:
                         System.out.println("\n----------- Sign Up -----------");
-                        System.out.print("Enter new Admin ID: ");
-                        String newId = input.nextLine();
 
                         System.out.print("Enter Name: ");
                         String newName = input.nextLine();
@@ -61,17 +60,13 @@ public class AdminUI {
                         System.out.print("Enter Email: ");
                         String newEmail = input.nextLine();
 
-                        adminDAO.addAdmin(newId, newName, newPhone, newEmail);
+                        String generatedAdminId = IdGenerator.getInstance().generateUserIdByRole("admin");
+
+                        adminDAO.addAdmin(generatedAdminId, newName, newPhone, newEmail);
+
                         System.out.println("\nAdmin account created successfully.");
+                        System.out.println("Generated Admin ID: " + generatedAdminId);
                         break;
-
-                    case 3:
-                        System.out.println("\nGoodbye!");
-                        input.close();
-                        return;
-
-                    default:
-                        System.out.println("\nInvalid choice. Please try again.");
                 }
             }
 
@@ -106,17 +101,9 @@ public class AdminUI {
                         doctor.displayInfo();
                         System.out.println("---------------------------------");
 
-                        System.out.print("\nEnter the base salary for this doctor: ");
-                        double baseSalary = input.nextDouble();
-                        input.nextLine();
-
                         int nightShifts = 0;
-                        double bonusPerShift = 0;
                         int onCallDays = 0;
-                        double onCallAllowance = 0;
                         boolean hasHazard = false;
-                        String department = "";
-                        double hazardAmount = 0;
 
                         System.out.print("\nDid this doctor work night shifts this month? (yes/no): ");
                         String nightShiftAnswer = input.nextLine().trim().toLowerCase();
@@ -124,9 +111,6 @@ public class AdminUI {
                         if (nightShiftAnswer.equals("yes")) {
                             System.out.print("Enter number of night shifts: ");
                             nightShifts = input.nextInt();
-
-                            System.out.print("Enter bonus per night shift: ");
-                            bonusPerShift = input.nextDouble();
                             input.nextLine();
                         }
 
@@ -136,9 +120,6 @@ public class AdminUI {
                         if (onCallAnswer.equals("yes")) {
                             System.out.print("Enter number of on-call days: ");
                             onCallDays = input.nextInt();
-
-                            System.out.print("Enter allowance per on-call day: ");
-                            onCallAllowance = input.nextDouble();
                             input.nextLine();
                         }
 
@@ -147,26 +128,19 @@ public class AdminUI {
 
                         if (hazardAnswer.equals("yes")) {
                             hasHazard = true;
-
-                            System.out.print("Enter department name (e.g. ICU / Emergency): ");
-                            department = input.nextLine();
-
-                            System.out.print("Enter hazard allowance amount: ");
-                            hazardAmount = input.nextDouble();
-                            input.nextLine();
                         }
 
+                        // 👇 هنا بقى نستخدم النسخة الجديدة من الديكوريتر
                         loggedInAdmin.assignSalaryToDoctor(
                                 doctor,
-                                baseSalary,
-                                nightShifts, bonusPerShift,
-                                onCallDays, onCallAllowance,
-                                hasHazard, department, hazardAmount
+                                nightShifts,
+                                onCallDays,
+                                hasHazard
                         );
 
-                        System.out.println("\n========= FINAL SALARY DETAILS =========");
+                        System.out.println("\n========= SALARY BREAKDOWN =========");
                         doctor.viewSalary();
-                        System.out.println("========================================");
+                        System.out.println("====================================");
                         break;
 
                     case 2:

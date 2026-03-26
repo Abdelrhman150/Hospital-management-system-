@@ -8,6 +8,9 @@ public class Doctor extends User {
     private double consultationFee;
     private DoctorSalary salary;
 
+    private double savedSalary;
+    private String savedSalaryDescription;
+
     public Doctor(String id, String name, String phone, String email,
                   String specialization, boolean availability, double consultationFee) {
         super(id, name, phone, email);
@@ -41,10 +44,6 @@ public class Doctor extends User {
         this.availability = availability;
     }
 
-    public void diagnosePatient() {
-        System.out.println(name + " is diagnosing a patient.");
-    }
-
     public void setSalary(DoctorSalary salary) {
         this.salary = salary;
     }
@@ -53,15 +52,47 @@ public class Doctor extends User {
         return salary;
     }
 
+    public double getSavedSalary() {
+        return savedSalary;
+    }
+
+    public void setSavedSalary(double savedSalary) {
+        this.savedSalary = savedSalary;
+    }
+
+    public String getSavedSalaryDescription() {
+        return savedSalaryDescription;
+    }
+
+    public void setSavedSalaryDescription(String savedSalaryDescription) {
+        this.savedSalaryDescription = savedSalaryDescription;
+    }
+
+    public void diagnosePatient() {
+        System.out.println(name + " is diagnosing a patient.");
+    }
+
     public void viewSalary() {
         if (salary == null) {
             System.out.println("Salary has not been assigned yet.");
             return;
         }
 
-        System.out.println("Doctor: " + name);
-        System.out.println("Salary Details: " + salary.getDescription());
-        System.out.println("Final Salary: " + salary.calculateSalary());
+        System.out.println("\n========== SALARY BREAKDOWN ==========");
+        System.out.println(salary.getDescription());
+        System.out.println("--------------------------------------");
+        System.out.println("Total Salary: " + salary.calculateSalary());
+        System.out.println("======================================");
+    }
+
+    public void viewSavedSalaryFromDatabase() {
+        System.out.println("\n========== SAVED SALARY ==========");
+        if (savedSalaryDescription != null && !savedSalaryDescription.isEmpty()) {
+            System.out.println(savedSalaryDescription);
+            System.out.println("--------------------------------------");
+        }
+        System.out.println("Saved Salary: " + savedSalary);
+        System.out.println("==================================");
     }
 
     @Override

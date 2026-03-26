@@ -404,3 +404,9 @@ END
 GO
 
 PRINT 'Full Database setup completed successfully.';
+
+ALTER TABLE Doctors
+ADD salary DECIMAL(10,2);
+
+ALTER TABLE Doctors
+ADD salaryDescription VARCHAR(1000);

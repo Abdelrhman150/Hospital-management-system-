@@ -1,12 +1,9 @@
 package Package3;
 
 import java.sql.*;
-
 import Package1.Doctor;
 
 public class DoctorDAO {
-
-    // ==================== Singleton ====================
 
     private static DoctorDAO instance;
 
@@ -19,10 +16,8 @@ public class DoctorDAO {
         return instance;
     }
 
-    // ==================== Operations ====================
-
     public void addDoctor(String doctorId, String name, String specialization,
-            String contactEmail, double consultationFee) throws Exception {
+                          String contactEmail, double consultationFee) throws Exception {
         String sql = "INSERT INTO Doctors(doctorId, name, specialization, contactEmail, consultationFee) VALUES(?,?,?,?,?)";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -36,7 +31,7 @@ public class DoctorDAO {
     }
 
     public void updateDoctor(String doctorId, String name, String specialization,
-            String contactEmail, double consultationFee) throws Exception {
+                             String contactEmail, double consultationFee) throws Exception {
         String sql = "UPDATE Doctors SET name=?, specialization=?, contactEmail=?, consultationFee=? WHERE doctorId=?";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -72,8 +67,8 @@ public class DoctorDAO {
         return ps.executeQuery();
     }
 
-    public ResultSet getAvailableDoctors() throws SQLException{
-        String sql = "Select doctorId , name , specialization from Doctors where AvailabilityStatus = 'Available'" ;
+    public ResultSet getAvailableDoctors() throws SQLException {
+        String sql = "SELECT doctorId, name, specialization FROM Doctors WHERE AvailabilityStatus = 'Available'";
         Connection conn = DatabaseConnection.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql);
         return ps.executeQuery();
@@ -91,37 +86,103 @@ public class DoctorDAO {
         }
         throw new Exception("Doctor not found with name: " + doctorName);
     }
+
     public Doctor findDoctorObjectById(String doctorId) throws Exception {
-    String sql = "SELECT * FROM Doctors WHERE doctorId=?";
-    Connection conn = DatabaseConnection.getConnection();
+        String sql = "SELECT * FROM Doctors WHERE doctorId=?";
+        Connection conn = DatabaseConnection.getConnection();
 
-    try (PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, doctorId);
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, doctorId);
 
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                String id = rs.getString("doctorId");
-                String name = rs.getString("name");
-                String specialization = rs.getString("specialization");
-                String phone = rs.getString("phone");
-                String email = rs.getString("email");
-                boolean availability = rs.getString("AvailabilityStatus").equalsIgnoreCase("Available");
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String id = rs.getString("doctorId");
+                    String name = rs.getString("name");
+                    String specialization = rs.getString("specialization");
+                    String phone = rs.getString("phone");
+                    String email = rs.getString("email");
+                    boolean availability = rs.getString("AvailabilityStatus").equalsIgnoreCase("Available");
 
-                double consultationFee = 0.0; // لو مش موجود في الجدول أو مش محتاجاه هنا
+                    double consultationFee = 0.0;
 
-                return new Doctor(
-                        id,
-                        name,
-                        phone,
-                        email,
-                        specialization,
-                        availability,
-                        consultationFee
-                );
+                    Doctor doctor = new Doctor(
+                            id,
+                            name,
+                            phone,
+                            email,
+                            specialization,
+                            availability,
+                            consultationFee
+                    );
+
+                    try {
+                        double salary = rs.getDouble("salary");
+                        if (!rs.wasNull()) {
+                            doctor.setSavedSalary(salary);
+                        }
+                    } catch (SQLException e) {
+                    }
+
+                    try {
+                        String salaryDescription = rs.getString("salaryDescription");
+                        doctor.setSavedSalaryDescription(salaryDescription);
+                    } catch (SQLException e) {
+                    }
+
+                    return doctor;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public void saveDoctorSalary(String doctorId, double salary, String salaryDescription) throws Exception {
+        String sql = "UPDATE Doctors SET salary=?, salaryDescription=? WHERE doctorId=?";
+        Connection conn = DatabaseConnection.getConnection();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, salary);
+            ps.setString(2, salaryDescription);
+            ps.setString(3, doctorId);
+
+            if (ps.executeUpdate() == 0) {
+                throw new Exception("Doctor not found with ID: " + doctorId);
             }
         }
     }
 
-    return null;
-}
+    public double getSavedSalaryByDoctorId(String doctorId) throws Exception {
+        String sql = "SELECT salary FROM Doctors WHERE doctorId=?";
+        Connection conn = DatabaseConnection.getConnection();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, doctorId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("salary");
+                }
+            }
+        }
+
+        throw new Exception("No saved salary found for doctor ID: " + doctorId);
+    }
+
+    public String getSavedSalaryDescriptionByDoctorId(String doctorId) throws Exception {
+        String sql = "SELECT salaryDescription FROM Doctors WHERE doctorId=?";
+        Connection conn = DatabaseConnection.getConnection();
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, doctorId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("salaryDescription");
+                }
+            }
+        }
+
+        throw new Exception("No saved salary description found for doctor ID: " + doctorId);
+    }
 }

@@ -65,9 +65,9 @@ public class BillDAO {
     /**
      * إضافة فاتورة جديدة.
      * billId يُولَّد تلقائيًا بواسطة قاعدة البيانات (IDENTITY column).
+     * @param patientId2 
      */
-    public void addBill(String patientId, double amount, String status) throws Exception {
-        String billId = IdGenerator.getInstance().nextBillId();
+    public void addBill(String billId, String patientId, double amount, String status) throws Exception {
         String sql = "INSERT INTO Bills(billId, patientId, amount, status) VALUES(?,?,?,?)";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -79,16 +79,6 @@ public class BillDAO {
         }
     }
 
-    /**
-     * إضافة فاتورة بعد تطبيق خصم التأمين.
-     * amount = originalAmount - (originalAmount * discountPct / 100)
-     */
-    public void addBillWithInsurance(String patientId, double originalAmount,
-            int insuranceDiscountPercentage) throws Exception {
-        double discounted = originalAmount
-                - (originalAmount * insuranceDiscountPercentage / 100.0);
-        addBill(patientId, discounted, "Unpaid");
-    }
 
     /**
      * تعديل مبلغ وحالة فاتورة موجودة.

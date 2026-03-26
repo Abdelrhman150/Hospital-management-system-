@@ -29,8 +29,9 @@ public class RoomBill implements Bill {
         this.room = room;
         BillDAO billDAO = BillDAO.getInstance() ;
         amount = calculateamount(room, daysOfStay);
+        this.billId = IdGenerator.getInstance().nextBillId() ;
         try {
-            billDAO.addBill(patientId, amount, "Unpaid");
+            billDAO.addBill(billId,patientId, amount, "Unpaid");
         } catch (Exception e) {
             e.printStackTrace();
         }

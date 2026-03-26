@@ -3,8 +3,6 @@ package Package1;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 
-import Package1.Payement_System.Insurance;
-import Package1.Payement_System.InsuranceAdaptor;
 import Package1.Payement_System.PaymentProcessor;
 import Package2.*;
 import Package3.DoctorDAO;
@@ -80,9 +78,9 @@ public class Secretary extends User {
         }
     }
 
-    public void Payment(String billId, double amount, PaymentProcessor paymentProcessor) {
+    public void Payment(PaymentProcessor paymentProcessor) {
         bill.setPaymentProcessor(paymentProcessor);
-        System.out.println("Payment processed successfully!");
+        System.out.println("Payment processed successfully for bill : " + bill.getBillId());
     }
 
 

@@ -12,7 +12,7 @@ public class Doctor extends User {
     private String savedSalaryDescription;
 
     public Doctor(String id, String name, String phone, String email,
-                  String specialization, boolean availability, double consultationFee) {
+            String specialization, boolean availability, double consultationFee) {
         super(id, name, phone, email);
         this.specialization = specialization;
         this.availability = availability;

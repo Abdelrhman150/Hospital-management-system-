@@ -150,4 +150,8 @@ public class IdGenerator {
         }
         return newId;
     }
+
+    public String nextBillId() {
+        return generatePrefixId("Bills", "billId", "BILL");
+    }
 }

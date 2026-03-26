@@ -4,6 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import Package2.IdGenerator;
+
 /**
  * Data Access Object: BillDAO
  * Handles all database operations for the Bills table.
@@ -65,12 +67,14 @@ public class BillDAO {
      * billId يُولَّد تلقائيًا بواسطة قاعدة البيانات (IDENTITY column).
      */
     public void addBill(String patientId, double amount, String status) throws Exception {
-        String sql = "INSERT INTO Bills(patientId, amount, status) VALUES(?,?,?)";
+        String billId = IdGenerator.getInstance().nextBillId();
+        String sql = "INSERT INTO Bills(billId, patientId, amount, status) VALUES(?,?,?,?)";
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, patientId);
-            ps.setDouble(2, amount);
-            ps.setString(3, status);
+            ps.setString(1, billId);
+            ps.setString(2, patientId);
+            ps.setDouble(3, amount);
+            ps.setString(4, status);
             ps.executeUpdate();
         }
     }

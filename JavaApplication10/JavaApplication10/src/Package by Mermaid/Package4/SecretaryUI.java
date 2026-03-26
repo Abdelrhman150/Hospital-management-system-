@@ -47,14 +47,11 @@ public class SecretaryUI {
             System.out.println("2.  Get Secretary Role");
             System.out.println("3.  Get Secretary Shift");
             System.out.println("4.  Show Available Doctors");
-            System.out.println("5.  Book Visiting Appointment");
-            System.out.println("6.  Book Stay Appointment");
-            System.out.println("7.  Generate Bill");
-            System.out.println("8.  Process Payment");
-            System.out.println("9.  Display Appointment Details");
-            System.out.println("10. Display Bill Details");
-            System.out.println("11. Exit");
-            System.out.print("Choose an option (1-11): ");
+            System.out.println("5.  Manage Appointment");
+            System.out.println("6.  Display Appointment Details");
+            System.out.println("7.  Display Bill Details");
+            System.out.println("8.  Exit");
+            System.out.print("Choose an option (1-8): ");
 
             String choice = scanner.nextLine().trim();
 
@@ -72,28 +69,79 @@ public class SecretaryUI {
                     showAvailableDoctors();
                     break;
                 case "5":
-                    bookVisitingAppointment();
+                    manageAppointmentMenu();
                     break;
                 case "6":
-                    bookStayAppointment();
-                    break;
-                case "7":
-                    generateBill();
-                    break;
-                case "8":
-                    processPayment();
-                    break;
-                case "9":
                     displayAppointmentDetails();
                     break;
-                case "10":
+                case "7":
                     displayBillDetails();
                     break;
-                case "11":
+                case "8":
                     System.out.println("Exiting Secretary Control Panel. Goodbye!");
                     return;
                 default:
-                    System.out.println("Invalid choice. Please select 1-11.");
+                    System.out.println("Invalid choice. Please select 1-8.");
+            }
+        }
+    }
+
+    /**
+     * Sub-menu for Managing Appointments (Booking, Billing, Payment)
+     */
+    private void manageAppointmentMenu() {
+        while (true) {
+            System.out.println("\n--- Manage Appointment ---");
+            System.out.println("1. Book Appointment");
+            System.out.println("2. Generate Bill");
+            System.out.println("3. Process Payment");
+            System.out.println("4. Back to Main Menu");
+            System.out.print("Choose an option (1-4): ");
+
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1":
+                    bookAppointmentSubMenu();
+                    break;
+                case "2":
+                    generateBill();
+                    break;
+                case "3":
+                    processPayment();
+                    break;
+                case "4":
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please select 1-4.");
+            }
+        }
+    }
+
+    /**
+     * Sub-sub-menu for Booking Appointments
+     */
+    private void bookAppointmentSubMenu() {
+        while (true) {
+            System.out.println("\n--- Book Appointment ---");
+            System.out.println("1. Visiting Appointment");
+            System.out.println("2. Stay Appointment");
+            System.out.println("3. Back");
+            System.out.print("Choose an option (1-3): ");
+
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1":
+                    bookVisitingAppointment();
+                    return; // Return to parent menu after operation
+                case "2":
+                    bookStayAppointment();
+                    return; // Return to parent menu after operation
+                case "3":
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please select 1-3.");
             }
         }
     }
@@ -128,7 +176,7 @@ public class SecretaryUI {
     private void showAvailableDoctors() {
         System.out.println("\n--- Available Doctors ---");
         secretary.showAvailableDoctors();
-        
+
     }
 
     /**
@@ -149,7 +197,6 @@ public class SecretaryUI {
 
             String AppointmentID = secretary.bookVisitingAppointment(patientId, doctorName, appointmentDate);
             secretary.DisplayAppointmentDetails(AppointmentID);
-
 
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid patient ID. Please enter a number.");
@@ -207,15 +254,10 @@ public class SecretaryUI {
     /**
      * Process payment using PayPal or Insurance
      */
+
     private void processPayment() {
         System.out.println("\n--- Process Payment ---");
         try {
-            System.out.print("Enter Bill ID: ");
-            String billId = scanner.nextLine().trim();
-
-            System.out.print("Enter Amount to Pay: $");
-            double amount = Double.parseDouble(scanner.nextLine().trim());
-
             System.out.println("Select Payment Method:");
             System.out.println("1. PayPal");
             System.out.println("2. Insurance");
@@ -226,11 +268,11 @@ public class SecretaryUI {
                 case "1":
                     Paypal paypal = new Paypal();
                     paypalAdapter paypalProcessor = new paypalAdapter(paypal);
-                    secretary.Payment(billId, amount, paypalProcessor);
+                    secretary.Payment(paypalProcessor);
                     break;
                 case "2":
                     InsuranceAdaptor insuranceProcessor = new InsuranceAdaptor(new Insurance());
-                    secretary.Payment(billId, amount, insuranceProcessor);
+                    secretary.Payment(insuranceProcessor);
                     break;
                 default:
                     System.out.println("Invalid payment method selected.");

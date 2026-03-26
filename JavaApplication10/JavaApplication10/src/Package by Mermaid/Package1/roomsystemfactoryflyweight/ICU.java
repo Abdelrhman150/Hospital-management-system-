@@ -13,11 +13,13 @@ public class ICU implements Room {
     public ICU() {
         this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.ICU);
         this.occupancyStatus = RoomStatus.Available;
+        // id generation logic can be added here if needed
     }
 
     public ICU(String roomId, RoomStatus occupancyStatus) {
         this.roomId = roomId;
         this.occupancyStatus = occupancyStatus;
+        RoomDAO roomdao = RoomDAO.getInstance();
         this.sharedData = RoomFlyweightFactory.getRoomSharedData(RoomType.ICU);
     }
 

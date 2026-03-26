@@ -193,8 +193,8 @@ public class SecretaryUI {
             System.out.print("Enter Doctor Name: ");
             String doctorName = scanner.nextLine().trim();
 
-            String appointmentDate = LocalDate.now().toString();
-            System.out.println("Appointment Date (Automatic): " + appointmentDate);
+           System.out.print("Enter Appointment Date (YYYY-MM-DD): ");
+            String appointmentDate = scanner.nextLine().trim();
 
             String AppointmentID = secretary.bookVisitingAppointment(patientId, doctorName, appointmentDate);
             secretary.DisplayAppointmentDetails(AppointmentID);

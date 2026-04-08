@@ -10,8 +10,8 @@ import Package3.DoctorDAO;
 public class Secretary extends User {
     private String shift;
     Appointment appointment;
-    HospitalServiceController hospitalServiceController; 
-    Bill bill ;
+    HospitalServiceController hospitalServiceController;
+    Bill bill;
 
     public Secretary(String id, String name, String phone, String email, String shift) {
         super(id, name, phone, email);
@@ -27,43 +27,26 @@ public class Secretary extends User {
         return shift;
     }
 
-    public void showAvailableDoctors(){
-        DoctorDAO Doctors = DoctorDAO.getInstance();
-        try {
-            ResultSet rs = Doctors.getAvailableDoctors();
-            System.out.println("Available Doctors:");
-            while (rs.next()) {
-                String doctorId = rs.getString("doctorId");
-                String name = rs.getString("name");
-                String specialization = rs.getString("specialization");
-                System.out.println("ID: " + doctorId + ", Name: " + name + ", Specialization: " + specialization);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public String bookVisitingAppointment(String patientId, String doctorName, String appointmentDate) {
         hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory());
         appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
         appointment.scheduleAppointment(patientId, doctorName, appointmentDate);
         System.out.println("Appointment booked successfully!");
-        return appointment.getAppointmentId() ;
-        
-        
+        return appointment.getAppointmentId();
+
     }
 
     public String bookStayAppointment(String patientId, String doctorName, String appointmentDate, String roomID)
-        throws Exception {
+            throws Exception {
         hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory(roomID));
         appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
         appointment.scheduleAppointment(patientId, doctorName, appointmentDate);
         System.out.println("Appointment booked successfully!");
-        return appointment.getAppointmentId() ;
+        return appointment.getAppointmentId();
 
     }
 
-    public void GenerateBill(){
+    public void GenerateBill() {
         bill = hospitalServiceController.CreateBill(appointment.getPatientId(), appointment.getDaysOfStay());
         System.out.println("Bill Generated Successfully. ");
     }
@@ -81,15 +64,13 @@ public class Secretary extends User {
         System.out.println("Payment processed successfully for bill : " + bill.getBillId());
     }
 
-
     public void DisplayAppointmentDetails(String billId) {
         appointment.displayDetails(billId);
     }
 
     public void DisplayBillDetails(String billId) {
         bill.getBillDetails(billId);
-    } 
-
+    }
 
     @Override
     public void displayInfo() {

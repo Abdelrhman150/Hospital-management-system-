@@ -1,14 +1,12 @@
 package Package3;
 
 import java.sql.*;
-<<<<<<< HEAD
 import Package1.staff.Doctor;
 import Package1.salary.*;
-=======
 import java.util.ArrayList;
 import java.util.List;
-import Package1.Doctor;
->>>>>>> 2d8052ceec96ad29dc964448c293e6853cad9ce4
+
+
 
 public class DoctorDAO {
 

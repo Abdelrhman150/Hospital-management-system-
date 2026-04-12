@@ -11,7 +11,7 @@ public class RoomController {
         this.factory = factory;
     }
 
-    public Room createRoom() {
+    public Room createRoomController() {
         Room room = factory.createRoom();
 
         String generatedRoomId = IdGenerator.getInstance().nextRoomId();

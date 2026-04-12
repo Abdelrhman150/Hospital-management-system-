@@ -178,7 +178,7 @@ public class AdminUI {
                         }
 
                         RoomController roomController = new RoomController(factory);
-                        Room createdRoom = roomController.createRoom();
+                        Room createdRoom = roomController.createRoomController();
 
                         System.out.println("\nRoom created successfully:");
                         System.out.println(createdRoom);

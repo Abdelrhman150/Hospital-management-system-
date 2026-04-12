@@ -1,11 +1,7 @@
 package Package4;
 
-<<<<<<< HEAD
 import Package1.staff.User;
-=======
-import Package1.User;
 import Package1.MedicalRecordDisplay.MedicalRecord;
->>>>>>> 2d8052ceec96ad29dc964448c293e6853cad9ce4
 import Package3.MedicalRecordDAO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

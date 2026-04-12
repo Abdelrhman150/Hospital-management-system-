@@ -1,8 +1,10 @@
 package Package3;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-import Package1.MedicalRecord;
+import Package1.MedicalRecordDisplay.MedicalRecord;
 
 public class MedicalRecordDAO {
 
@@ -51,12 +53,19 @@ public class MedicalRecordDAO {
         }
     }
 
-    public ResultSet getPatientHistory(String patientId) throws Exception {
+    public List<MedicalRecord> getPatientHistory(String patientId) throws Exception {
+        List<MedicalRecord> history = new ArrayList<>();
         String sql = "SELECT * FROM MedicalRecords WHERE patientId=? ORDER BY recordDate DESC";
         Connection conn = DatabaseConnection.getConnection();
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, patientId);
-        return ps.executeQuery();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, patientId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    history.add(mapToModel(rs));
+                }
+            }
+        }
+        return history;
     }
 
     // ==================== Decorator Methods ====================
@@ -91,12 +100,18 @@ public class MedicalRecordDAO {
         }
     }
 
-    public ResultSet getFullRecord(String recordId) throws Exception {
+    public MedicalRecord getFullRecord(String recordId) throws Exception {
         String sql = "SELECT * FROM MedicalRecords WHERE recordId=?";
         Connection conn = DatabaseConnection.getConnection();
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, recordId);
-        return ps.executeQuery();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, recordId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapToModel(rs);
+                }
+            }
+        }
+        return null;
     }
 
     public MedicalRecord mapToModel(ResultSet rs) throws SQLException {

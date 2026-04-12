@@ -1,18 +1,15 @@
 package Package4;
 
-import Package1.Report;
 import Package1.staff.User;
-import Package2.ExcelFormatter;
-import Package2.PDFFormatter;
+import Package1.report.*;
 import Package2.ReportController;
-import Package2.ReportFormatter;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
- * Report GUI with home navigation and stylish UI.
+ * ReporSt GUI with home navigation and stylish UI.
  */
 public class ReportGUI extends JFrame {
     private ReportController reportController;
@@ -202,7 +199,7 @@ public class ReportGUI extends JFrame {
                 return;
             }
             try {
-                //patientId = Integer.parseInt(idStr);
+                // patientId = Integer.parseInt(idStr);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Patient ID must be numeric.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -217,13 +214,13 @@ public class ReportGUI extends JFrame {
 
         if (report != null) {
             txtOutput.setText(report.getFullContent());
-            
+
             // Real File Generation
             String fileName = isPatientReport ? "PatientReport_" + patientId : "FinancialReport";
             String extension = "PDF".equals(formatSelection) ? ".pdf" : ".csv";
             report.exportToFile(fileName + extension);
 
-            JOptionPane.showMessageDialog(this, "Report Generated and Opened!\nSaved as: " + fileName + extension, 
+            JOptionPane.showMessageDialog(this, "Report Generated and Opened!\nSaved as: " + fileName + extension,
                     "Success", JOptionPane.INFORMATION_MESSAGE);
         } else {
             txtOutput.setText("");

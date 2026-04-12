@@ -183,7 +183,7 @@ public class LoginUI {
             System.out.print("Enter Doctor ID: ");
             String doctorId = scanner.nextLine();
 
-            Doctor doctor = doctorDAO.findDoctorObjectById(doctorId);
+            Doctor doctor = doctorDAO.getDoctorById(doctorId);
 
             if (doctor == null) {
                 System.out.println("Doctor not found in the database.");
@@ -263,7 +263,7 @@ public class LoginUI {
     private void handleViewPayroll(User user) {
         try {
             DoctorDAO doctorDAO = DoctorDAO.getInstance();
-            Doctor doctor = doctorDAO.findDoctorObjectById(user.getId());
+            Doctor doctor = doctorDAO.getDoctorById(user.getId());
 
             if (doctor == null) {
                 System.out.println("Doctor not found in database.");

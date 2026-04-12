@@ -99,7 +99,7 @@ public class AdminUI {
                         System.out.print("Enter Doctor ID: ");
                         String doctorId = input.nextLine();
 
-                        Doctor doctor = doctorDAO.findDoctorObjectById(doctorId);
+                        Doctor doctor = doctorDAO.getDoctorById(doctorId);
 
                         if (doctor == null) {
                             System.out.println("\nDoctor not found in the database.");

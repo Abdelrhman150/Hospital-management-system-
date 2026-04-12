@@ -1,8 +1,14 @@
 package Package3;
 
 import java.sql.*;
+<<<<<<< HEAD
 import Package1.staff.Doctor;
 import Package1.salary.*;
+=======
+import java.util.ArrayList;
+import java.util.List;
+import Package1.Doctor;
+>>>>>>> 2d8052ceec96ad29dc964448c293e6853cad9ce4
 
 public class DoctorDAO {
 
@@ -54,25 +60,102 @@ public class DoctorDAO {
         }
     }
 
-    public ResultSet getAllDoctors() throws Exception {
+    public List<Doctor> getAllDoctors() throws Exception {
+        List<Doctor> doctors = new ArrayList<>();
         String sql = "SELECT * FROM Doctors";
         Connection conn = DatabaseConnection.getConnection();
-        return conn.createStatement().executeQuery(sql);
+        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                doctors.add(mapToDoctor(rs));
+            }
+        }
+        return doctors;
     }
 
-    public ResultSet getDoctorById(String doctorId) throws Exception {
+    public Doctor getDoctorById(String doctorId) throws Exception {
         String sql = "SELECT * FROM Doctors WHERE doctorId=?";
         Connection conn = DatabaseConnection.getConnection();
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, doctorId);
-        return ps.executeQuery();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, doctorId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapToDoctor(rs);
+                }
+            }
+        }
+        return null;
     }
 
-    public ResultSet getAvailableDoctors() throws SQLException {
-        String sql = "SELECT doctorId, name, specialization FROM Doctors WHERE AvailabilityStatus = 'Available'";
+    public List<Doctor> getAvailableDoctors() throws Exception {
+        List<Doctor> doctors = new ArrayList<>();
+        String sql = "SELECT * FROM Doctors WHERE AvailabilityStatus = 'Available'";
         Connection conn = DatabaseConnection.getConnection();
-        PreparedStatement ps = conn.prepareStatement(sql);
-        return ps.executeQuery();
+        try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                doctors.add(mapToDoctor(rs));
+            }
+        }
+        return doctors;
+    }
+
+    private Doctor mapToDoctor(ResultSet rs) throws SQLException {
+        String id = rs.getString("doctorId");
+        String name = rs.getString("name");
+        String specialization = rs.getString("specialization");
+        String phone = ""; // Might be missing in some schemas
+        try {
+            phone = rs.getString("phone");
+        } catch (SQLException e) {
+        }
+        String email = "";
+        try {
+            email = rs.getString("email");
+            if (email == null)
+                email = rs.getString("contactEmail");
+        } catch (SQLException e) {
+            try {
+                email = rs.getString("contactEmail");
+            } catch (SQLException e2) {
+            }
+        }
+
+        boolean availability = false;
+        try {
+            String status = rs.getString("AvailabilityStatus");
+            availability = status != null && status.equalsIgnoreCase("Available");
+        } catch (SQLException e) {
+        }
+
+        double consultationFee = 0.0;
+        try {
+            consultationFee = rs.getDouble("consultationFee");
+        } catch (SQLException e) {
+        }
+
+        Doctor doctor = new Doctor(
+                id,
+                name,
+                phone,
+                email,
+                specialization,
+                availability,
+                consultationFee);
+
+        try {
+            double salary = rs.getDouble("salary");
+            if (!rs.wasNull()) {
+                doctor.setSavedSalary(salary);
+            }
+        } catch (SQLException e) {
+        }
+
+        try {
+            String salaryDescription = rs.getString("salaryDescription");
+            doctor.setSavedSalaryDescription(salaryDescription);
+        } catch (SQLException e) {
+        }
+
+        return doctor;
     }
 
     public String getDoctorIdByName(String doctorName) throws Exception {
@@ -80,62 +163,13 @@ public class DoctorDAO {
         Connection conn = DatabaseConnection.getConnection();
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, doctorName);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getString("doctorId");
-            }
-        }
-        throw new Exception("Doctor not found with name: " + doctorName);
-    }
-
-    public Doctor findDoctorObjectById(String doctorId) throws Exception {
-        String sql = "SELECT * FROM Doctors WHERE doctorId=?";
-        Connection conn = DatabaseConnection.getConnection();
-
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, doctorId);
-
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    String id = rs.getString("doctorId");
-                    String name = rs.getString("name");
-                    String specialization = rs.getString("specialization");
-                    String phone = rs.getString("phone");
-                    String email = rs.getString("email");
-                    boolean availability = rs.getString("AvailabilityStatus").equalsIgnoreCase("Available");
-
-                    double consultationFee = 0.0;
-
-                    Doctor doctor = new Doctor(
-                            id,
-                            name,
-                            phone,
-                            email,
-                            specialization,
-                            availability,
-                            consultationFee
-                    );
-
-                    try {
-                        double salary = rs.getDouble("salary");
-                        if (!rs.wasNull()) {
-                            doctor.setSavedSalary(salary);
-                        }
-                    } catch (SQLException e) {
-                    }
-
-                    try {
-                        String salaryDescription = rs.getString("salaryDescription");
-                        doctor.setSavedSalaryDescription(salaryDescription);
-                    } catch (SQLException e) {
-                    }
-
-                    return doctor;
+                    return rs.getString("doctorId");
                 }
             }
         }
-
-        return null;
+        throw new Exception("Doctor not found with name: " + doctorName);
     }
 
     public void saveDoctorSalary(String doctorId, double salary, String salaryDescription) throws Exception {

@@ -1,10 +1,6 @@
 package Package2;
 
-import Package1.AllergyWarningsDecorator;
-import Package1.LabTestResultsDecorator;
-import Package1.MedicalRecord;
-import Package1.MedicalRecordInterface;
-import Package1.XRayScansDecorator;
+import Package1.MedicalRecordDisplay.*;
 
 /**
  * Controller for medical record operations.
@@ -43,4 +39,4 @@ public class MedicalRecordController {
     public String getFullDetails() {
         return record.getDetails();
     }
-}
+}

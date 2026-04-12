@@ -1,6 +1,6 @@
 package Package3;
 
-import Package1.Notification;
+import Package1.notification.Notification;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;

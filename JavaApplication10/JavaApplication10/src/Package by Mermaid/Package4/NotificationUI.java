@@ -1,7 +1,7 @@
 package Package4;
 
-import Package1.Notification;
-import Package2.*;
+import Package1.notification.*;
+import Package2.NotificationController;
 import java.util.Scanner;
 
 /**

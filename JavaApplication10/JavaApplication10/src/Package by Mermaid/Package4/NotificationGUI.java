@@ -1,8 +1,8 @@
 package Package4;
 
-import Package1.Notification;
+import Package1.notification.*;
+import Package2.NotificationController;
 import Package1.staff.User;
-import Package2.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

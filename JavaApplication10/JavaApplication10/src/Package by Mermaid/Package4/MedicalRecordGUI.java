@@ -1,6 +1,6 @@
 package Package4;
 
-import Package1.User;
+import Package1.staff.User;
 import Package3.MedicalRecordDAO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

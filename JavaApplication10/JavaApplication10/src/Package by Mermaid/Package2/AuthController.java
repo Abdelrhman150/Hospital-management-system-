@@ -1,8 +1,8 @@
 package Package2;
 
 import Package1.Admin;
-import Package1.Doctor;
-import Package1.User;
+import Package1.staff.Doctor;
+import Package1.staff.User;
 import Package3.AdminDAO;
 import Package3.DoctorDAO;
 import Package3.UserDatabase;

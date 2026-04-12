@@ -1,13 +1,13 @@
 package Package4;
 
-import Package1.Bill;
-import Package1.OutPatientServiceFactory;
-import Package1.RoomBill;
-import Package1.StayPatientServiceFactory;
-import Package1.VisitingBill;
+import Package1.hospitalservice.Bill;
+import Package1.hospitalservice.OutPatientServiceFactory;
+import Package1.hospitalservice.RoomBill;
+import Package1.hospitalservice.StayPatientServiceFactory;
+import Package1.hospitalservice.VisitingBill;
 import Package2.HospitalServiceController;
 import Package3.BillDAO;
-import Package1.roomsystemfactoryflyweight.Room;
+import Package1.room.Room;
 import Package3.RoomDAO;
 
 import java.util.Scanner;

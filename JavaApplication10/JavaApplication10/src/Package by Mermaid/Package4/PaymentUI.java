@@ -1,13 +1,13 @@
 package Package4;
 
-import Package1.Bill;
-import Package1.Payement_System.Insurance;
-import Package1.Payement_System.InsuranceAdaptor;
-import Package1.Payement_System.Paypal;
-import Package1.Payement_System.PaymentProcessor;
-import Package1.Payement_System.paypalAdapter;
-import Package1.RoomBill;
-import Package1.VisitingBill;
+import Package1.hospitalservice.Bill;
+import Package1.payment.Insurance;
+import Package1.payment.InsuranceAdaptor;
+import Package1.payment.Paypal;
+import Package1.payment.PaymentProcessor;
+import Package1.payment.paypalAdapter;
+import Package1.hospitalservice.RoomBill;
+import Package1.hospitalservice.VisitingBill;
 import Package3.BillDAO;
 
 import java.util.Scanner;

@@ -5,7 +5,6 @@ import Package3.*;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-
 public class DoctorRoleController {
 
     private DoctorDAO doctorDAO;
@@ -38,10 +37,9 @@ public class DoctorRoleController {
             }
             return doctor;
         }
-        return null; 
+        return null;
     }
 
-   
     private DoctorService addRoleToDoctor(DoctorService doctor, String role) {
         if (role.equalsIgnoreCase("Surgeon")) {
             return new SurgeonDecorator(doctor);
@@ -50,15 +48,13 @@ public class DoctorRoleController {
         } else if (role.equalsIgnoreCase("On-call")) {
             return new OnCallDoctorDecorator(doctor);
         }
-        return doctor; 
+        return doctor;
     }
-
 
     public void assignRole(String doctorId, String roleName) throws Exception {
         roleDAO.assignRoleToDoctor(doctorId, roleName);
     }
 
-  
     public void removeRole(String doctorId, String roleName) throws Exception {
         roleDAO.removeRoleFromDoctor(doctorId, roleName);
     }

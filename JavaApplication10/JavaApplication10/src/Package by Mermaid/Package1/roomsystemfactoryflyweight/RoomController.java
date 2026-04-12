@@ -1,5 +1,6 @@
 package Package1.roomsystemfactoryflyweight;
 
+import Package1.room.*;
 import Package2.IdGenerator;
 import Package3.RoomDAO;
 

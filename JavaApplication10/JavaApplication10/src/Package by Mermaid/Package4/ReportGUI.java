@@ -1,7 +1,7 @@
 package Package4;
 
 import Package1.Report;
-import Package1.User;
+import Package1.staff.User;
 import Package2.ExcelFormatter;
 import Package2.PDFFormatter;
 import Package2.ReportController;

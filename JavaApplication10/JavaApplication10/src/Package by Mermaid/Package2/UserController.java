@@ -1,6 +1,6 @@
 package Package2;
 
-import Package1.User;
+import Package1.staff.User;
 import Package3.UserDatabase;
 import java.util.List;
 

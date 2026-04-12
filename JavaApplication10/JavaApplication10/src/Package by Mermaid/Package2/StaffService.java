@@ -1,6 +1,7 @@
 package Package2;
 
 import Package1.*;
+import Package1.staff.*;
 import Package3.*;
 
 import java.sql.ResultSet;

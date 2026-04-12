@@ -1,5 +1,5 @@
 package Package2;
-import Package1.*;
+import Package1.hospitalservice.*;
 
 public class HospitalServiceController {
     HospitalServicFactory hospitalServiceFactory;

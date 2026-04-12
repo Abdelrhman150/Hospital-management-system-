@@ -1,6 +1,6 @@
 package Package4;
 
-import Package1.roomsystemfactoryflyweight.Room;
+import Package1.room.Room;
 import Package3.RoomDAO;
 
 import java.util.List;

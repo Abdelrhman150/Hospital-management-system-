@@ -1,6 +1,6 @@
 package Package4;
 
-import Package1.User;
+import Package1.staff.User;
 import Package2.AuthController;
 
 import javax.swing.*;

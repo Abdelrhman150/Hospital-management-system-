@@ -1,10 +1,10 @@
 package Package4;
 
-import Package1.Secretary;
-import Package1.Payement_System.Insurance;
-import Package1.Payement_System.InsuranceAdaptor;
-import Package1.Payement_System.Paypal;
-import Package1.Payement_System.paypalAdapter;
+import Package1.staff.Secretary;
+import Package1.payment.Insurance;
+import Package1.payment.InsuranceAdaptor;
+import Package1.payment.Paypal;
+import Package1.payment.paypalAdapter;
 import Package3.DoctorDAO;
 
 import java.sql.ResultSet;

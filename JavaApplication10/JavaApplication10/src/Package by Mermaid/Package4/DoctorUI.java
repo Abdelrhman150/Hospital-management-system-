@@ -1,5 +1,5 @@
 package Package4;
-import Package1.Doctor;
+import Package1.staff.Doctor;
 import Package3.DoctorDAO;
 
 import java.io.*;

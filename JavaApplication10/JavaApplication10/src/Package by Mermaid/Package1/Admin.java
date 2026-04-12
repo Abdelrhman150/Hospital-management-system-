@@ -1,5 +1,7 @@
 package Package1;
 
+import Package1.staff.*;
+import Package1.salary.*;
 import Package3.DoctorDAO;
 
 public class Admin extends User {

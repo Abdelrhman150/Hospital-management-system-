@@ -1,7 +1,8 @@
 package Package3;
 
 import java.sql.*;
-import Package1.Doctor;
+import Package1.staff.Doctor;
+import Package1.salary.*;
 
 public class DoctorDAO {
 

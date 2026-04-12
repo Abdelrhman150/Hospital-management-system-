@@ -1,6 +1,6 @@
 package Package4;
 
-import Package1.User;
+import Package1.staff.User;
 import Package1.MedicalRecord;
 import Package2.DoctorView;
 import Package2.PatientView;

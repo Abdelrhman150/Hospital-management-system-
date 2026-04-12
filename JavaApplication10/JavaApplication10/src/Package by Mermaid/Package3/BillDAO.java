@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import Package2.IdGenerator;
+
 
 /**
  * Data Access Object: BillDAO

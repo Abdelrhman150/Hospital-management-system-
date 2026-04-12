@@ -2,7 +2,8 @@ package Package4;
 
 import Package2.MedicalRecordBridgeController;
 import Package3.MedicalRecordDAO;
-import java.sql.ResultSet;
+import Package1.MedicalRecordDisplay.MedicalRecord;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -60,23 +61,21 @@ public class MedicalRecordUI {
         }
 
         try {
-            ResultSet rs = medicalRecordDAO.getPatientHistory(patientId);
+            List<MedicalRecord> history = medicalRecordDAO.getPatientHistory(patientId);
             System.out.println("\n--- History for Patient: " + patientId + " ---");
             System.out.printf("%-12s | %-12s | %-20s | %-20s\n", "Record ID", "Date", "Diagnosis", "Complaint");
             System.out.println("----------------------------------------------------------------------");
             
-            boolean found = false;
-            while (rs.next()) {
-                found = true;
-                System.out.printf("%-12s | %-12s | %-20s | %-20s\n",
-                        rs.getString("recordId"),
-                        rs.getDate("recordDate"),
-                        rs.getString("diagnosis"),
-                        rs.getString("complaint"));
-            }
-
-            if (!found) {
+            if (history.isEmpty()) {
                 System.out.println("No records found for this patient.");
+            } else {
+                for (MedicalRecord rec : history) {
+                    System.out.printf("%-12s | %-12s | %-20s | %-20s\n",
+                            rec.recordId,
+                            rec.dateCreated,
+                            rec.clinicalDiagnosis,
+                            rec.chiefComplaint);
+                }
             }
         } catch (Exception e) {
             System.err.println("✗ Error loading history: " + e.getMessage());

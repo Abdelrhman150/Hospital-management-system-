@@ -1,10 +1,9 @@
 package Package2;
 
 import Package1.*;
+import Package1.DoctorRole.*;
 import Package3.*;
-import java.sql.ResultSet;
 import java.util.ArrayList;
-
 
 public class DoctorRoleController {
 
@@ -22,10 +21,10 @@ public class DoctorRoleController {
     }
 
     public DoctorService getDecoratedDoctor(String doctorId) throws Exception {
-        ResultSet rs = doctorDAO.getDoctorById(doctorId);
-        if (rs != null && rs.next()) {
-            String name = rs.getString("name");
-            String specialization = rs.getString("specialization");
+        Doctor docModel = doctorDAO.getDoctorById(doctorId);
+        if (docModel != null) {
+            String name = docModel.getName();
+            String specialization = docModel.getSpecialization();
 
             DoctorService doctor = new BasicDoctor(name, specialization);
 

@@ -1,6 +1,6 @@
 package Package2;
 
-import Package1.Notification;
+import Package1.notification.*;
 import Package3.NotificationDAO;
 import java.sql.Timestamp;
 

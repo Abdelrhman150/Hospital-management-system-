@@ -31,7 +31,7 @@ public class AdminDAO {
     }
 
     public Admin getAdminById(String adminId) throws Exception {
-        String sql = "SELECT * FROM Admin WHERE adminId=?";
+        String sql = "SELECT * FROM Admins WHERE adminId=?";
         Connection conn = DatabaseConnection.getConnection();
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

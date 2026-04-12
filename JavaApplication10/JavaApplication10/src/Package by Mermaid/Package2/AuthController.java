@@ -52,7 +52,7 @@ public class AuthController {
                     }
 
                     if (role.equalsIgnoreCase("Doctor")) {
-                        Doctor doctor = DoctorDAO.getInstance().findDoctorObjectById(officialId);
+                        Doctor doctor = DoctorDAO.getInstance().getDoctorById(officialId);
 
                         if (doctor != null) {
                             doctor.setUsername(user.getUsername());

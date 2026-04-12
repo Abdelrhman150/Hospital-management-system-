@@ -30,7 +30,7 @@ public class DatabaseConnection {
     /**
      * Get database connection (Singleton pattern)
      */
-    public static Connection getConnection() throws SQLException {
+    public static synchronized Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
                 // تحميل تعريف SQL Server

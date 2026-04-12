@@ -1,14 +1,12 @@
 package Package4;
 
 import Package1.User;
-import Package1.MedicalRecord;
-import Package2.DoctorView;
-import Package2.PatientView;
-import Package2.DesktopDisplay;
+import Package1.MedicalRecordDisplay.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Dashboard GUI: Displays functions based on the user's role after login.
@@ -150,15 +148,9 @@ public class DashboardGUI extends JFrame {
                     try {
                         // Build a sample record to display via Bridge Pattern
                         Package3.MedicalRecordDAO dao = Package3.MedicalRecordDAO.getInstance();
-                        java.sql.ResultSet rs = dao.getPatientHistory(idStr.trim());
-                        if (rs.next()) {
-                            MedicalRecord rec = new MedicalRecord();
-                            rec.recordId = rs.getString("recordId");
-                            rec.patientId = idStr.trim();
-                            rec.doctorId = currentUser.getId();
-                            rec.dateCreated = rs.getDate("recordDate");
-                            rec.chiefComplaint = rs.getString("complaint");
-                            rec.clinicalDiagnosis = rs.getString("diagnosis");
+                        List<MedicalRecord> history = dao.getPatientHistory(idStr.trim());
+                        if (!history.isEmpty()) {
+                            MedicalRecord rec = history.get(0); // Get the latest record
                             // Bridge Pattern display
                             StringBuilder sb = new StringBuilder();
                             DoctorView view = new DoctorView(content -> sb.append(content));

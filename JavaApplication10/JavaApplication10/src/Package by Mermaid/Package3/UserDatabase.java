@@ -69,17 +69,28 @@ public class UserDatabase {
             name = rs.getString("full_name");
         } catch (SQLException e) {
             // If full_name column is missing, fallback to 'name' or empty
-            try { name = rs.getString("name"); } catch (SQLException e2) {}
+            try {
+                name = rs.getString("name");
+            } catch (SQLException e2) {
+            }
         }
 
-        return new User(
-            rs.getString("id"),
-            rs.getString("username"),
-            name,
-            rs.getString("password"),
-            rs.getString("email"),
-            rs.getString("role")
-        );
+        User user = new User(
+                rs.getString("id"),
+                rs.getString("username"),
+                name,
+                rs.getString("password"),
+                rs.getString("email"),
+                rs.getString("role"));
+
+        // Try to load personId if it exists in the table
+        try {
+            user.setPersonId(rs.getString("personId"));
+        } catch (SQLException e) {
+            // Column might not exist in all versions of the schema
+        }
+
+        return user;
     }
 
     /**

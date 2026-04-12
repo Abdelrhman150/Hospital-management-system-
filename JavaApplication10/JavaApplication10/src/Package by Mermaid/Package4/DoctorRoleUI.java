@@ -1,6 +1,6 @@
 package Package4;
 
-import Package1.DoctorService;
+import Package1.DoctorRole.DoctorService;
 import Package2.DoctorRoleController;
 import java.util.Scanner;
 

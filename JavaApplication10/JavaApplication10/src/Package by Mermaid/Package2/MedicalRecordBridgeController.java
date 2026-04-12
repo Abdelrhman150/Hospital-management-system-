@@ -1,8 +1,7 @@
 package Package2;
 
-import Package1.MedicalRecord;
+import Package1.MedicalRecordDisplay.*;
 import Package3.MedicalRecordDAO;
-import java.sql.ResultSet;
 
 /**
  * Controller for Medical Record viewing logic using Bridge Pattern.
@@ -22,10 +21,8 @@ public class MedicalRecordBridgeController {
     public void viewRecord(String recordId, String platformType, String viewType) {
         try {
             // 1. Fetch data from DB
-            ResultSet rs = dao.getFullRecord(recordId);
-            if (rs.next()) {
-                MedicalRecord model = dao.mapToModel(rs);
-
+            MedicalRecord model = dao.getFullRecord(recordId);
+            if (model != null) {
                 // 2. Choose Display Platform (Implementor)
                 DisplayPlatform platform;
                 if (platformType.equalsIgnoreCase("web")) {

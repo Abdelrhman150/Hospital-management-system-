@@ -5,10 +5,10 @@ import Package1.Payement_System.Insurance;
 import Package1.Payement_System.InsuranceAdaptor;
 import Package1.Payement_System.Paypal;
 import Package1.Payement_System.paypalAdapter;
+import Package1.Doctor;
 import Package3.DoctorDAO;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -181,12 +181,12 @@ public class SecretaryUI {
         System.out.println("\n--- Available Doctors ---");
         DoctorDAO doctorDAO = DoctorDAO.getInstance();
         try {
-            ResultSet rs = doctorDAO.getAvailableDoctors();
-            while (rs.next()) {
-                System.out.println("ID: " + rs.getString("doctorId") + ", Name: " + rs.getString("name")
-                        + ", Specialization: " + rs.getString("specialization"));
+            List<Doctor> doctors = doctorDAO.getAvailableDoctors();
+            for (Doctor doc : doctors) {
+                System.out.println("ID: " + doc.getId() + ", Name: " + doc.getName()
+                        + ", Specialization: " + doc.getSpecialization());
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

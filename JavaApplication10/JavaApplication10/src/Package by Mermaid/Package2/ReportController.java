@@ -1,7 +1,6 @@
 package Package2;
 
-import Package1.PatientReport;
-import Package1.Report;
+import Package1.report.*;
 import Package3.ReportDAO;
 
 /**

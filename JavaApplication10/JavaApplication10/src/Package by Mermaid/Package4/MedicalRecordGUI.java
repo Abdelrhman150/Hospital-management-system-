@@ -1,12 +1,13 @@
 package Package4;
 
 import Package1.User;
+import Package1.MedicalRecordDisplay.MedicalRecord;
 import Package3.MedicalRecordDAO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.sql.ResultSet;
+import java.util.List;
 import java.util.Vector;
 
 /**
@@ -134,21 +135,19 @@ public class MedicalRecordGUI extends JFrame {
             String patientId = idStr;
             tableModel.setRowCount(0); // Clear old data
 
-            ResultSet rs = medicalRecordDAO.getPatientHistory(patientId);
-            boolean found = false;
-            while (rs.next()) {
-                found = true;
-                Vector<Object> row = new Vector<>();
-                row.add(rs.getString("recordId"));
-                row.add(rs.getDate("recordDate"));
-                row.add(rs.getString("diagnosis"));
-                row.add(rs.getString("complaint"));
-                tableModel.addRow(row);
-            }
-
-            if (!found) {
+            List<MedicalRecord> history = medicalRecordDAO.getPatientHistory(patientId);
+            if (history.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "No records found for this patient.", "Info",
                         JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                for (MedicalRecord rec : history) {
+                    Vector<Object> row = new Vector<>();
+                    row.add(rec.recordId);
+                    row.add(rec.dateCreated);
+                    row.add(rec.clinicalDiagnosis);
+                    row.add(rec.chiefComplaint);
+                    tableModel.addRow(row);
+                }
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error loading history: " + ex.getMessage(), "Database Error",

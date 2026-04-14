@@ -7,6 +7,7 @@ import Package1.payment.InsuranceAdaptor;
 import Package1.payment.Paypal;
 import Package1.payment.paypalAdapter;
 import Package3.DoctorDAO;
+import Package2.SecretaryController;
 
 import java.util.List;
 import java.util.Scanner;
@@ -18,6 +19,7 @@ import java.util.Scanner;
 public class SecretaryUI {
 
     private Secretary secretary;
+    private SecretaryController controller;
     private Scanner scanner;
 
     /**
@@ -25,6 +27,7 @@ public class SecretaryUI {
      */
     public SecretaryUI(Secretary secretary) {
         this.secretary = secretary;
+        this.controller = new SecretaryController();
         this.scanner = new Scanner(System.in);
     }
 
@@ -34,6 +37,7 @@ public class SecretaryUI {
     public SecretaryUI() {
         // Create a demo secretary for testing
         this.secretary = new Secretary("SEC001", "John Doe", "123-456-7890", "john.doe@hospital.com", "Morning");
+        this.controller = new SecretaryController();
         this.scanner = new Scanner(System.in);
     }
 
@@ -208,8 +212,11 @@ public class SecretaryUI {
             System.out.print("Enter Appointment Date (yyyy-MM-dd): ");
             String appointmentDate = scanner.nextLine().trim();
 
-            String AppointmentID = secretary.bookVisitingAppointment(patientId, doctorName, appointmentDate);
-            secretary.DisplayAppointmentDetails(AppointmentID);
+            System.out.print("Enter Room ID: ");
+            String roomId = scanner.nextLine().trim();
+
+            String AppointmentID = controller.bookVisitingAppointment(patientId, doctorName, appointmentDate, roomId);
+            controller.DisplayAppointmentDetails(AppointmentID);
 
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid patient ID. Please enter a number.");
@@ -238,14 +245,19 @@ public class SecretaryUI {
             System.out.print("Enter Room ID: ");
             String roomId = scanner.nextLine().trim();
 
-            String AppointmentID = secretary.bookStayAppointment(patientId, doctorName, appointmentDate, roomId);
-            System.out.println("Stay appointment booked successfully!");
-            secretary.DisplayAppointmentDetails(AppointmentID);
+            System.out.print("Enter Days of Stay: ");
+            int daysOfStay = Integer.parseInt(scanner.nextLine().trim());
+
+            String AppointmentID = controller.bookStayAppointment(patientId, doctorName, appointmentDate, roomId, daysOfStay);
+            if (AppointmentID != null) {
+                System.out.println("Stay appointment booked successfully!");
+                controller.DisplayAppointmentDetails(AppointmentID);
+            }
 
         } catch (NumberFormatException e) {
-            System.out.println("Error: Invalid number format. Please enter valid numbers for ID and Room ID.");
+            System.out.println("Error: Invalid number format. Please enter valid numbers for days of stay.");
         } catch (Exception e) {
-            System.out.println("Error booking stay appointment: " + e.getMessage());
+            System.out.println("Error booking stay appoi4ntment: " + e.getMessage());
         }
     }
 
@@ -255,9 +267,9 @@ public class SecretaryUI {
     private void generateBill() {
         System.out.println("\n--- Generate Bill ---");
         try {
-            secretary.GenerateBill();
+            controller.GenerateBill();
             System.out.println();
-            secretary.DisplayBillDetailsAfterGeneration();
+            controller.DisplayBillDetailsAfterGeneration();
         } catch (Exception e) {
             System.out.println("Error generating bill: " + e.getMessage());
             System.out.println("(Make sure an appointment has been booked first.)");
@@ -281,11 +293,11 @@ public class SecretaryUI {
                 case "1":
                     Paypal paypal = new Paypal();
                     paypalAdapter paypalProcessor = new paypalAdapter(paypal);
-                    secretary.Payment(paypalProcessor);
+                    controller.Payment(paypalProcessor);
                     break;
                 case "2":
                     InsuranceAdaptor insuranceProcessor = new InsuranceAdaptor(new Insurance());
-                    secretary.Payment(insuranceProcessor);
+                    controller.Payment(insuranceProcessor);
                     break;
                 default:
                     System.out.println("Invalid payment method selected.");
@@ -308,7 +320,7 @@ public class SecretaryUI {
         try {
             System.out.print("Enter Appointment ID: ");
             String appointmentId = scanner.nextLine().trim();
-            secretary.DisplayAppointmentDetails(appointmentId);
+            controller.DisplayAppointmentDetails(appointmentId);
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid Appointment ID. Please enter a number.");
         } catch (Exception e) {
@@ -325,7 +337,7 @@ public class SecretaryUI {
         try {
             System.out.print("Enter Bill ID: ");
             String billId = scanner.nextLine().trim();
-            secretary.DisplayBillDetails(billId);
+            controller.DisplayBillDetails(billId);
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid Bill ID. Please enter a number.");
         } catch (Exception e) {

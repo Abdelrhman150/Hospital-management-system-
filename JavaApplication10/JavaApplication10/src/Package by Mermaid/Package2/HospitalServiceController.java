@@ -13,6 +13,6 @@ public class HospitalServiceController {
     }
 
     public Appointment CreateAppointment(String patientId, String doctorName, String appointmentDate) {
-        return hospitalServiceFactory.createAppointment(patientId, doctorName, appointmentDate);
+        return hospitalServiceFactory.createAppointment();
     }
 }

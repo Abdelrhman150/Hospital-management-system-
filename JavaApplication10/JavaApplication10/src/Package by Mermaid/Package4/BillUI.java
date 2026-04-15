@@ -67,17 +67,22 @@ public class BillUI {
     }
 
     private void createVisitingBill() throws Exception {
+        
         System.out.print("Enter Patient ID: ");
         String patientId = scanner.nextLine();
+        
+        System.out.print("Enter Room ID: ");
+        String roomId = scanner.nextLine();
+        Room room = RoomDAO.getInstance().getRoomById(roomId);
 
-        HospitalServiceController controller = new HospitalServiceController(new OutPatientServiceFactory());
+        HospitalServiceController controller = new HospitalServiceController(new OutPatientServiceFactory(room));
         Bill bill = controller.CreateBill(patientId, 0);
         if (bill instanceof VisitingBill) {
             VisitingBill visitingBill = (VisitingBill) bill;
-            visitingBill.generateBill(patientId, 0, null);
+            visitingBill.generateBill(patientId, 0);
             currentBill = visitingBill;
             currentBillId = visitingBill.billId;
-            currentAmount = visitingBill.calculateamount(null, 0);
+            currentAmount = visitingBill.calculateamount();
             System.out.println("Visiting bill created with amount: $" + currentAmount);
             BillDAO.getInstance().addBill(bill.getBillId(),patientId, currentAmount, "Unpaid");
         } else {
@@ -94,7 +99,7 @@ public class BillUI {
         int days = Integer.parseInt(scanner.nextLine());
 
         Room room = RoomDAO.getInstance().getRoomById(roomId);
-        HospitalServiceController controller = new HospitalServiceController(new StayPatientServiceFactory(roomId));
+        HospitalServiceController controller = new HospitalServiceController(new StayPatientServiceFactory(room));
         Bill bill = controller.CreateBill(patientId, days);
 
         if (bill instanceof RoomBill) {

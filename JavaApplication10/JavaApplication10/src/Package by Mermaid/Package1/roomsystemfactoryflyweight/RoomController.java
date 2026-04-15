@@ -15,7 +15,7 @@ public class RoomController {
         Room room = factory.createRoom();
 
         String generatedRoomId = IdGenerator.getInstance().nextRoomId();
-        room.setRoomID(generatedRoomId);
+        room.setRoomID(generatedRoomId);    
 
         RoomDAO.RoomRecord record = new RoomDAO.RoomRecord(
                 room.getRoomID(),

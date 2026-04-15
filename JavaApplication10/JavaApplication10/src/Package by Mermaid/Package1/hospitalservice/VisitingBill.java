@@ -3,54 +3,39 @@ package Package1.hospitalservice;
 import Package1.payment.*;
 import Package1.room.Room;
 import Package2.IdGenerator;
-import Package3.BillDAO;
-
 public class VisitingBill implements Bill {
     public String billId;
     public String patientId;
     public String billingDate;
     public double amount;
-    public double VistingFee = 50.0; // Flat fee for outpatient services
     PaymentProcessor paymentProcessor;
-    public Room room; // Added room reference for payment processing
+    public Room room; 
     
 
     @Override
-    public void generateBill(String patientId, int daysOfStay, Room room) {
+    public void generateBill(String patientId, int daysOfStay) {
         this.patientId = patientId;
-        this.room = room;
-        BillDAO billDAO = BillDAO.getInstance() ;
-        amount = calculateamount(room, daysOfStay);
+        amount = calculateamount();
         this.billId = IdGenerator.getInstance().nextBillId() ;
         System.out.println(billId);
-        try {
-            billDAO.addBill(billId,patientId, amount, "Unpaid");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         billingDate = java.time.LocalDate.now().toString(); // Get current date as billing date
     }
     
 
     @Override
-    public double calculateamount(Room room, double days) {
+    public double calculateamount() {
+        double VistingFee = 50.0;
         return VistingFee;
     }
 
     @Override
     public void getBillDetails(String billId) {
-        BillDAO billDAO = BillDAO.getInstance();
-        try {
-            billDAO.BillDetails(billId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // DAO logic moved to controller
     }
 
     @Override
     public void setPaymentProcessor(PaymentProcessor paymentProcessor) {
         this.paymentProcessor = paymentProcessor;
-        paymentProcessor.processPayment(VistingFee); // Process payment immediately for visiting bill
     }
 
     @Override

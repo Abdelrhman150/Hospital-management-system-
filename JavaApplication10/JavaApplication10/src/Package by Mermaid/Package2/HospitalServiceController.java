@@ -9,10 +9,10 @@ public class HospitalServiceController {
     }
 
     public Bill CreateBill(String patientId, int daysOfStay) {
-        return hospitalServiceFactory.createBill(patientId, daysOfStay);
+        return hospitalServiceFactory.createBill();
     }
 
-    public Appointment CreateAppointment(String patientId, String doctorName, String appointmentDate) {
-        return hospitalServiceFactory.createAppointment(patientId, doctorName, appointmentDate);
+    public Appointment CreateAppointment() {
+        return hospitalServiceFactory.createAppointment();
     }
 }

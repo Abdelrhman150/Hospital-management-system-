@@ -3,8 +3,6 @@ package Package1.hospitalservice;
 import Package1.payment.PaymentProcessor;
 import Package1.room.Room;
 import Package2.*;
-import Package3.BillDAO;
-
 public class RoomBill implements Bill {
     public String billId;
     public String patientId;
@@ -18,39 +16,26 @@ public class RoomBill implements Bill {
     // Constructor
     public RoomBill(Room room) {
         this.room = room;
-
     }
 
     @Override
-    public void generateBill(String patientId, int daysOfStay, Room room) {
+    public void generateBill(String patientId, int daysOfStay) {
 
         this.patientId = patientId;
         this.DaysOfStay = daysOfStay;
-        this.room = room;
-        BillDAO billDAO = BillDAO.getInstance() ;
-        amount = calculateamount(room, daysOfStay);
+        amount = calculateamount();
         this.billId = IdGenerator.getInstance().nextBillId() ;
-        try {
-            billDAO.addBill(billId,patientId, amount, "Unpaid");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         billingDate = java.time.LocalDate.now().toString(); // Get current date as billing date
     }
 
     @Override
     public void getBillDetails(String billId) {
-            BillDAO billDAO = BillDAO.getInstance();
-            try {
-                billDAO.BillDetails(billId);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        // DAO logic moved to controller
     }
 
     @Override
-    public double calculateamount(Room room, double days) {
-        this.amount = room.getDailyRate() * (int) days;
+    public double calculateamount() {
+        this.amount = room.getDailyRate() * DaysOfStay;
         return this.amount;
     }
 
@@ -62,6 +47,6 @@ public class RoomBill implements Bill {
     @Override
     public void setPaymentProcessor(PaymentProcessor paymentProcessor) {
         this.paymentProcessor = paymentProcessor;
-        paymentProcessor.processPayment(amount); // Process payment immediately for room bill
+        // Payment processing immediately moved to controller
     }
 }

@@ -98,58 +98,58 @@ public class AdminUI {
 
                 switch (option) {
                     case 1:
-    System.out.println("\n------ Assign Salary To Doctor ------");
-    System.out.print("Enter Doctor ID: ");
-    String doctorId = input.nextLine();
+                        System.out.println("\n------ Assign Salary To Doctor ------");
+                        System.out.print("Enter Doctor ID: ");
+                        String doctorId = input.nextLine();
 
-    Doctor doctor = salaryController.getDoctorById(doctorId);
+                        Doctor doctor = salaryController.getDoctorById(doctorId);
 
-    if (doctor == null) {
-        System.out.println("\nDoctor not found in the database.");
-        break;
-    }
+                        if (doctor == null) {
+                            System.out.println("\nDoctor not found in the database.");
+                            break;
+                        }
 
-    System.out.println("\nDoctor found successfully:");
-    doctor.displayInfo();
+                        System.out.println("\nDoctor found successfully:");
+                        doctor.displayInfo();
 
-    int nightShifts = 0;
-    int onCallDays = 0;
-    boolean hasHazard = false;
+                        int nightShifts = 0;
+                        int onCallDays = 0;
+                        boolean hasHazard = false;
 
-    System.out.print("\nDid this doctor work night shifts this month? (yes/no): ");
-    String nightShiftAnswer = input.nextLine().trim().toLowerCase();
+                        System.out.print("\nDid this doctor work night shifts this month? (yes/no): ");
+                        String nightShiftAnswer = input.nextLine().trim().toLowerCase();
 
-    if (nightShiftAnswer.equals("yes")) {
-        System.out.print("Enter number of night shifts: ");
-        nightShifts = input.nextInt();
-        input.nextLine();
-    }
+                        if (nightShiftAnswer.equals("yes")) {
+                            System.out.print("Enter number of night shifts: ");
+                            nightShifts = input.nextInt();
+                            input.nextLine();
+                        }
 
-    System.out.print("\nWas this doctor on-call this month? (yes/no): ");
-    String onCallAnswer = input.nextLine().trim().toLowerCase();
+                        System.out.print("\nWas this doctor on-call this month? (yes/no): ");
+                        String onCallAnswer = input.nextLine().trim().toLowerCase();
 
-    if (onCallAnswer.equals("yes")) {
-        System.out.print("Enter number of on-call days: ");
-        onCallDays = input.nextInt();
-        input.nextLine();
-    }
+                        if (onCallAnswer.equals("yes")) {
+                            System.out.print("Enter number of on-call days: ");
+                            onCallDays = input.nextInt();
+                            input.nextLine();
+                        }
 
-    System.out.print("\nDoes this doctor receive hazard allowance this month? (yes/no): ");
-    String hazardAnswer = input.nextLine().trim().toLowerCase();
+                        System.out.print("\nDoes this doctor receive hazard allowance this month? (yes/no): ");
+                        String hazardAnswer = input.nextLine().trim().toLowerCase();
 
-    if (hazardAnswer.equals("yes")) {
-        hasHazard = true;
-    }
+                        if (hazardAnswer.equals("yes")) {
+                            hasHazard = true;
+                        }
 
-    Doctor updatedDoctor = salaryController.assignSalaryToDoctor(doctorId, nightShifts, onCallDays, hasHazard);
+                        Doctor updatedDoctor = salaryController.assignSalaryToDoctor(doctorId, nightShifts, onCallDays, hasHazard);
 
-if (updatedDoctor != null) {
-    updatedDoctor.viewSalary();
-    System.out.println("====================================");
-} else {
-    System.out.println("\nFailed to assign salary.");
-}
-    break;
+                        if (updatedDoctor != null) {
+                            updatedDoctor.viewSalary();
+                            System.out.println("====================================");
+                        } else {
+                            System.out.println("\nFailed to assign salary.");
+                        }
+                            break;
 
                     case 2:
                         System.out.println("\n------ Create Room ------");

@@ -1,7 +1,6 @@
 package Package1.hospitalservice;
 import Package2.*;
-import Package3.AppointmentDAO;
-import Package3.DoctorDAO;
+
 
 public class VistingAppointment implements Appointment {
     public String appointmentId;
@@ -11,13 +10,8 @@ public class VistingAppointment implements Appointment {
 
     @Override
     public void displayDetails(String appointmentId) {
-        AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
-        try {
-            appointmentDAO.GetAppointmentDetails(appointmentId);
-        } catch (Exception e) {
-            e.printStackTrace();
+        // DAO logic moved to controller
     }
-}
 
     @Override
     public void scheduleAppointment(String patientId, String doctorName, String appointmentDate) {
@@ -25,17 +19,7 @@ public class VistingAppointment implements Appointment {
         this.doctorName = doctorName;
         this.appointmentDate = appointmentDate;
         this.appointmentId = IdGenerator.getInstance().nextAppointmentId();
-        AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
-        DoctorDAO doctorDAO = DoctorDAO.getInstance();
-        try {
-            // Look up the doctor ID from the doctor name
-            String doctorId = doctorDAO.getDoctorIdByName(doctorName);
-            // Pass the doctor ID as a string to bookAppointment
-            appointmentDAO.bookAppointment(this.appointmentId, this.patientId, doctorId, java.sql.Timestamp.valueOf(appointmentDate), "Visiting", null, 0);
-        } catch (Exception e) {
-            System.out.println("Error scheduling appointment: " + e.getMessage());
-            e.printStackTrace();   
-        }
+        // DAO logic moved to controller
     }
 
     @Override

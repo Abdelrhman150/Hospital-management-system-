@@ -75,6 +75,14 @@ public class IdGenerator {
         return generatePrefixId("MedicalRecords", "recordId", "REC");
     }
 
+    public String nextRoomId() {
+        return generatePrefixId("rooms", "roomId", "ROOM");
+    }
+
+    public String nextBillId() {
+        return generatePrefixId("Bills", "billId", "BILL");
+    }
+
     /**
      * Generates a unique role-based ID (e.g., D001, N015, SCT001)
      */
@@ -130,28 +138,5 @@ public class IdGenerator {
         return processedName + "." + generatedId.toLowerCase() + "@hospital.com";
     }
 
-    // ==================== Room (String ID) ====================
-
-    public String nextRoomId() {
-        String newId = "ROOM001";
-        try {
-            Connection conn = DatabaseConnection.getConnection();
-            ResultSet rs = conn.createStatement()
-                    .executeQuery("SELECT MAX(roomId) AS maxId FROM rooms WHERE roomId LIKE 'ROOM%'");
-            if (rs.next()) {
-                String maxId = rs.getString("maxId");
-                if (maxId != null && maxId.startsWith("ROOM")) {
-                    int num = Integer.parseInt(maxId.substring(4));
-                    newId = String.format("ROOM%03d", num + 1);
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Error generating room ID: " + e.getMessage());
-        }
-        return newId;
-    }
-
-    public String nextBillId() {
-        return generatePrefixId("Bills", "billId", "BILL");
-    }
+    
 }

@@ -12,7 +12,6 @@ public class DoctorView extends RecordView {
                 "Record ID      : " + record.recordId + "\n" +
                 "Patient ID     : " + record.patientId + "\n" +
                 "Doctor ID      : " + record.doctorId + "\n" +
-                "Appointment ID : " + record.appointmentId + "\n" +
                 "Date Created   : " + record.dateCreated + "\n" +
                 "Chief Complaint: " + record.chiefComplaint + "\n" +
                 "Diagnosis      : " + record.clinicalDiagnosis;

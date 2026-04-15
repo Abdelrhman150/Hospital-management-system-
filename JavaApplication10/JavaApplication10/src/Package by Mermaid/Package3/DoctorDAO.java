@@ -129,7 +129,7 @@ public class DoctorDAO {
             consultationFee = rs.getDouble("consultationFee");
         } catch (SQLException e) {
         }
-
+        String departmentId = "";
         Doctor doctor = new Doctor(
                 id,
                 name,
@@ -137,7 +137,9 @@ public class DoctorDAO {
                 email,
                 specialization,
                 availability,
-                consultationFee);
+                consultationFee,
+                departmentId
+            );
 
         try {
             double salary = rs.getDouble("salary");

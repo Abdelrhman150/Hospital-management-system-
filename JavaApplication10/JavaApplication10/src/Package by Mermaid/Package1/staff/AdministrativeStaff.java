@@ -33,7 +33,7 @@ public class AdministrativeStaff implements StaffFactory {
 
     @Override
     public User createUser() {
-        return new Secretary(staffId, name, phone, email, position);
+        return new Secretary(staffId, name, phone, email, position, department.getId());
     }
 
     @Override

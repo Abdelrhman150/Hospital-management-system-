@@ -404,5 +404,32 @@ BEGIN
     ('DR004', 'DOC009', 'On-call');
 END
 GO
+CREATE TABLE AdministrativeDepartment (
+    departmentId VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+INSERT INTO AdministrativeDepartment (departmentId, name)
+VALUES
+('ADD001', 'Reception'),
+('ADD002', 'Human Resources'),
+('ADD003', 'Accounting'),
+('ADD004', 'Medical Records'),
+('ADD005', 'Customer Service');
+
+ALTER TABLE Secretaries
+ADD shift VARCHAR(50),
+    departmentId VARCHAR(10);
+
+ALTER TABLE Secretaries
+ADD CONSTRAINT FK_Secretaries_AdministrativeDepartment
+FOREIGN KEY (departmentId)
+REFERENCES AdministrativeDepartment(departmentId);
+
+UPDATE Secretaries
+SET shift = 'Morning',
+    departmentId = 'ADD001'
+WHERE secretaryId = 'S001';
+
 
 PRINT 'Full Database setup completed successfully.';

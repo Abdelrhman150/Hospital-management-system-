@@ -7,17 +7,20 @@ public class Doctor extends User {
     private String specialization;
     private boolean availability;
     private double consultationFee;
+    private String departmentId;
     private DoctorSalary salary;
 
     private double savedSalary;
     private String savedSalaryDescription;
 
     public Doctor(String id, String name, String phone, String email,
-            String specialization, boolean availability, double consultationFee) {
+                  String specialization, boolean availability,
+                  double consultationFee, String departmentId) {
         super(id, name, phone, email);
         this.specialization = specialization;
         this.availability = availability;
         this.consultationFee = consultationFee;
+        this.departmentId = departmentId;
     }
 
     @Override
@@ -29,20 +32,28 @@ public class Doctor extends User {
         return specialization;
     }
 
+    public boolean isAvailable() {
+        return availability;
+    }
+
     public double getConsultationFee() {
         return consultationFee;
+    }
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
     }
 
     public void setConsultationFee(double consultationFee) {
         this.consultationFee = consultationFee;
     }
 
-    public boolean isAvailable() {
-        return availability;
-    }
-
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
     }
 
     public void setSalary(DoctorSalary salary) {
@@ -101,5 +112,6 @@ public class Doctor extends User {
         super.displayInfo();
         System.out.println("Specialization: " + specialization);
         System.out.println("Available: " + availability);
+        System.out.println("Department ID: " + departmentId);
     }
 }

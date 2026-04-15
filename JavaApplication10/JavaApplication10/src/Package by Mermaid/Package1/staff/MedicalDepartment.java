@@ -15,4 +15,8 @@ public class MedicalDepartment extends Department {
     public void displayDepartment() {
         super.displayDepartment();
     }
+    @Override
+    protected String getId() {
+        return departmentId;
+    }
 }

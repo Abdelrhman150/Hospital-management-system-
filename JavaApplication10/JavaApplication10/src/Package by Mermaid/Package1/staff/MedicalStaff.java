@@ -26,7 +26,7 @@ public class MedicalStaff implements StaffFactory {
 
     @Override
     public User createUser() {
-        return new Doctor(id, name, phone, email, specialization, availability, consultationFee);
+        return new Doctor(id, name, phone, email, specialization, availability, consultationFee, department.getId());
     }
 
     @Override

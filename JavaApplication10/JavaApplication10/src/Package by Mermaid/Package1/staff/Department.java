@@ -45,4 +45,6 @@ public abstract class Department {
         System.out.println("Department Head ID: " + departmentHeadId);
     }
 
+    protected abstract String getId();
+
 }

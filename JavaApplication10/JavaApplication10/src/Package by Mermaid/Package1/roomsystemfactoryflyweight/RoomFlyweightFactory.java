@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class RoomFlyweightFactory {
 
-    private static final Map<String, RoomSharedData> sharedRooms = new HashMap<>();
+    private static Map<String, RoomSharedData> sharedRooms = new HashMap<>();
 
     public static RoomSharedData getRoomSharedData(RoomType roomType) {
         String key = roomType.name();
@@ -27,7 +27,4 @@ public class RoomFlyweightFactory {
         return sharedRooms.get(key);
     }
 
-    public static int getTotalFlyweights() {
-        return sharedRooms.size();
-    }
 }

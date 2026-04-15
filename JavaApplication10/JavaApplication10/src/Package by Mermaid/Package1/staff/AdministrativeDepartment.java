@@ -16,4 +16,10 @@ public class AdministrativeDepartment extends Department {
         super.displayDepartment();
     }
 
+    @Override
+    protected String getId() {
+
+        return departmentId;
+    }
+
 }

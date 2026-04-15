@@ -30,7 +30,7 @@ public class SecretaryController {
         }
 
         hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory(room));
-        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
+        appointment = hospitalServiceController.CreateAppointment();
         appointment.scheduleAppointment(patientId, doctorName, appointmentDate);
         
         AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
@@ -58,7 +58,7 @@ public class SecretaryController {
         }
 
         hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory(room));
-        appointment = hospitalServiceController.CreateAppointment(patientId, doctorName, appointmentDate);
+        appointment = hospitalServiceController.CreateAppointment();
         
         ((RoomAppointment) appointment).setDaysOfStay(daysOfStay);
         
@@ -84,8 +84,8 @@ public class SecretaryController {
     public void GenerateBill() {
         bill = hospitalServiceController.CreateBill(appointment.getPatientId(), appointment.getDaysOfStay());
         
-            Room room = ((RoomAppointment) appointment).room;
-            bill.generateBill(appointment.getPatientId(), appointment.getDaysOfStay(), room);
+        Room room = ((RoomAppointment) appointment).room;
+        bill.generateBill(appointment.getPatientId(), appointment.getDaysOfStay());
         
 
         BillDAO billDAO = BillDAO.getInstance() ;

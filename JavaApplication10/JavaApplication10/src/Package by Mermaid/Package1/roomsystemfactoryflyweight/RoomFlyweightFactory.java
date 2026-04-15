@@ -27,7 +27,4 @@ public class RoomFlyweightFactory {
         return sharedRooms.get(key);
     }
 
-    public static int getTotalFlyweights() {
-        return sharedRooms.size();
-    }
 }

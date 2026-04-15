@@ -79,7 +79,7 @@ public class BillUI {
         Bill bill = controller.CreateBill(patientId, 0);
         if (bill instanceof VisitingBill) {
             VisitingBill visitingBill = (VisitingBill) bill;
-            visitingBill.generateBill(patientId, 0, null);
+            visitingBill.generateBill(patientId, 0);
             currentBill = visitingBill;
             currentBillId = visitingBill.billId;
             currentAmount = visitingBill.calculateamount();

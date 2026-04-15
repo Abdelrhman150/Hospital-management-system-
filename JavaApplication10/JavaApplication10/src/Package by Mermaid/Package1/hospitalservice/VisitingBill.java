@@ -12,11 +12,9 @@ public class VisitingBill implements Bill {
     public Room room; 
     
 
-
     @Override
-    public void generateBill(String patientId, int daysOfStay, Room room) {
+    public void generateBill(String patientId, int daysOfStay) {
         this.patientId = patientId;
-        this.room = room;
         amount = calculateamount();
         this.billId = IdGenerator.getInstance().nextBillId() ;
         System.out.println(billId);
@@ -38,7 +36,6 @@ public class VisitingBill implements Bill {
     @Override
     public void setPaymentProcessor(PaymentProcessor paymentProcessor) {
         this.paymentProcessor = paymentProcessor;
-        // Payment processing immediately moved to controller or service
     }
 
     @Override

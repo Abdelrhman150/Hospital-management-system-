@@ -16,11 +16,10 @@ public class RoomBill implements Bill {
     // Constructor
     public RoomBill(Room room) {
         this.room = room;
-
     }
 
     @Override
-    public void generateBill(String patientId, int daysOfStay, Room room) {
+    public void generateBill(String patientId, int daysOfStay) {
 
         this.patientId = patientId;
         this.DaysOfStay = daysOfStay;

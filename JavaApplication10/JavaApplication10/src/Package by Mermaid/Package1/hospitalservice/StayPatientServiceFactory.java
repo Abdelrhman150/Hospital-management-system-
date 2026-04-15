@@ -10,7 +10,7 @@ public class StayPatientServiceFactory implements HospitalServicFactory {
     }
 
     @Override
-    public Bill createBill(String patientId, int daysOfStay) {
+    public Bill createBill() {
         RoomBill Bill = new RoomBill(room);
         return Bill;
     }

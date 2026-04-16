@@ -1,12 +1,9 @@
 package Package1.staff;
 
 import Package1.salary.*;
-import Package2.*;
 
 public class Doctor extends User {
     private String specialization;
-    private boolean availability;
-    private double consultationFee;
     private String departmentId;
     private DoctorSalary salary;
 
@@ -14,12 +11,9 @@ public class Doctor extends User {
     private String savedSalaryDescription;
 
     public Doctor(String id, String name, String phone, String email,
-                  String specialization, boolean availability,
-                  double consultationFee, String departmentId) {
+                  String specialization, String departmentId) {
         super(id, name, phone, email);
         this.specialization = specialization;
-        this.availability = availability;
-        this.consultationFee = consultationFee;
         this.departmentId = departmentId;
     }
 
@@ -32,24 +26,8 @@ public class Doctor extends User {
         return specialization;
     }
 
-    public boolean isAvailable() {
-        return availability;
-    }
-
-    public double getConsultationFee() {
-        return consultationFee;
-    }
-
     public String getDepartmentId() {
         return departmentId;
-    }
-
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
-    }
-
-    public void setConsultationFee(double consultationFee) {
-        this.consultationFee = consultationFee;
     }
 
     public void setDepartmentId(String departmentId) {
@@ -111,7 +89,6 @@ public class Doctor extends User {
     public void displayInfo() {
         super.displayInfo();
         System.out.println("Specialization: " + specialization);
-        System.out.println("Available: " + availability);
         System.out.println("Department ID: " + departmentId);
     }
 }

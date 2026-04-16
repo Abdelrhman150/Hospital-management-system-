@@ -21,15 +21,6 @@ public class AdministrativeStaff implements StaffFactory {
         this.department = department;
     }
 
-    public AdministrativeStaff(String staffId, String name, String phone, String email,
-            String position, Department department) {
-        this.staffId = staffId;
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.position = position;
-        this.department = department;
-    }
 
     @Override
     public User createUser() {

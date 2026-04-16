@@ -2,8 +2,8 @@ package Package1.staff;
 
 public class AdministrativeDepartment extends Department {
 
-    public AdministrativeDepartment(String departmentId, String departmentName, int floorNumber, String departmentHeadId) {
-        super(departmentId, departmentName, floorNumber, departmentHeadId);
+    public AdministrativeDepartment(String departmentId, String departmentName) {
+        super(departmentId, departmentName);
     }
 
     @Override
@@ -18,8 +18,6 @@ public class AdministrativeDepartment extends Department {
 
     @Override
     protected String getId() {
-
         return departmentId;
     }
-
 }

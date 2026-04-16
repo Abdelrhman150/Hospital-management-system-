@@ -1,8 +1,8 @@
 package Package4;
-import Package1.staff.Department;
-import Package1.staff.Secretary;
+
 import Package1.Admin;
 import Package1.staff.Doctor;
+import Package1.staff.StaffController;
 import Package2.IdGenerator;
 import Package3.AdminDAO;
 import Package3.DoctorDAO;
@@ -19,6 +19,7 @@ public class AdminUI {
         Scanner input = new Scanner(System.in);
         AdminDAO adminDAO = AdminDAO.getInstance();
         DoctorDAO doctorDAO = DoctorDAO.getInstance();
+        StaffController staffController = new StaffController();
 
         Admin loggedInAdmin = null;
 
@@ -88,16 +89,101 @@ public class AdminUI {
                 System.out.println("\n=================================");
                 System.out.println("         ADMIN FUNCTIONS");
                 System.out.println("=================================");
-                System.out.println("1. Assign Salary To Doctor");
-                System.out.println("2. Create Room");
-                System.out.println("3. Logout");
+                System.out.println("1. Create Doctor");
+                System.out.println("2. Create Secretary");
+                System.out.println("3. Assign Salary To Doctor");
+                System.out.println("4. Create Room");
+                System.out.println("5. Logout");
                 System.out.print("Choose an option: ");
 
                 int option = input.nextInt();
                 input.nextLine();
 
                 switch (option) {
+
                     case 1:
+                        System.out.println("\n------ Create Doctor ------");
+
+                        System.out.print("Enter Doctor Name: ");
+                        String doctorName = input.nextLine();
+
+                        System.out.print("Enter Doctor Phone: ");
+                        String doctorPhone = input.nextLine();
+
+                        System.out.print("Enter Doctor Email: ");
+                        String doctorEmail = input.nextLine();
+
+                        System.out.print("Enter Username: ");
+                        String doctorUsername = input.nextLine();
+
+                        System.out.print("Enter Password: ");
+                        String doctorPassword = input.nextLine();
+
+                        System.out.print("Enter Specialization: ");
+                        String specialization = input.nextLine();
+
+                        System.out.print("Enter Medical Department Name: ");
+                        String medDeptName = input.nextLine();
+
+                        boolean doctorSaved = staffController.createDoctorAndSave(
+                                doctorName,
+                                doctorPhone,
+                                doctorEmail,
+                                doctorUsername,
+                                doctorPassword,
+                                specialization,
+                                medDeptName
+                        );
+
+                        if (doctorSaved) {
+                            System.out.println("\nDoctor created and saved successfully.");
+                        } else {
+                            System.out.println("\nFailed to create doctor.");
+                        }
+                        break;
+
+                    case 2:
+                        System.out.println("\n------ Create Secretary ------");
+
+                        System.out.print("Enter Secretary Name: ");
+                        String secretaryName = input.nextLine();
+
+                        System.out.print("Enter Secretary Phone: ");
+                        String secretaryPhone = input.nextLine();
+
+                        System.out.print("Enter Secretary Email: ");
+                        String secretaryEmail = input.nextLine();
+
+                        System.out.print("Enter Username: ");
+                        String username = input.nextLine();
+
+                        System.out.print("Enter Password: ");
+                        String password = input.nextLine();
+
+                        System.out.print("Enter Shift: ");
+                        String shift = input.nextLine();
+
+                        System.out.print("Enter Administrative Department Name: ");
+                        String adminDeptName = input.nextLine();
+
+                        boolean secretarySaved = staffController.createSecretaryAndSave(
+                                secretaryName,
+                                secretaryPhone,
+                                secretaryEmail,
+                                username,
+                                password,
+                                shift,
+                                adminDeptName
+                        );
+
+                        if (secretarySaved) {
+                            System.out.println("\nSecretary created and saved successfully.");
+                        } else {
+                            System.out.println("\nFailed to create secretary.");
+                        }
+                        break;
+
+                    case 3:
                         System.out.println("\n------ Assign Salary To Doctor ------");
                         System.out.print("Enter Doctor ID: ");
                         String doctorId = input.nextLine();
@@ -141,7 +227,9 @@ public class AdminUI {
                             hasHazard = true;
                         }
 
-                        Doctor updatedDoctor = salaryController.assignSalaryToDoctor(doctorId, nightShifts, onCallDays, hasHazard);
+                        Doctor updatedDoctor = salaryController.assignSalaryToDoctor(
+                                doctorId, nightShifts, onCallDays, hasHazard
+                        );
 
                         if (updatedDoctor != null) {
                             updatedDoctor.viewSalary();
@@ -149,9 +237,9 @@ public class AdminUI {
                         } else {
                             System.out.println("\nFailed to assign salary.");
                         }
-                            break;
+                        break;
 
-                    case 2:
+                    case 4:
                         System.out.println("\n------ Create Room ------");
                         System.out.println("Choose Room Type:");
                         System.out.println("1. General Ward");
@@ -190,7 +278,7 @@ public class AdminUI {
                         System.out.println(createdRoom);
                         break;
 
-                    case 3:
+                    case 5:
                         System.out.println("\nLogged out successfully.");
                         running = false;
                         break;

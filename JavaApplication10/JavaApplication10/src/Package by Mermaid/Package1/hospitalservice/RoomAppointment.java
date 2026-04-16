@@ -1,7 +1,6 @@
 package Package1.hospitalservice;
 
 import Package1.room.Room;
-import Package1.roomsystemfactoryflyweight.RoomStatus;
 import Package2.IdGenerator;
 
 

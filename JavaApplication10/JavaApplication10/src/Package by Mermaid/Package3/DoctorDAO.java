@@ -21,19 +21,20 @@ public class DoctorDAO {
         return instance;
     }
 
-    public void addDoctor(String doctorId, String name, String specialization,
-                          String contactEmail, double consultationFee) throws Exception {
-        String sql = "INSERT INTO Doctors(doctorId, name, specialization, contactEmail, consultationFee) VALUES(?,?,?,?,?)";
-        Connection conn = DatabaseConnection.getConnection();
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, doctorId);
-            ps.setString(2, name);
-            ps.setString(3, specialization);
-            ps.setString(4, contactEmail);
-            ps.setDouble(5, consultationFee);
-            ps.executeUpdate();
-        }
+    public void addDoctor(Doctor doctor) throws Exception {
+    String sql = "INSERT INTO Doctors (doctorId, name, specialization, phone, email, departmentId) VALUES (?, ?, ?, ?, ?, ?)";
+    Connection conn = DatabaseConnection.getConnection();
+
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, doctor.getId());
+        ps.setString(2, doctor.getName());
+        ps.setString(3, doctor.getSpecialization());
+        ps.setString(4, doctor.getPhone());
+        ps.setString(5, doctor.getEmail());
+        ps.setString(6, doctor.getDepartmentId());
+        ps.executeUpdate();
     }
+}
 
     public void updateDoctor(String doctorId, String name, String specialization,
                              String contactEmail, double consultationFee) throws Exception {
@@ -129,16 +130,15 @@ public class DoctorDAO {
             consultationFee = rs.getDouble("consultationFee");
         } catch (SQLException e) {
         }
-
+        String departmentId = "";
         Doctor doctor = new Doctor(
-                id,
-                name,
-                phone,
-                email,
-                specialization,
-                availability,
-                consultationFee);
-
+            id,
+            name,
+            phone,
+            email,
+            specialization,
+            departmentId
+        );
         try {
             double salary = rs.getDouble("salary");
             if (!rs.wasNull()) {

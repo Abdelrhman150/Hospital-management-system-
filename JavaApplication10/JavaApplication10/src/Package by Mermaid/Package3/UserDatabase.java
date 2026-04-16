@@ -186,23 +186,24 @@ public class UserDatabase {
      * Saves a new user account
      */
     public boolean createUser(User user) {
-        String query = "INSERT INTO Users (username, full_name, password, email, role) VALUES (?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setString(1, user.getUsername());
-            ps.setString(2, user.getName());
-            ps.setString(3, user.getPassword());
-            ps.setString(4, user.getEmail());
-            ps.setString(5, user.getRole());
-            
-            return ps.executeUpdate() > 0;
-            
-        } catch (SQLException e) {
-            System.err.println("Error creating user: " + e.getMessage());
-            return false;
-        }
+    String query = "INSERT INTO Users (personId, username, full_name, password, email, role) VALUES (?, ?, ?, ?, ?, ?)";
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+
+        ps.setString(1, user.getPersonId());
+        ps.setString(2, user.getUsername());
+        ps.setString(3, user.getName());
+        ps.setString(4, user.getPassword());
+        ps.setString(5, user.getEmail());
+        ps.setString(6, user.getRole());
+
+        return ps.executeUpdate() > 0;
+
+    } catch (SQLException e) {
+        System.err.println("Error creating user: " + e.getMessage());
+        return false;
     }
+}
 
     /**
      * Retrieves all users from the database

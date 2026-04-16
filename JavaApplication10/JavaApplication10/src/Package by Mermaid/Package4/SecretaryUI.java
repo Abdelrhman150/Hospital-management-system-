@@ -36,8 +36,7 @@ public class SecretaryUI {
      */
     public SecretaryUI() {
         // Create a demo secretary for testing
-        this.secretary = new Secretary("SEC001", "John Doe", "123-456-7890", "john.doe@hospital.com", "Morning");
-        this.controller = new SecretaryController();
+        this.secretary = new Secretary("SEC001", "John Doe", "123-456-7890", "john.doe@hospital.com", "Morning", "DEP001");
         this.scanner = new Scanner(System.in);
     }
 

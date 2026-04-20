@@ -1,6 +1,9 @@
 package Package3;
 
 import java.sql.*;
+import Package1.hospitalservice.sorting.AppointmentData;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AppointmentDAO {
 
@@ -35,7 +38,6 @@ public class AppointmentDAO {
             ps.executeUpdate();
         }
     }
-    
 
     public void GetAppointmentDetails(String appointmentId) throws Exception {
         String sql = "SELECT * FROM Appointments WHERE appointmentId=?";
@@ -63,7 +65,6 @@ public class AppointmentDAO {
             }
         }
     }
-
 
     public void rescheduleAppointment(String appointmentId, Timestamp newTime) throws Exception {
         String sql = "UPDATE Appointments SET appointmentTime=? WHERE appointmentId=?";
@@ -117,4 +118,40 @@ public class AppointmentDAO {
             ps.executeUpdate();
         }
     }
+
+    // ==================== NEW METHODS FOR SORTING ====================
+
+    public List<AppointmentData> getAllAppointments() throws Exception {
+        List<AppointmentData> appointments = new ArrayList<>();
+
+        String sql = "SELECT a.appointmentId, a.patientId, d.name as doctorName, " +
+                     "a.appointmentTime, a.type, a.status " +
+                     "FROM Appointments a " +
+                     "JOIN Doctors d ON a.doctorId = d.doctorId " +
+                     "ORDER BY a.appointmentTime";
+
+        Connection conn = DatabaseConnection.getConnection();
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                AppointmentData apt = mapToAppointmentData(rs);
+                appointments.add(apt);
+            }
+        }
+
+        return appointments;
+    }
+
+    private AppointmentData mapToAppointmentData(ResultSet rs) throws SQLException {
+        return new AppointmentData(
+            rs.getString("appointmentId"),
+            rs.getString("patientId"),
+            rs.getString("doctorName"),
+            rs.getTimestamp("appointmentTime"),
+            rs.getString("type"),
+            rs.getString("status")
+        );
+    }
 }
+

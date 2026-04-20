@@ -2,11 +2,13 @@ package Package2;
 
 import Package1.payment.PaymentProcessor;
 import Package1.hospitalservice.*;
+import Package1.hospitalservice.sorting.*;
 import Package3.DoctorDAO;
 import Package3.RoomDAO;
 import Package3.AppointmentDAO;
 import Package3.BillDAO;
 import Package1.room.Room;
+import java.util.List;
 
 /**
  * Controller for secretary operations.
@@ -20,7 +22,8 @@ public class SecretaryController {
     public SecretaryController() {
     }
 
-    public String bookVisitingAppointment(String patientId, String doctorName, String appointmentDate, String roomId) throws Exception {
+    public String bookVisitingAppointment(String patientId, String doctorName, String appointmentDate, String roomId)
+            throws Exception {
         RoomDAO roomDAO = RoomDAO.getInstance();
         Room room = roomDAO.getRoomById(roomId);
 
@@ -32,26 +35,28 @@ public class SecretaryController {
         hospitalServiceController = new HospitalServiceController(new OutPatientServiceFactory(room));
         appointment = hospitalServiceController.CreateAppointment();
         appointment.scheduleAppointment(patientId, doctorName, appointmentDate);
-        
+
         AppointmentDAO appointmentDAO = AppointmentDAO.getInstance();
         DoctorDAO doctorDAO = DoctorDAO.getInstance();
         try {
             String doctorId = doctorDAO.getDoctorIdByName(doctorName);
-            appointmentDAO.bookAppointment(appointment.getAppointmentId(), patientId, doctorId, java.sql.Timestamp.valueOf(appointmentDate), "Visiting", roomId , 0);
+            appointmentDAO.bookAppointment(appointment.getAppointmentId(), patientId, doctorId,
+                    java.sql.Timestamp.valueOf(appointmentDate), "Visiting", roomId, 0);
         } catch (Exception e) {
             System.out.println("Error scheduling appointment: " + e.getMessage());
-            e.printStackTrace();   
+            e.printStackTrace();
         }
-        
+
         System.out.println("Appointment booked successfully!");
         return appointment.getAppointmentId();
     }
 
-    public String bookStayAppointment(String patientId, String doctorName, String appointmentDate, String roomID, int daysOfStay)
+    public String bookStayAppointment(String patientId, String doctorName, String appointmentDate, String roomID,
+            int daysOfStay)
             throws Exception {
         RoomDAO roomDAO = RoomDAO.getInstance();
         Room room = roomDAO.getRoomById(roomID);
-        
+
         if (!"Available".equals(room.getAvailabilityStatus())) {
             System.out.println("Selected room is not available. Please choose another room.");
             return null;
@@ -59,11 +64,11 @@ public class SecretaryController {
 
         hospitalServiceController = new HospitalServiceController(new StayPatientServiceFactory(room));
         appointment = hospitalServiceController.CreateAppointment();
-        
+
         ((RoomAppointment) appointment).setDaysOfStay(daysOfStay);
-        
+
         appointment.scheduleAppointment(patientId, doctorName, appointmentDate);
-        
+
         room.markOccupied(room.getRoomID());
         System.out.println("Room " + room.getRoomID() + " has been Booked.");
 
@@ -71,7 +76,8 @@ public class SecretaryController {
         DoctorDAO doctorDAO = DoctorDAO.getInstance();
         try {
             String doctorId = doctorDAO.getDoctorIdByName(doctorName);
-            appointmentDAO.bookAppointment(appointment.getAppointmentId(), patientId, doctorId, java.sql.Timestamp.valueOf(appointmentDate), "Stay", room.getRoomID(), daysOfStay);
+            appointmentDAO.bookAppointment(appointment.getAppointmentId(), patientId, doctorId,
+                    java.sql.Timestamp.valueOf(appointmentDate), "Stay", room.getRoomID(), daysOfStay);
         } catch (Exception e) {
             System.out.println("Error scheduling appointment: " + e.getMessage());
             e.printStackTrace();
@@ -83,12 +89,11 @@ public class SecretaryController {
 
     public void GenerateBill() {
         bill = hospitalServiceController.CreateBill(appointment.getPatientId(), appointment.getDaysOfStay());
-        
+
         Room room = ((RoomAppointment) appointment).room;
         bill.generateBill(appointment.getPatientId(), appointment.getDaysOfStay());
-        
 
-        BillDAO billDAO = BillDAO.getInstance() ;
+        BillDAO billDAO = BillDAO.getInstance();
         try {
             double amount = (bill instanceof RoomBill) ? ((RoomBill) bill).amount : ((VisitingBill) bill).amount;
             billDAO.addBill(bill.getBillId(), appointment.getPatientId(), amount, "Unpaid");
@@ -139,6 +144,48 @@ public class SecretaryController {
         try {
             billDAO.BillDetails(billId);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ==================== NEW METHODS FOR SORTED APPOINTMENTS ====================
+
+    public void showSortedAppointments(String sortType) {
+        try {
+            AppointmentDAO dao = AppointmentDAO.getInstance();
+            List<AppointmentData> appointments = dao.getAllAppointments();
+
+            if (appointments.isEmpty()) {
+                System.out.println("no appointments!");
+                return;
+            }
+
+            AppointmentSortingContext context = new AppointmentSortingContext();
+
+            if ("date".equals(sortType)) {
+                context.setStrategy(new SortByDateStrategy());
+            } else if ("priority".equals(sortType)) {
+                context.setStrategy(new SortByPriorityStrategy());
+            } else if ("type".equals(sortType)) {
+                context.setStrategy(new SortByTypeStrategy());
+            } else if ("doctor".equals(sortType)) {
+                context.setStrategy(new SortByDoctorStrategy());
+            }
+
+            List<AppointmentData> sorted = context.execute(appointments);
+
+            System.out.println("\n" + "=".repeat(100));
+            System.out.println("sorted appointments:");
+            System.out.println("=".repeat(100));
+
+            for (int i = 0; i < sorted.size(); i++) {
+                System.out.println((i + 1) + ". " + sorted.get(i));
+            }
+
+            System.out.println("=".repeat(100));
+
+        } catch (Exception e) {
+            System.out.println("error: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -36,7 +36,8 @@ public class SecretaryUI {
      */
     public SecretaryUI() {
         // Create a demo secretary for testing
-        this.secretary = new Secretary("SEC001", "John Doe", "123-456-7890", "john.doe@hospital.com", "Morning", "DEP001");
+        this.secretary = new Secretary("SEC001", "John Doe", "123-456-7890", "john.doe@hospital.com", "Morning",
+                "DEP001");
         this.scanner = new Scanner(System.in);
     }
 
@@ -57,8 +58,9 @@ public class SecretaryUI {
             System.out.println("5.  Manage Appointment");
             System.out.println("6.  Display Appointment Details");
             System.out.println("7.  Display Bill Details");
-            System.out.println("8.  Exit");
-            System.out.print("Choose an option (1-8): ");
+            System.out.println("8.  View Sorted Appointments");
+            System.out.println("9.  Exit");
+            System.out.print("Choose an option (1-9): ");
 
             String choice = scanner.nextLine().trim();
 
@@ -85,10 +87,13 @@ public class SecretaryUI {
                     displayBillDetails();
                     break;
                 case "8":
+                    sortAppointmentsMenu();
+                    break;
+                case "9":
                     System.out.println("Exiting Secretary Control Panel. Goodbye!");
                     return;
                 default:
-                    System.out.println("Invalid choice. Please select 1-8.");
+                    System.out.println("Invalid choice. Please select 1-9.");
             }
         }
     }
@@ -247,7 +252,8 @@ public class SecretaryUI {
             System.out.print("Enter Days of Stay: ");
             int daysOfStay = Integer.parseInt(scanner.nextLine().trim());
 
-            String AppointmentID = controller.bookStayAppointment(patientId, doctorName, appointmentDate, roomId, daysOfStay);
+            String AppointmentID = controller.bookStayAppointment(patientId, doctorName, appointmentDate, roomId,
+                    daysOfStay);
             if (AppointmentID != null) {
                 System.out.println("Stay appointment booked successfully!");
                 controller.DisplayAppointmentDetails(AppointmentID);
@@ -351,5 +357,30 @@ public class SecretaryUI {
     public static void main(String[] args) {
         SecretaryUI ui = new SecretaryUI();
         ui.start();
+    }
+
+    /**
+     * Sub-menu for sorting appointments by different criteria
+     */
+    private void sortAppointmentsMenu() {
+        System.out.println("\n sorted appointments ");
+        System.out.println("1. by date");
+        System.out.println("2. by priority");
+        System.out.println("3. by type");
+        System.out.println("4. by doctor");
+        System.out.println("5. back");
+        System.out.print("choose (1-5): ");
+
+        String choice = scanner.nextLine().trim();
+
+        if ("1".equals(choice)) {
+            controller.showSortedAppointments("date");
+        } else if ("2".equals(choice)) {
+            controller.showSortedAppointments("priority");
+        } else if ("3".equals(choice)) {
+            controller.showSortedAppointments("type");
+        } else if ("4".equals(choice)) {
+            controller.showSortedAppointments("doctor");
+        }
     }
 }

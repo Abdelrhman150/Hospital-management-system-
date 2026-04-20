@@ -3,7 +3,6 @@ package Package1.hospitalservice;
 import Package1.room.Room;
 import Package2.IdGenerator;
 
-
 public class RoomAppointment implements Appointment {
     public String appointmentId;
     public String patientId;
@@ -52,7 +51,7 @@ public class RoomAppointment implements Appointment {
     @Override
     public int getDaysOfStay() {
         return this.daysOfStay;
-        }
+    }
 
     @Override
     public String getAppointmentId() {
@@ -62,17 +61,15 @@ public class RoomAppointment implements Appointment {
     public void CheckingRoomAvailablity() throws Exception {
 
         if (room.getAvailabilityStatus() != "Available") {
-        System.out.println("Selected room is not available. Please choose another room.");
-        return;
-        }
-        else {
+            System.out.println("Selected room is not available. Please choose another room.");
+            return;
+        } else {
             room.markOccupied(room.getRoomID());
             System.out.println("Room " + room.getRoomID() + " has been Booked.");
         }
     }
 
-
-    public void setDaysOfStay(int days){
+    public void setDaysOfStay(int days) {
         this.daysOfStay = days;
     }
 }

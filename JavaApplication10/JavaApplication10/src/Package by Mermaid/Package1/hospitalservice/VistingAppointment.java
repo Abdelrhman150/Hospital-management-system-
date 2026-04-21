@@ -8,10 +8,6 @@ public class VistingAppointment implements Appointment {
     public String doctorName;
     public String appointmentDate;
 
-    @Override
-    public void displayDetails(String appointmentId) {
-        // DAO logic moved to controller
-    }
 
     @Override
     public void scheduleAppointment(String patientId, String doctorName, String appointmentDate) {

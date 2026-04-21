@@ -83,6 +83,8 @@ public class IdGenerator {
         return generatePrefixId("Bills", "billId", "BILL");
     }
 
+    
+
     /**
      * Generates a unique role-based ID (e.g., D001, N015, SCT001)
      */
@@ -113,6 +115,9 @@ public class IdGenerator {
                             int num = Integer.parseInt(numericPart);
                             newId = String.format(prefix + "%03d", num + 1);
                             break; // Found the latest numeric ID
+                        }
+                        else {
+                            System.err.println("Warning: Found non-numeric username with prefix " + prefix + ": " + maxId);
                         }
                     }
                 }

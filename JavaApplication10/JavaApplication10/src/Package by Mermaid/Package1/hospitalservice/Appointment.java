@@ -1,7 +1,6 @@
 package Package1.hospitalservice;
 
 public interface Appointment {
-    public void displayDetails(String appointmentId);
     public void cancelAppointment(String appointmentId);
     public String getPatientId();
     public int getDaysOfStay();

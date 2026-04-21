@@ -37,6 +37,7 @@ public class SecretaryUI {
     public SecretaryUI() {
         // Create a demo secretary for testing
         this.secretary = new Secretary("SEC001", "John Doe", "123-456-7890", "john.doe@hospital.com", "Morning", "DEP001");
+        this.controller = new SecretaryController();
         this.scanner = new Scanner(System.in);
     }
 
@@ -256,7 +257,7 @@ public class SecretaryUI {
         } catch (NumberFormatException e) {
             System.out.println("Error: Invalid number format. Please enter valid numbers for days of stay.");
         } catch (Exception e) {
-            System.out.println("Error booking stay appoi4ntment: " + e.getMessage());
+            System.out.println("Error booking stay appointment: " + e.getMessage());
         }
     }
 

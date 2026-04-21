@@ -1,17 +1,17 @@
 package Package1.staff;
 
 import Package1.salary.*;
+import Package2.DoctorController;
 
 public class Doctor extends User {
     private String specialization;
     private String departmentId;
     private DoctorSalary salary;
-
+    private DoctorController doctorController;
     private double savedSalary;
     private String savedSalaryDescription;
 
-    public Doctor(String id, String name, String phone, String email,
-                  String specialization, String departmentId) {
+    public Doctor(String id, String name, String phone, String email, String specialization, String departmentId) {
         super(id, name, phone, email);
         this.specialization = specialization;
         this.departmentId = departmentId;
@@ -91,4 +91,18 @@ public class Doctor extends User {
         System.out.println("Specialization: " + specialization);
         System.out.println("Department ID: " + departmentId);
     }
+
+    public boolean getAvailability() {
+        try {
+            boolean isAvailable = doctorController.getAvailability(this.id);
+            System.out.println("Doctor " + name + " is " + (isAvailable ? "available" : "not available"));
+            return isAvailable;
+        } catch (Exception e) {
+            System.out.println("Error occurred while checking doctor availability.");
+            return false;
+        }
+    }
+
+
 }
+        

@@ -17,11 +17,6 @@ public class RoomAppointment implements Appointment {
     }
 
     @Override
-    public void displayDetails(String appointmentId) {
-        // DAO logic moved to controller
-    }
-
-    @Override
     public void scheduleAppointment(String patientId, String doctorName, String appointmentDate) {
         this.patientId = patientId;
         this.doctorName = doctorName;

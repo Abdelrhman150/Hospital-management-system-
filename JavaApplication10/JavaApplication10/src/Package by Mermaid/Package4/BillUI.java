@@ -81,7 +81,7 @@ public class BillUI {
             VisitingBill visitingBill = (VisitingBill) bill;
             visitingBill.generateBill(patientId, 0);
             currentBill = visitingBill;
-            currentBillId = visitingBill.billId;
+            currentBillId = visitingBill.getBillId();
             currentAmount = visitingBill.calculateamount();
             System.out.println("Visiting bill created with amount: $" + currentAmount);
             BillDAO.getInstance().addBill(bill.getBillId(),patientId, currentAmount, "Unpaid");
@@ -105,7 +105,7 @@ public class BillUI {
         if (bill instanceof RoomBill) {
             RoomBill roomBill = (RoomBill) bill;
             currentBill = roomBill;
-            currentBillId = roomBill.billId;
+            currentBillId = roomBill.getBillId();
             currentAmount = roomBill.amount;
             System.out.println("Room bill created with amount: $" + currentAmount);
             BillDAO.getInstance().addBill(bill.getBillId(),patientId, currentAmount, "Unpaid");
@@ -121,7 +121,6 @@ public class BillUI {
         }
 
         System.out.println("\n--- Current Bill Details ---");
-        currentBill.getBillDetails(currentBillId);
 
         try {
             var billRecord = BillDAO.getInstance().getBillById(currentBillId);

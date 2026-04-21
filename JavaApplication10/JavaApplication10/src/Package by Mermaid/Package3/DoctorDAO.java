@@ -218,4 +218,20 @@ public class DoctorDAO {
 
         throw new Exception("No saved salary description found for doctor ID: " + doctorId);
     }
+
+
+    public boolean isAvailable(String doctorId) throws Exception {
+        String sql = "SELECT AvailabilityStatus FROM Doctors WHERE doctorId=?";
+        Connection conn = DatabaseConnection.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, doctorId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String status = rs.getString("AvailabilityStatus");
+                    return status != null && status.equalsIgnoreCase("Available");
+                }
+            }
+        }
+        throw new Exception("Doctor not found with ID: " + doctorId);
+    }
 }

@@ -11,6 +11,9 @@ import Package1.sorting.SortByDateStrategy;
 import Package1.sorting.SortByDoctorStrategy;
 import Package1.sorting.SortByPriorityStrategy;
 import Package1.sorting.SortByTypeStrategy;
+import Package1.payment.PaymentController;
+import Package1.HospitalDischarge.*;
+
 
 import java.util.List;
 
@@ -22,42 +25,41 @@ public class SecretaryController {
     Appointment appointment;
     HospitalServiceController hospitalServiceController;
     Bill bill;
-
+    PaymentController paymentController;
+    DischargeMediator dischargeMediator;
 
     public SecretaryController() {
         this.appointmentMediator = new HospitalAppointmentMediator();
+        this.paymentController = new PaymentController();
+        this.dischargeMediator = new HospitalDischargeMediator();
     }
 
-    public String bookVisitingAppointment(String patientId, String doctorName, String appointmentDate, String roomId) throws Exception {
-
+    public String bookVisitingAppointment(String patientId, String doctorName, String appointmentDate, String roomId)
+            throws Exception {
         return appointmentMediator.bookAppointment(
-            patientId,
-            doctorName,
-            appointmentDate,
-            roomId,
-            0,
-            "Visiting"
-        );
+                patientId,
+                doctorName,
+                appointmentDate,
+                roomId,
+                0,
+                "Visiting");
     }
 
     public String bookStayAppointment(String patientId,
-                                      String doctorName,
-                                      String appointmentDate,
-                                      String roomId,
-                                      int daysOfStay) throws Exception {
+            String doctorName,
+            String appointmentDate,
+            String roomId,
+            int daysOfStay) throws Exception {
 
                                         
         return appointmentMediator.bookAppointment(
-            patientId,
-            doctorName,
-            appointmentDate,
-            roomId,
-            daysOfStay,
-            "Stay"
-        );
+                patientId,
+                doctorName,
+                appointmentDate,
+                roomId,
+                daysOfStay,
+                "Stay");
     }
-
-
 
     public void GenerateBill() {
         bill = hospitalServiceController.CreateBill(appointment.getPatientId(), appointment.getDaysOfStay());
@@ -67,8 +69,7 @@ public class SecretaryController {
 
         BillDAO billDAO = BillDAO.getInstance();
         try {
-            double amount = (bill instanceof RoomBill) ? ((RoomBill) bill).amount : ((VisitingBill) bill).amount;
-            billDAO.addBill(bill.getBillId(), appointment.getPatientId(), amount, "Unpaid");
+            billDAO.addBill(bill.getBillId(), appointment.getPatientId(), bill.getAmount(), "Unpaid");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,13 +90,16 @@ public class SecretaryController {
         }
     }
 
-    public void Payment(PaymentProcessor paymentProcessor) {
-        bill.setPaymentProcessor(paymentProcessor);
-        if (bill instanceof RoomBill) {
-            paymentProcessor.processPayment(((RoomBill) bill).amount);
-        } else if (bill instanceof VisitingBill) {
-            paymentProcessor.processPayment(((VisitingBill) bill).amount);
+    public void processPayment(PaymentProcessor paymentProcessor) {
+        if (bill == null) {
+            System.out.println("No bill has been generated yet.");
+            return;
         }
+
+        bill.setPaymentProcessor(paymentProcessor);
+        paymentController.setPaymentProcessor(paymentProcessor);
+        paymentController.processPayment(bill.getAmount());
+
         System.out.println("Payment processed successfully for bill : " + bill.getBillId());
     }
 
@@ -116,9 +120,6 @@ public class SecretaryController {
             e.printStackTrace();
         }
     }
-    
-
-    // ==================== NEW METHODS FOR SORTED APPOINTMENTS ====================
 
     public void showSortedAppointments(String sortType) {
         try {
@@ -159,4 +160,11 @@ public class SecretaryController {
             e.printStackTrace();
         }
     }
+    public void dischargePatient(String appointmentId, String billId) {
+    try {
+        dischargeMediator.dischargePatient(appointmentId, billId);
+    } catch (Exception e) {
+        System.out.println("Error during discharge: " + e.getMessage());
+    }
+}
 }

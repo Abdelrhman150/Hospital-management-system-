@@ -12,7 +12,6 @@ public class DatabaseConnection {
     private static final String SERVER_NAME = "localhost\\MSSQLSERVER_LAST";
     private static final String DB_NAME = "hospital_mangament_system";
 
-    // جملة الاتصال الخاصة بـ SQL Server (بدون رقم البورت، ليعتمد على خدمة Browser)
     private static final String DB_URL = "jdbc:sqlserver://" + SERVER_NAME +
             ";databaseName=" + DB_NAME +
             ";integratedSecurity=true;trustServerCertificate=true;";
@@ -33,10 +32,8 @@ public class DatabaseConnection {
     public static synchronized Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             try {
-                // تحميل تعريف SQL Server
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-                // إنشاء الاتصال
                 connection = DriverManager.getConnection(DB_URL);
                 System.out.println("✓ Database connected successfully!");
 

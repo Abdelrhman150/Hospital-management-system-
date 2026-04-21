@@ -3,6 +3,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "SecretaryUI",
+            "request": "launch",
+            "mainClass": "Package4.SecretaryUI",
+            "projectName": "HospitalManagementSystem"
+        },
+        {
+            "type": "java",
             "name": "MainMenuGUI",
             "request": "launch",
             "mainClass": "Package4.MainMenuGUI",

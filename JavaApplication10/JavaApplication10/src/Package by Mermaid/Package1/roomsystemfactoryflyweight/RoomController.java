@@ -8,22 +8,21 @@ public class RoomController {
     public static RoomFactory factory;
 
     public RoomController(RoomFactory factory) {
-        this.factory = factory;
+        RoomController.factory = factory;
     }
 
     public Room createRoomController() {
         Room room = factory.createRoom();
 
         String generatedRoomId = IdGenerator.getInstance().nextRoomId();
-        room.setRoomID(generatedRoomId);    
+        room.setRoomID(generatedRoomId);
 
         RoomDAO.RoomRecord record = new RoomDAO.RoomRecord(
                 room.getRoomID(),
                 room.getRoomType(),
                 room.getCapacity(),
                 room.getAvailabilityStatus(),
-                room.getDailyRate()
-        );
+                room.getDailyRate());
 
         try {
             RoomDAO.getInstance().addRoom(record);

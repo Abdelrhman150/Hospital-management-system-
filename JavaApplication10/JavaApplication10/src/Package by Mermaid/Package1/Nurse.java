@@ -1,7 +1,5 @@
 package Package1;
 
-import java.util.Date;
-
 /**
  * Represents a nurse in the hospital system.
  */

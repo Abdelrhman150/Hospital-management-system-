@@ -46,6 +46,7 @@ public class SecretaryController {
                                       String roomId,
                                       int daysOfStay) throws Exception {
 
+                                        
         return appointmentMediator.bookAppointment(
             patientId,
             doctorName,

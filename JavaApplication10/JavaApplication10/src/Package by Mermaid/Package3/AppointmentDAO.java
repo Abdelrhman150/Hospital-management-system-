@@ -154,5 +154,32 @@ public class AppointmentDAO {
             rs.getString("status")
         );
     }
+    public String getAppointmentTypeById(String appointmentId) throws Exception {
+    String sql = "SELECT type FROM Appointments WHERE appointmentId=?";
+    Connection conn = DatabaseConnection.getConnection();
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, appointmentId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getString("type");
+            }
+        }
+    }
+    return null;
+}
+
+public String getRoomIdByAppointmentId(String appointmentId) throws Exception {
+    String sql = "SELECT roomId FROM Appointments WHERE appointmentId=?";
+    Connection conn = DatabaseConnection.getConnection();
+    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, appointmentId);
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getString("roomId");
+            }
+        }
+    }
+    return null;
+}
 }
 

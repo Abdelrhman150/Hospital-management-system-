@@ -2,12 +2,9 @@ package Package4;
 
 import Package1.staff.Doctor;
 import Package1.staff.Secretary;
-import Package1.payment.Insurance;
-import Package1.payment.InsuranceAdaptor;
-import Package1.payment.Paypal;
-import Package1.payment.paypalAdapter;
 import Package3.DoctorDAO;
 import Package2.SecretaryController;
+import Package1.payment.*;
 
 import java.util.List;
 import java.util.Scanner;
@@ -104,33 +101,37 @@ public class SecretaryUI {
      * Sub-menu for Managing Appointments (Booking, Billing, Payment)
      */
     private void manageAppointmentMenu() {
-        while (true) {
-            System.out.println("\n--- Manage Appointment ---");
-            System.out.println("1. Book Appointment");
-            System.out.println("2. Generate Bill");
-            System.out.println("3. Process Payment");
-            System.out.println("4. Back to Main Menu");
-            System.out.print("Choose an option (1-4): ");
+    while (true) {
+        System.out.println("\n--- Manage Appointment ---");
+        System.out.println("1. Book Appointment");
+        System.out.println("2. Generate Bill");
+        System.out.println("3. Process Payment");
+        System.out.println("4. Discharge Patient");
+        System.out.println("5. Back to Main Menu");
+        System.out.print("Choose an option (1-5): ");
 
-            String choice = scanner.nextLine().trim();
+        String choice = scanner.nextLine().trim();
 
-            switch (choice) {
-                case "1":
-                    bookAppointmentSubMenu();
-                    break;
-                case "2":
-                    generateBill();
-                    break;
-                case "3":
-                    processPayment();
-                    break;
-                case "4":
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please select 1-4.");
-            }
+        switch (choice) {
+            case "1":
+                bookAppointmentSubMenu();
+                break;
+            case "2":
+                generateBill();
+                break;
+            case "3":
+                processPayment();
+                break;
+            case "4":
+                dischargePatient();
+                break;
+            case "5":
+                return;
+            default:
+                System.out.println("Invalid choice. Please select 1-5.");
         }
     }
+}
 
     /**
      * Sub-sub-menu for Booking Appointments
@@ -288,36 +289,40 @@ public class SecretaryUI {
      */
 
     private void processPayment() {
-        System.out.println("\n--- Process Payment ---");
-        try {
-            System.out.println("Select Payment Method:");
-            System.out.println("1. PayPal");
-            System.out.println("2. Insurance");
-            System.out.print("Choose (1-2): ");
-            String paymentChoice = scanner.nextLine().trim();
+    System.out.println("\n--- Process Payment ---");
+    try {
+        System.out.println("Select Payment Method:");
+        System.out.println("1. PayPal");
+        System.out.println("2. Insurance");
+        System.out.println("3. Cash");
+        System.out.print("Choose (1-3): ");
+        String paymentChoice = scanner.nextLine().trim();
 
-            switch (paymentChoice) {
-                case "1":
-                    Paypal paypal = new Paypal();
-                    paypalAdapter paypalProcessor = new paypalAdapter(paypal);
-                    controller.Payment(paypalProcessor);
-                    break;
-                case "2":
-                    InsuranceAdaptor insuranceProcessor = new InsuranceAdaptor(new Insurance());
-                    controller.Payment(insuranceProcessor);
-                    break;
-                default:
-                    System.out.println("Invalid payment method selected.");
-                    return;
-            }
+        PaymentProcessor processor;
 
-        } catch (NumberFormatException e) {
-            System.out.println("Error: Invalid number format. Please enter valid Bill ID and Amount.");
-        } catch (Exception e) {
-            System.out.println("Error processing payment: " + e.getMessage());
-            System.out.println("(Make sure a bill has been generated first.)");
+        switch (paymentChoice) {
+            case "1":
+                Paypal paypal = new Paypal();
+                processor = new paypalAdapter(paypal);
+                break;
+            case "2":
+                processor = new InsuranceAdaptor(new Insurance());
+                break;
+            case "3":
+                processor = new CashPayment();
+                break;
+            default:
+                System.out.println("Invalid payment method selected.");
+                return;
         }
+
+        controller.processPayment(processor);
+
+    } catch (Exception e) {
+        System.out.println("Error processing payment: " + e.getMessage());
+        System.out.println("(Make sure a bill has been generated first.)");
     }
+}
 
     /**
      * Display appointment details
@@ -350,6 +355,21 @@ public class SecretaryUI {
         } catch (Exception e) {
             System.out.println("Error displaying bill details: " + e.getMessage());
             System.out.println("(Make sure a bill has been generated first.)");
+        }
+    }
+        private void dischargePatient() {
+        System.out.println("\n--- Discharge Patient ---");
+        try {
+            System.out.print("Enter Appointment ID: ");
+            String appointmentId = scanner.nextLine().trim();
+
+            System.out.print("Enter Bill ID: ");
+            String billId = scanner.nextLine().trim();
+
+            controller.dischargePatient(appointmentId, billId);
+
+        } catch (Exception e) {
+            System.out.println("Error discharging patient: " + e.getMessage());
         }
     }
 

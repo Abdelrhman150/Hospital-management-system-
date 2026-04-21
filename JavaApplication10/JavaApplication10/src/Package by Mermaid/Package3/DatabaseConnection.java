@@ -9,7 +9,7 @@ import java.sql.*;
 
 public class DatabaseConnection {
 
-    private static final String SERVER_NAME = "localhost\\MSSQLSERVER_LAST";
+    private static final String SERVER_NAME = "DESKTOP-B0TEC55\\SQLEXPRESS";
     private static final String DB_NAME = "hospital_mangament_system";
 
     private static final String DB_URL = "jdbc:sqlserver://" + SERVER_NAME +

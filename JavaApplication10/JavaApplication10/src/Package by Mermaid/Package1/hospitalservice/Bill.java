@@ -27,7 +27,9 @@ public abstract class Bill {
     public String getBillId(){
         return billId;
     }
-    
+    public double getAmount() {
+    return amount;
+    } 
     public abstract double calculateamount();
     
 }

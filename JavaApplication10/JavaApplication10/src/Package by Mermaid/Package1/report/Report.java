@@ -1,8 +1,9 @@
 package Package1.report;
 
 /**
- * The Abstraction in the Bridge Pattern.
- * This class holds a reference to the Implementor (ReportFormatter).
+ * The Abstraction in the Bridge Pattern AND the Template in the Template Method Pattern.
+ * - Bridge: Holds a reference to the Implementor (ReportFormatter).
+ * - Template Method: Defines the fixed algorithm structure (generateReport).
  */
 public abstract class Report {
     protected ReportFormatter formatter;
@@ -14,21 +15,23 @@ public abstract class Report {
         this.formatter = formatter;
     }
 
- 
-   
-    protected abstract void generate();
-
-
-    public String getFullContent() {
- 
-        this.generate();
-        
- 
-        return formatter.getFormattedReport();
+    
+    public final void generateReport() {
+        drawHeader();
+        insertMainData();
+        addDetails();
+        finalSignature();
     }
 
-    public void exportToFile(String fileName) {
-        this.generate();
-        formatter.saveToFile(fileName);
+    
+    protected abstract void drawHeader();
+    protected abstract void insertMainData();
+    protected abstract void addDetails();
+    protected abstract void finalSignature();
+
+    
+    public String getFullContent() {
+        this.generateReport();
+        return formatter.getFormattedReport();
     }
 }

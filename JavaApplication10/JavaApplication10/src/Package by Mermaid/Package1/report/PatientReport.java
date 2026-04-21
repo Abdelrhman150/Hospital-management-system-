@@ -2,22 +2,36 @@ package Package1.report;
 
 /**
  * Refined Abstraction: Patient-specific report.
- * This class uses real-time data from SQL Server to present patient information.
+ * - Implements Template Method steps (drawHeader, insertMainData, etc.)
+ * - Uses the Bridge (formatter) to format each section.
  */
 public class PatientReport extends Report {
     private String patientName;
     private String diagnosis;
 
-    public PatientReport(final String patientName, final String diagnosis, final ReportFormatter formatter) {
-        this.formatter = formatter;
+    public PatientReport(String patientName, String diagnosis, ReportFormatter formatter) {
+        super(formatter);
         this.patientName = patientName;
         this.diagnosis = diagnosis;
     }
 
     @Override
-    public void generate() {
+    protected void drawHeader() {
         formatter.formatHeader("Patient Medical History Export");
-        formatter.formatBody("Patient Name: " + patientName + "\nDiagnosis: " + diagnosis);
+    }
+
+    @Override
+    protected void insertMainData() {
+        formatter.formatBody("Patient Name: " + patientName);
+    }
+
+    @Override
+    protected void addDetails() {
+        formatter.formatBody("Diagnosis: " + diagnosis);
+    }
+
+    @Override
+    protected void finalSignature() {
         formatter.formatFooter("Medical Confidentiality Apply | System Generated History.");
     }
 }

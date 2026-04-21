@@ -9,5 +9,5 @@ public interface ReportFormatter {
     void formatBody(String content);
     void formatFooter(String footer);
     String getFormattedReport();
-    void saveToFile(String fileName); // Added for real file generation
+    
 }

@@ -8,6 +8,7 @@ public class MedicalDepartment extends Department {
         this.departmentHeadId = departmentHeadId;
     }
 
+ 
     public String getDepartmentHeadId() {
         return departmentHeadId;
     }

@@ -20,6 +20,11 @@ public class MedicalStaff implements StaffFactory {
         this.department = department;
     }
 
+    public MedicalStaff(String name2, String phone2, String email2, String specialization2, boolean availability,
+            double consultationFee, Department department2) {
+        //TODO Auto-generated constructor stub
+    }
+
     @Override
     public User createUser() {
         return new Doctor(id, name, phone, email, specialization, department.getId());

@@ -1,6 +1,6 @@
 package Package1.staff;
 
-import Package4.*;
+
 import Package3.DoctorDAO;
 import Package3.SecretaryDAO;
 import Package3.UserDatabase;

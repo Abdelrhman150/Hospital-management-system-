@@ -218,7 +218,6 @@ public class ReportGUI extends JFrame {
             // Real File Generation
             String fileName = isPatientReport ? "PatientReport_" + patientId : "FinancialReport";
             String extension = "PDF".equals(formatSelection) ? ".pdf" : ".csv";
-            report.exportToFile(fileName + extension);
 
             JOptionPane.showMessageDialog(this, "Report Generated and Opened!\nSaved as: " + fileName + extension,
                     "Success", JOptionPane.INFORMATION_MESSAGE);

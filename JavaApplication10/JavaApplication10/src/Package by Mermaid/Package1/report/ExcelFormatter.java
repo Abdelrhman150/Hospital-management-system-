@@ -42,19 +42,5 @@ public class ExcelFormatter implements ReportFormatter {
         return report.toString();
     }
 
-    @Override
-    public void saveToFile(String fileName) {
-        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.File(fileName))) {
-            // Using CSV format for real Excel compatibility
-            String csvContent = report.toString().replace("\t|\t", ",");
-            writer.write(csvContent);
-            System.out.println("Excel file saved as: " + fileName);
-            // Open the file automatically
-            if (java.awt.Desktop.isDesktopSupported()) {
-                java.awt.Desktop.getDesktop().open(new java.io.File(fileName));
-            }
-        } catch (Exception e) {
-            System.err.println("Error saving Excel: " + e.getMessage());
-        }
-    }
+
 }

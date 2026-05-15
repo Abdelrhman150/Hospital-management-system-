@@ -1,0 +1,147 @@
+package Package2;
+
+import Package3.DatabaseConnection;
+import java.sql.*;
+
+public class IdGenerator {
+
+    // ==================== Singleton ====================
+
+    private static IdGenerator instance;
+
+    private IdGenerator() {
+    }
+
+    public static synchronized IdGenerator getInstance() {
+        if (instance == null)
+            instance = new IdGenerator();
+        return instance;
+    }
+
+    // ==================== Helper (private) ====================
+
+    private String generatePrefixId(String table, String column, String prefix) {
+        String newId = prefix + "001";
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            String query = "SELECT " + column + " FROM " + table + " WHERE " + column + " LIKE '" + prefix + "%' ORDER BY LEN(" + column + ") DESC, " + column + " DESC";
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(query)) {
+                
+                if (rs.next()) {
+                    String maxId = rs.getString(1);
+                    if (maxId != null && maxId.startsWith(prefix)) {
+                        String numericPart = maxId.substring(prefix.length());
+                        if (numericPart.matches("\\d+")) {
+                            int num = Integer.parseInt(numericPart);
+                            newId = String.format(prefix + "%03d", num + 1);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error generating ID for " + table + ": " + e.getMessage());
+        }
+        return newId;
+    }
+
+    // ==================== Public Methods ====================
+
+    public String nextDoctorId() {
+        return generatePrefixId("Doctors", "doctorId", "DOC");
+    }
+
+    public String nextNurseId() {
+        return generatePrefixId("Nurses", "nurseId", "NUR");
+    }
+
+    public String nextPatientId() {
+        return generatePrefixId("Patients", "patientId", "PAT");
+    }
+
+    public String nextSecretaryId() {
+        return generatePrefixId("Secretaries", "secretaryId", "SEC");
+    }
+
+    public String nextDepartmentId() {
+        return generatePrefixId("Departments", "departmentId", "DEP");
+    }
+
+    public String nextAppointmentId() {
+        return generatePrefixId("Appointments", "appointmentId", "APP");
+    }
+
+    public String nextRecordId() {
+        return generatePrefixId("MedicalRecords", "recordId", "REC");
+    }
+
+    public String nextRoomId() {
+        return generatePrefixId("rooms", "roomId", "ROOM");
+    }
+
+    public String nextBillId() {
+        return generatePrefixId("Bills", "billId", "BILL");
+    }
+
+    
+
+    /**
+     * Generates a unique role-based ID (e.g., D001, N015, SCT001)
+     */
+    public String generateUserIdByRole(String role) {
+        String prefix = "";
+        switch (role.toLowerCase()) {
+            case "doctor": prefix = "D"; break;
+            case "nurse": prefix = "N"; break;
+            case "admin": prefix = "A"; break;
+            case "patient": prefix = "P"; break;
+            case "secretary": prefix = "SCT"; break;
+            default: prefix = "U";
+        }
+
+        String newId = prefix + "001";
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            // Order by length and name to find the true highest numeric ID
+            String query = "SELECT username FROM Users WHERE username LIKE '" + prefix + "%' ORDER BY LEN(username) DESC, username DESC";
+            try (Statement stmt = conn.createStatement();
+                 ResultSet rs = stmt.executeQuery(query)) {
+                
+                while (rs.next()) {
+                    String maxId = rs.getString("username");
+                    if (maxId != null && maxId.startsWith(prefix)) {
+                        String numericPart = maxId.substring(prefix.length());
+                        if (numericPart.matches("\\d+")) { // Ensure it's numeric
+                            int num = Integer.parseInt(numericPart);
+                            newId = String.format(prefix + "%03d", num + 1);
+                            break; // Found the latest numeric ID
+                        }
+                        else {
+                            System.err.println("Warning: Found non-numeric username with prefix " + prefix + ": " + maxId);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error generating role ID: " + e.getMessage());
+        }
+        return newId;
+    }
+
+    /**
+     * Generates an official email based on Full Name and ID
+     */
+    public String generateEmail(String fullName, String generatedId) {
+        // 1) convert to lowercase
+        String processedName = fullName.toLowerCase();
+        // 2) replace spaces with dots
+        processedName = processedName.replace(" ", ".");
+        // 3) remove special characters (keep dots)
+        processedName = processedName.replaceAll("[^a-z0-9.]", "");
+        
+        // 4) append ID and @hospital.com
+        return processedName + "." + generatedId.toLowerCase() + "@hospital.com";
+    }
+
+    
+}

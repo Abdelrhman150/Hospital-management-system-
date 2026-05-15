@@ -96,11 +96,21 @@ public class LoginUI {
         String roleChoice = scanner.nextLine();
         String role = "";
         switch (roleChoice) {
-            case "1": role = "Admin"; break;
-            case "2": role = "Doctor"; break;
-            case "3": role = "Nurse"; break;
-            case "4": role = "Secretary"; break;
-            case "5": role = "Patient"; break;
+            case "1":
+                role = "Admin";
+                break;
+            case "2":
+                role = "Doctor";
+                break;
+            case "3":
+                role = "Nurse";
+                break;
+            case "4":
+                role = "Secretary";
+                break;
+            case "5":
+                role = "Patient";
+                break;
             default:
                 System.out.println("✗ Error: Invalid role choice.");
                 return;
